@@ -10,7 +10,7 @@ shifted expectations:
 > for each market, points moved × dollars traded during the move × √(trading pace vs normal),
 > summed over the story's markets; the score is 10 × log10(1 + that sum), capped at 100.
 
-Stories scoring 30 or more are chased. Claude starts from the scent (what moved, which way, when,
+Stories scoring 25 or more are chased. Claude starts from the scent (what moved, which way, when,
 and how the market resolves), finds what happened and writes it up. The code checks every source
 against the searches that found it and against the time of the shift, and won't let aggregators or
 partisan blogs explain a story. Only what the hunt catches is published. Leads with nothing reported
