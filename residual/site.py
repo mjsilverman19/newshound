@@ -395,20 +395,27 @@ def archive_page(cfg, now: float, days: dict) -> str:
 
 def method_page(cfg, now: float) -> str:
     lo = cfg.hunt_min_score
+    pts = f"{cfg.move_threshold * 100:.0f}"
+    floor_usd = f"${cfg.min_window_volume_usd:,.0f}"
+    hours = [f"{h:g}" for h in cfg.recheck_after_hours]
+    recheck = ", ".join(hours[:-1]) + f" and {hours[-1]}" if len(hours) > 1 else hours[0]
     bands = "".join(f"<li>{e(label)}: {floor:.0f} and up</li>" for floor, label in cfg.shift_bands if floor > 0)
     body = f"""<main class="page"><h1>Method</h1>
 <p>Newshound follows a scent. Prediction markets on Polymarket and Kalshi are where people put money on what happens next, and when expectations about something shift sharply, it usually means something happened. The shift is the scent. It is not the story.</p>
-<p>Every hour the hound checks about 55,000 markets against an hour earlier. Sharp moves with real money behind them are grouped by what they are about, and each group is scored by how much it shifted expectations. Anything that scores high enough gets chased.</p>
+<p>Every hour the hound checks about 55,000 markets against an hour earlier. A market that moved {pts} points or more, with at least {floor_usd} traded during the move, is flagged. Flagged markets are grouped into stories by what they are about, and each story is scored by how much it shifted expectations. Anything that scores {lo:.0f} or more gets chased.</p>
 <h2>The chase</h2>
-<p>Claude works out what kind of development would produce the shift, then goes looking: news reports, official statements and press releases, court dockets and filings, government sites, posts from the people involved. It reads what it finds, checks when each piece was published, and writes up what happened.</p>
-<p>Only what it catches is published. A story needs a source that came back from a real search, reported the development, and was published before expectations moved (or within a few minutes of it). Code checks this, not the writer. Wire services, established outlets and primary documents can explain a story. Aggregators, re-posters and partisan blogs can appear as context but never count as the report that explains it.</p>
+<p>Claude, an AI model made by Anthropic, works out what kind of development would produce the shift, then goes looking: news reports, official statements and press releases, court dockets and filings, government sites, posts from the people involved. It reads what it finds, checks when each piece was published, and writes up what happened. No person edits the stories before they go up.</p>
+<p>Only what it catches is published. A story needs a source that its own searches actually turned up, that reported the development, and that was published before expectations moved or within {cfg.reaction_slack_minutes} minutes of it. Code checks this, not the writer. Wire services, established outlets and primary documents can explain a story. Aggregators, re-posters and partisan blogs can appear as context but never count as the report that explains it.</p>
+<p>If two stories turn out to be the same news, they are merged into one.</p>
 <h2>On the trail</h2>
-<p>When the hunt finds nothing, the lead goes on the trail as an open question, and the hound checks again after 1, 6 and 24 hours. If reporting turns up later, the lead becomes a story, and the page notes how long after the shift the first report came.</p>
+<p>When the hunt finds nothing, the lead goes on the trail as an open question, and the hound checks again after {recheck} hours. If reporting turns up later, the lead becomes a story, and the page notes how long after the shift the first report came.</p>
 <h2>How shifts are scored</h2>
 <p>For each market, the points it moved are multiplied by the dollars traded during the move, and weighted up when trading ran far above its usual pace. A story's score adds this up across its markets on a log scale from 0 to 100, so every 10 points means ten times as much. Stories scoring {lo:.0f} or more are chased; smaller ones are noted as things the hound is watching.</p>
 <ul>{bands}</ul>
 <h2>What it misses</h2>
 <p>The page reflects what people bet on. Politics, sports and economics carry the most money, and news with no market behind it never gives off a scent. Live games, weather, crypto prices and other markets that just track a public feed are ignored.</p>
+<p>Prices are compared an hour apart, so the time a shift began, and how long it came before the first report, are accurate to about an hour.</p>
+<p>Publication times come from the pages themselves, as the writer read them, and can be wrong. Each story lists its sources with their times so you can check.</p>
 <p>Images are each source article's own lead image, shown with its credit and linked to the article.</p>
 </main>"""
     return shell(cfg, now, "Method", body)
