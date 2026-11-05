@@ -22,95 +22,104 @@ sources. Odds, dollars and points appear only on the Method page.
 
 The Python package is called `residual`.
 
-## API mode (GitHub Actions, Claude API key)
+## How it runs: GitHub Actions on the Claude API
 
-This is how it runs by default. `.github/workflows/hourly.yml` runs once an hour (and whenever you start
-it from the Actions tab) and calls the Claude API directly, so it doesn't use your Claude account.
+`.github/workflows/hourly.yml` runs once an hour, at 17 minutes past, and whenever you start it from
+Actions > Hourly run > Run workflow. It calls the Claude API with the repository secret
+`ANTHROPIC_API_KEY` (Settings > Secrets and variables > Actions), so it doesn't use a Claude account.
 
-Setup: create an API key at https://platform.claude.com, add it to the repo as the Actions secret
-`ANTHROPIC_API_KEY` (Settings > Secrets and variables > Actions), and turn off the old scheduled task in
-your Claude account so the two don't both run.
+Each run:
 
-Each run checks out the `data` and `gh-pages` branches, runs `python -m residual --data rdata cycle`
-(scan, queue, name the small stories, hunt each queued story with web search and web fetch, record), builds
-the site, pushes `gh-pages` and force-pushes `data`. The run summary appears on the workflow run's page.
-The sourcing and writing rules are the ones in `AGENT.md`, built into `residual/hunter.py`. One check is
-stricter than in a Claude session: sources are checked against the URLs the API's search and fetch tools
-actually returned, not against the list the model reports.
+1. Clones the `data` branch (database and saved prices) and the `gh-pages` branch (the site).
+2. Runs `python -m residual --data rdata cycle`, which:
+   - compares prices with the previous run (and with Polymarket's own one-hour change) and groups the
+     sharp moves into stories;
+   - names the stories below the hunt threshold in a few words (`claude-haiku-5-5`);
+   - hunts each queued story and each lead due for a recheck with web search, web fetch and a lead-image
+     tool (`claude-opus-5-5` at `medium` effort), and records what it found. The code decides the status
+     from the sources and their times.
+3. Builds the site, pushes `gh-pages`, and force-pushes `data` as a single commit so the repo doesn't
+   grow. Commits are signed as `github-actions[bot]`.
+4. Writes a summary to the run's page: the day's top stories, leads still on the trail, anything that
+   failed, and how many tokens, searches and fetches the run used.
 
-Models and limits are in `residual/config.py`: `hunt_model` (default `claude-opus-5-5` at `medium` effort),
-`label_model` (`claude-haiku-5-5`), searches and fetches per story, and `max_new_per_run` /
-`max_rechecks_per_run` (6 each) to cap spend. To try a cheaper hunter, set `hunt_model =
-"claude-sonnet-5-5"` in a config file and pass it with `--config`.
+The sourcing and writing rules are in `residual/hunter.py` (and, for a Claude session, `AGENT.md`; keep
+the two in step). A source only counts if the API's search or fetch tools actually returned its URL.
 
-## Scheduled mode (Claude session, no API key)
+Because it compares prices hour to hour, it catches moves over the past hour rather than within minutes,
+and lead times are only accurate to about an hour.
 
-The earlier way to run it. A Claude scheduled task runs once an hour, and you can also start it
-whenever you like. Each run does the following, as set out in [`AGENT.md`](AGENT.md):
+## Settings and cost
 
-1. Clones this repo, the `data` branch (database and saved prices) and the `gh-pages` branch (site).
-2. Runs `scan` to compare prices with the previous run (and with Polymarket's own one-hour change),
-   `queue` to pick the stories to chase, and `label` to name the small ones in a few words.
-3. Claude hunts each queued story with its own web search, finds a lead image with `image`, writes
-   it up as JSON and runs `record`. The code decides the status from the sources and their times.
-4. Runs `site` to build the static site and pushes it to `gh-pages`, then force-pushes the `data`
-   branch, which is kept to a single commit so the repo doesn't grow.
-5. Ends with a summary of the top stories, which arrives as a push notification.
+Settings live in `residual/config.py`. To change any of them, copy `config.example.toml`, edit it, and
+pass it with `--config` (in the workflow, add it to the `cycle` and `site` commands). The ones that matter
+most:
 
-Because it compares prices hour to hour, scheduled mode catches moves over the past hour rather
-than within minutes, and lead times are only accurate to about an hour. To change how runs behave,
-edit `AGENT.md`; the scheduled task reads it fresh each time.
+| Setting | Default | What it does |
+|---|---|---|
+| `hunt_min_score` | 25 | Score a story needs before it is hunted |
+| `min_window_volume_usd` | 1000 | Moves with less money traded are skipped |
+| `move_threshold` | 0.05 | Smallest price move flagged (5 points) |
+| `max_new_per_run` / `max_rechecks_per_run` | 6 / 6 | Caps on hunts per run, the main limit on spend |
+| `hunt_model` / `hunt_effort` | `claude-opus-5-5` / `medium` | The hunter. `claude-sonnet-5-5` costs less |
+| `hunt_max_searches` / `hunt_max_fetches` | 13 / 10 | Per story (rechecks get 5 searches) |
+| `label_model` | `claude-haiku-5-5` | Names the small stories |
 
-## Continuous mode (older)
+Each run's summary reports the tokens and searches it used; the Claude Console shows the bill.
 
-The original loop that polls every 2 minutes and calls the Claude API still works, but it flags
-moves rather than building stories. Setup:
+## Commands
 
-Requires Python 3.11+.
+Requires Python 3.11+ and `pip install -r requirements.txt`.
 
 ```
-pip install -r requirements.txt
-export ANTHROPIC_API_KEY=sk-ant-...
+python -m residual --data DIR cycle [--summary FILE]   # one full run on the Claude API
+python -m residual --data DIR site --out DIR --clean   # build the site
+python -m residual --data DIR scan                     # just compare prices and flag moves
+python -m residual --data DIR queue --out queue.json   # stories to hunt or recheck now
+python -m residual --data DIR record 7 findings.json --kind hunt|recheck
+python -m residual --data DIR unlabeled                # small stories without a topic
+python -m residual --data DIR label 9 "Nigeria's 2027 race"
+python -m residual image https://example.com/article   # an article's lead image and credit
 ```
 
-## Running it
+`cycle` needs `ANTHROPIC_API_KEY`. The other commands don't call Claude.
+
+## Other ways to run it
+
+**In a Claude session.** `AGENT.md` is a playbook for a Claude scheduled task to run the same cycle
+with its own web search, using a Claude account instead of an API key. This is how Newshound first ran.
+The "Newshound run" scheduled task is paused, not deleted; don't run it alongside the workflow, because
+both write to `data`.
+
+**Continuous mode (older).** The original loop polls every 2 minutes and calls the Claude API, but it
+flags single moves rather than building stories, and doesn't publish the site.
 
 ```
 python -m residual run                     # watch, flag and investigate on a loop
 python -m residual run --no-investigate    # watch and flag only (no API key needed)
 python -m residual once                    # one cycle, then exit
 python -m residual investigate 12          # investigate one move by id
-python -m residual site --out site          # build the static site into ./site
 ```
 
-Run it somewhere that stays on, such as a small server or a `tmux` session, because the re-checks
-need it to still be running hours later. Settings live in `residual/config.py`. To change any of
-them, copy `config.example.toml`, edit it, and pass it with `--config`.
-
-## Cost control
-
-- `max_investigations_per_hour` (default 20) caps Claude calls. When the cap is hit, the most
-  suspicious moves go first: big move, fresh wallets, volume spike, one dominant buyer.
-- Most moves end after the quick pass.
-- Busy news days, such as election nights, flag many moves that have obvious causes. Raise
-  `move_threshold`, or add terms to `excluded_categories`, if the budget runs out.
+It needs a machine that stays on, because the rechecks run hours later. `max_investigations_per_hour`
+(default 20) caps its Claude calls, and its models are `anthropic_model_quick` and
+`anthropic_model_deep`.
 
 ## What has been tested
 
-- **Market watching and move detection:** run against the live Polymarket and Kalshi APIs. It flagged
-  real moves and pulled trade and wallet signals.
-- **The investigating agent:** tested only with scripted Claude API responses (`pytest tests`),
-  because no API key was available. Those tests cover a fast explanation, an invented URL being
-  rejected, a later report confirming a lead, re-checks, and the paused-turn case. Watch the first
-  live runs and read a few briefs before trusting the verdicts.
+- **Market watching and move detection:** run against the live Polymarket and Kalshi APIs.
+- **The hunt on the Claude API:** `pytest tests` covers it with scripted API responses (a source at a
+  URL the tools never returned being rejected, the lead-image tool, paused turns, a model that never
+  submits, labels). Live hourly runs began on November 5, 2026; read a few stories and their sources
+  before trusting the verdicts.
 
 ## Known limits
 
-- Publication times come from the agent reading the page, so they can be wrong. Briefs show them so
-  a person can check.
-- "Fresh wallet" means few lifetime trades. One person using many fresh wallets will not look like
-  one buyer.
-- Kalshi accounts are private, so Kalshi moves have no wallet signals.
-- Kalshi links point to the series page, not the exact market.
-- The default models are `claude-haiku-5-5` for the quick pass and `claude-sonnet-5-5` for the deep
-  one. Switch the deep pass to `claude-opus-5-5` for harder cases.
+- Publication times come from the model reading the page, so they can be wrong. Story pages list
+  sources with their times so a person can check.
+- Moves are measured hour to hour, so a story's lead time over the first report is only accurate to
+  about an hour.
+- Kalshi accounts are private, so Kalshi moves have no wallet signals, and Kalshi links point to the
+  series page, not the exact market.
+- "Fresh wallet" means few lifetime trades. One person using many fresh wallets will not look like one
+  buyer.
