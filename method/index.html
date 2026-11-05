@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method, Newshound</title>
+<meta name="description" content="The day’s news, found by following where expectations shifted.">
+<link rel="alternate" type="application/rss+xml" title="Newshound" href="/newshound/feed.xml">
+<style>
+:root { --fg:#141414; --dim:#6f6f6f; --soft:#3d3d3d; --line:#e4e2dd; --bg:#fbfaf8; --fill:#f1efea; --chip:#efede8; }
+@media (prefers-color-scheme: dark) { :root { --fg:#ecebe8; --dim:#9a9893; --soft:#c9c7c2; --line:#2c2b29; --bg:#141413; --fill:#1e1d1b; --chip:#262523; } }
+* { box-sizing:border-box; }
+html { background:var(--bg); color:var(--fg); -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body { margin:0 auto; max-width:1040px; padding:24px 24px 96px; font:15px/1.55 -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif; background:var(--bg); }
+a { color:inherit; text-decoration:none; } a:hover { text-decoration:underline; text-underline-offset:3px; }
+nav { display:flex; gap:24px; align-items:center; flex-wrap:wrap; padding:6px 0 26px; }
+nav .end { margin-left:auto; display:flex; gap:14px; align-items:center; }
+nav a { color:var(--soft); } nav a.brand { color:var(--fg); font-weight:600; font-size:16px; margin-right:6px; }
+nav .n { color:var(--soft); font-variant-numeric:tabular-nums; }
+nav .rss { display:inline-flex; color:var(--dim); } nav .rss svg { width:15px; height:15px; }
+.kick { margin:0 0 10px; color:var(--dim); display:flex; gap:14px; flex-wrap:wrap; font-size:14px; }
+.kick b { font-weight:500; color:var(--fg); }
+.hero { display:grid; grid-template-columns:minmax(0,1fr); gap:32px; padding:8px 0 36px; }
+.hero.has-img { grid-template-columns:minmax(0,1fr) minmax(0,0.95fr); }
+.hero h1 { font-size:34px; line-height:1.15; letter-spacing:-0.015em; font-weight:500; margin:0 0 16px; }
+.hero .lede { font-size:17px; line-height:1.55; color:var(--soft); margin:0 0 14px; max-width:620px; }
+.by, .note, .empty, .watch { color:var(--dim); font-size:14px; margin:0; }
+figure { margin:0; }
+figure img { display:block; width:100%; object-fit:cover; background:var(--fill); border-radius:3px; }
+figure.lead img { aspect-ratio:16/10; } figure.thumb img { aspect-ratio:16/10; margin-bottom:14px; }
+figure.big img { aspect-ratio:16/9; }
+figcaption { color:var(--dim); font-size:13px; margin-top:8px; } figure.thumb figcaption { display:none; }
+figcaption a { text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+.sh { display:flex; align-items:baseline; justify-content:space-between; gap:6px 16px; flex-wrap:wrap; border-bottom:1.5px solid var(--fg); padding-bottom:8px; margin:0 0 4px; }
+.sh h2 { font-size:15px; font-weight:500; margin:0; } .sh span { color:var(--dim); font-size:14px; }
+section.blk { margin-bottom:44px; }
+.cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); }
+.card { padding:16px 24px 18px 0; border-right:1px solid var(--line); }
+.cards > :last-child { border-right:0; }
+.cards > * + * { padding-left:16px; }
+.card h3 { font-size:16px; line-height:1.35; font-weight:500; margin:0 0 6px; }
+.card .dek { color:var(--soft); margin:0 0 10px; }
+.cards .note { align-self:center; padding:16px 0 16px 16px; }
+ul.trail { list-style:none; margin:0; padding:0; }
+ul.trail li { padding:14px 0; border-bottom:1px solid var(--line); }
+ul.trail .q { margin:0 0 2px; font-size:16px; } ul.trail .d { margin:0; color:var(--dim); font-size:14px; }
+.watch { padding:14px 0; }
+ul.list { list-style:none; margin:0; padding:0; }
+ul.list li { padding:14px 0; border-bottom:1px solid var(--line); }
+ul.list h3 { font-size:16px; font-weight:500; margin:0 0 4px; } ul.list p { margin:0; color:var(--soft); }
+ul.list .kick { margin:6px 0 0; }
+article.story { max-width:760px; }
+.back { color:var(--dim); display:flex; gap:20px; margin:0 0 10px; font-size:14px; }
+article.story h1 { font-size:32px; line-height:1.18; letter-spacing:-0.015em; font-weight:500; margin:0 0 8px; }
+.date { color:var(--dim); margin:0 0 22px; font-size:14px; }
+figure.big { margin:0 0 22px; }
+.body p { font-size:17px; line-height:1.6; margin:0 0 16px; }
+article.story h2 { font-size:15px; font-weight:600; margin:26px 0 6px; }
+ul.srcs { list-style:none; margin:8px 0 0; padding:0; }
+ul.srcs li { display:flex; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--line); }
+ul.srcs li:first-child { border-top:0; }
+.role { flex:none; background:var(--chip); color:var(--soft); font-size:13px; padding:2px 9px; border-radius:999px; }
+.page h1 { font-size:30px; font-weight:500; letter-spacing:-0.015em; margin:0 0 20px; }
+.page p { max-width:680px; font-size:16px; } .page h2 { font-size:15px; font-weight:600; margin:28px 0 6px; }
+.days { list-style:none; padding:0; margin:0; } .days li { padding:12px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.days span { color:var(--dim); }
+@media (max-width:760px) {
+  body { padding:16px 16px 80px; }
+  nav { gap:8px 18px; } nav a.brand { flex-basis:100%; } nav .end { margin-left:0; flex-basis:100%; justify-content:space-between; }
+  nav .n { font-size:13px; color:var(--dim); }
+  .hero.has-img { grid-template-columns:1fr; gap:18px; } .hero figure { order:-1; }
+  .hero h1, article.story h1 { font-size:26px; }
+  .card { border-right:0; padding:16px 0; border-bottom:1px solid var(--line); } .cards > * + * { padding-left:0; }
+  .cards .note { padding:16px 0; }
+  .body p { font-size:16px; }
+}
+</style></head>
+<body>
+<nav><a class="brand" href="/newshound/">Newshound</a><a href="/newshound/">Front page</a><a href="/newshound/#trail">On the trail</a>
+<a href="/newshound/archive/">Archive</a><a href="/newshound/method/">Method</a>
+<span class="end"><span class="n">Thursday, November 5, 5:27 PM ET</span><a class="rss" href="/newshound/feed.xml" title="RSS feed" aria-label="RSS feed"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3" cy="13" r="1.6" fill="currentColor"/><path d="M2 7.5a6.5 6.5 0 0 1 6.5 6.5M2 2.5A11.5 11.5 0 0 1 13.5 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></a></span></nav>
+<main class="page"><h1>Method</h1>
+<p>Newshound follows a scent. Prediction markets on Polymarket and Kalshi are where people put money on what happens next, and when expectations about something shift sharply, it usually means something happened. The shift is the scent. It is not the story.</p>
+<p>Every hour the hound checks about 55,000 markets against an hour earlier. Sharp moves with real money behind them are grouped by what they are about, and each group is scored by how much it shifted expectations. Anything that scores high enough gets chased.</p>
+<h2>The chase</h2>
+<p>Claude works out what kind of development would produce the shift, then goes looking: news reports, official statements and press releases, court dockets and filings, government sites, posts from the people involved. It reads what it finds, checks when each piece was published, and writes up what happened.</p>
+<p>Only what it catches is published. A story needs a source that came back from a real search, reported the development, and was published before expectations moved (or within a few minutes of it). Code checks this, not the writer. Wire services, established outlets and primary documents can explain a story. Aggregators, re-posters and partisan blogs can appear as context but never count as the report that explains it.</p>
+<h2>On the trail</h2>
+<p>When the hunt finds nothing, the lead goes on the trail as an open question, and the hound checks again after 1, 6 and 24 hours. If reporting turns up later, the lead becomes a story, and the page notes how long after the shift the first report came.</p>
+<h2>How shifts are scored</h2>
+<p>For each market, the points it moved are multiplied by the dollars traded during the move, and weighted up when trading ran far above its usual pace. A story's score adds this up across its markets on a log scale from 0 to 100, so every 10 points means ten times as much. Stories scoring 30 or more are chased; smaller ones are noted as things the hound is watching.</p>
+<ul><li>Extraordinary shift: 50 and up</li><li>Major shift: 38 and up</li><li>Large shift: 34 and up</li><li>Notable shift: 30 and up</li></ul>
+<h2>What it misses</h2>
+<p>The page reflects what people bet on. Politics, sports and economics carry the most money, and news with no market behind it never gives off a scent. Live games, weather, crypto prices and other markets that just track a public feed are ignored.</p>
+<p>Images are each source article's own lead image, shown with its credit and linked to the article.</p>
+</main>
+</body></html>
