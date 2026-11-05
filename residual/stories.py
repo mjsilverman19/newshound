@@ -299,7 +299,9 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
             fields.update(confirmed_ts=later, lead_minutes=round((later - start) / 60))
         done = fields.get("rechecks_done", story["rechecks_done"] or 0)
         delays = cfg.recheck_after_hours
-        fields["next_recheck_ts"] = story["created_ts"] + delays[done] * 3600 if done < len(delays) else None
+        # on the schedule from when the story was flagged, but never sooner than an hour after this search
+        fields["next_recheck_ts"] = max(story["created_ts"] + delays[done] * 3600, time.time() + 3600) \
+            if done < len(delays) else None
         if fields.get("confirmed_ts") or story["confirmed_ts"]:
             fields["next_recheck_ts"] = None  # reporting found: the lead becomes a story, no more rechecks
     else:
