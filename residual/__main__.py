@@ -8,11 +8,11 @@ Continuous mode (needs ANTHROPIC_API_KEY for investigations):
 
 Scheduled mode (Claude in a scheduled session does the investigating; see AGENT.md):
   python -m residual --data DIR scan                    compare prices with the last run, flag moves
-  python -m residual --data DIR queue --out queue.json  moves to investigate or re-check now
-  python -m residual --data DIR record 12 findings.json --kind investigate|recheck
+  python -m residual --data DIR queue --out queue.json  stories to hunt or re-check now
+  python -m residual --data DIR record 7 findings.json --kind hunt|recheck
 
 Both:
-  python -m residual report --out report.html
+  python -m residual report --out report.html    the front page
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import brief, detect, pipeline, scheduled
+from . import detect, frontpage, pipeline, scheduled
 from .config import Config
 from .db import DB
 
@@ -42,9 +42,9 @@ def main(argv=None):
     sub.add_parser("scan")
     sub.add_parser("queue").add_argument("--out", default="queue.json")
     p = sub.add_parser("record")
-    p.add_argument("move_id", type=int)
-    p.add_argument("findings", help="JSON file: sources, assessment, check_next, searched")
-    p.add_argument("--kind", choices=["investigate", "recheck"], required=True)
+    p.add_argument("story_id", type=int)
+    p.add_argument("findings", help="JSON file: headline, dek, summary, why_moved, sources, check_next, searched")
+    p.add_argument("--kind", choices=["hunt", "recheck"], required=True)
     sub.add_parser("report").add_argument("--out", default="report.html")
     args = ap.parse_args(argv)
 
@@ -58,7 +58,7 @@ def main(argv=None):
     db = DB(cfg.db_path)
 
     if args.cmd == "report":
-        Path(args.out).write_text(brief.report_html(db))
+        Path(args.out).write_text(frontpage.render(db, cfg))
         print(f"wrote {args.out}")
         return
     if args.cmd == "scan":
@@ -68,14 +68,14 @@ def main(argv=None):
     if args.cmd == "queue":
         q = scheduled.queue(db, cfg)
         Path(args.out).write_text(json.dumps(q, indent=2))
-        print(f"{len(q)} items ({sum(i['kind'] == 'investigate' for i in q)} new, "
+        print(f"{len(q)} stories ({sum(i['kind'] == 'hunt' for i in q)} to hunt, "
               f"{sum(i['kind'] == 'recheck' for i in q)} re-checks) written to {args.out}")
         return
     if args.cmd == "record":
         findings = json.loads(Path(args.findings).read_text())
-        mv = scheduled.record(db, cfg, args.move_id, args.kind, findings)
-        extra = f", confirmed {mv['lead_minutes']:.0f} min after the move" if mv.get("confirmed_ts") else ""
-        print(f"move {mv['id']}: {mv['verdict']}{extra} | {mv['question']} | {mv['url']}")
+        st = scheduled.record(db, cfg, args.story_id, args.kind, findings)
+        extra = f", first reported {st['lead_minutes']:.0f} min after the markets moved" if st.get("confirmed_ts") else ""
+        print(f"story {st['id']} ({st['score']:.0f}): {st['status']}{extra} | {st['headline']}")
         return
 
     client = None

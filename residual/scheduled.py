@@ -14,7 +14,7 @@ import time
 from collections import defaultdict
 from pathlib import Path
 
-from . import detect, investigate, pipeline
+from . import detect, stories
 
 log = logging.getLogger(__name__)
 MAX_STATE_AGE_S = 3 * 3600  # older than this, the last run's prices are too stale to compare with
@@ -95,34 +95,14 @@ def scan(db, cfg, state_path: Path) -> list[int]:
         state["saved_ts"][platform] = now
         state["prices"][platform] = {r["market_id"]: round(r["price"], 4) for r in live}
     save_state(state_path, state)
+    stories.assign(db, new_ids)
     return new_ids
 
 
 def queue(db, cfg) -> list[dict]:
-    """Moves for Claude to look into this run: the most suspicious new ones, then re-checks that are due."""
-    new = sorted(db.moves("status='new'"), key=pipeline.priority, reverse=True)[: cfg.max_new_per_run]
-    due = db.moves("next_recheck_ts IS NOT NULL AND next_recheck_ts <= ?", (time.time(),))[: cfg.max_rechecks_per_run]
-    out = []
-    for kind, moves in (("investigate", new), ("recheck", due)):
-        for mv in moves:
-            market = db.market(mv["platform"], mv["market_id"])
-            out.append({
-                "move_id": mv["id"],
-                "kind": kind,
-                "question": mv["question"],
-                "move_start_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(mv["move_start_ts"])),
-                "brief_for_agent": investigate.describe_move(mv, market, time.time()),
-            })
-    return out
+    """Stories for Claude to hunt this run, strongest scent first, then re-checks that are due."""
+    return stories.queue(db, cfg)
 
 
-def record(db, cfg, move_id: int, kind: str, findings: dict) -> dict:
-    mv = db.get_move(move_id)
-    if not mv:
-        raise SystemExit(f"no move {move_id}")
-    searched = [{"url": u} if isinstance(u, str) else u for u in findings.pop("searched", [])]
-    findings.setdefault("sources", [])
-    findings.setdefault("check_next", [])
-    result = {"stage": kind, "model": "claude (scheduled session)", "findings": findings,
-              "searched": searched, "usage": {"web_searches": len(findings.get("queries") or [])}}
-    return pipeline.apply(db, cfg, mv, result, kind)
+def record(db, cfg, story_id: int, kind: str, findings: dict) -> dict:
+    return stories.record(db, cfg, story_id, kind, findings)

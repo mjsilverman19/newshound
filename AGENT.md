@@ -1,8 +1,8 @@
-# Residual: instructions for a scheduled run
+# Newshound: instructions for a scheduled run
 
-You are running one cycle of Residual, which watches Polymarket and Kalshi for sharp price moves and
-works out whether anything public explains them. The code finds the moves and decides verdicts. Your
-job is the investigating, using your own web search and web fetch tools.
+You are running one cycle of Newshound. It ranks the day's news by how much money moved on it in
+Polymarket and Kalshi. The code finds the moves, groups them into stories and scores them. Your job is
+to hunt down what happened behind each story, using your own web search and web fetch tools.
 
 Work through the steps in order. Do not stop to ask questions; nobody is watching this run.
 
@@ -29,83 +29,108 @@ python3 -m residual --data /tmp/rdata scan
 python3 -m residual --data /tmp/rdata queue --out /tmp/queue.json
 ```
 
-The first run on a fresh data branch only records prices for Kalshi. Kalshi moves appear from the
-second run on.
+The scan groups price moves into **stories** and gives each one an importance score. The score
+measures how much money repriced on it. Stories above the threshold are queued for you to hunt.
 
-## 3. Investigate each queue item
+## 3. Hunt each story
 
-Read `/tmp/queue.json`. Each item has a `move_id`, a `kind` (`investigate` or `recheck`), and
-`brief_for_agent`, a description of the market and the move. Handle the items one at a time.
+You are building a front page that ranks the day's news by how much money moved on it. The markets
+have already decided what matters. Your job is to find out what happened and write it up.
+
+Read `/tmp/queue.json`. Each item has:
+- `story_id`
+- `kind`: `hunt` or `recheck`
+- `scent`: what the markets are saying, the money behind it, the resolution rules, and anything
+  already reported on this story
+- `move_start_utc`
+- `other_stories_today`
+
+Handle the items one at a time, highest score first.
+
+### Reading the scent
+
+Before you search, work out from the scent what kind of development would produce this move. For
+example, "the odds Rubio leaves fell 26 points" means something made him look more likely to stay:
+a denial, a statement of support, or a report being knocked down. Search for that.
+
+If several markets moved together, find the single development behind all of them. If two queued
+stories, or a queued story and one in `other_stories_today`, are really the same news, merge them
+(see `merge_with` below).
 
 ### Rules
-
-A sharp move with no public explanation can mean someone knows something that has not been reported
-yet. So "I found no explanation" is a correct, useful result. Never stretch weak or general background
-into a cause.
 
 - Report only sources that really appeared in your search results or that you fetched. Never invent
   or guess a URL.
 - Record each source's publication time as precisely as the page shows it. Fetch the page when a
   search result doesn't show the time. Use ISO 8601 with a time zone
-  (`2026-11-04T13:05:00-05:00`), a bare date if the page shows only a date, or `null` if you
-  can't tell. Never guess a time.
-- A **cause** must be specific and must plausibly move this exact market, given its resolution rules.
-- Articles that only report the market's odds or trading are `market_coverage`, never a cause.
+  (`2026-11-04T13:05:00-05:00`), a bare date if the page shows only a date, or `null` if you can't
+  tell. Never guess a time.
 - For posts on X, the post ID encodes when it was posted, which is often more reliable than the
   page: `python3 -c "print(__import__('datetime').datetime.utcfromtimestamp(((ID >> 22) + 1288834974657) / 1000))"`
   gives the time in UTC.
-- Look beyond news articles when it helps. That includes posts on X, official statements and press
-  releases, government and agency sites, court dockets, regulatory filings, schedules and calendars,
-  and the market's resolution source.
+- Look beyond news articles: posts on X, official statements and press releases, government and
+  agency sites, court dockets, filings, schedules, sports injury reports, and the market's
+  resolution source.
+- Never stretch weak or general background into a cause. If you find nothing specific, say so.
+  "Nothing reported yet" is a real and useful result.
 
-### For `investigate` items
+### For `hunt` items
 
-1. Start fast. Run 2 or 3 searches on the obvious angle: recent news about the market's subject. If
-   you find a clear cause published before the move started, stop there.
-2. Otherwise dig deeper with up to about 10 more searches. Try the people and organizations named,
-   official sources, social media, local and non-English outlets where relevant, and anything the
-   resolution rules depend on.
-3. Also note any source published after the move started that reports the same development.
+Start with 2 or 3 searches on the most likely development. If you find it, confirm it, get the
+publication time of the earliest report, and stop. Otherwise dig deeper with up to about 10 more
+searches. Note any report published after the move started too.
 
 ### For `recheck` items
 
-Earlier searches found nothing that explains the move. Run up to 5 searches for anything published
-since `move_start_utc` that reports a development explaining it, with publication times.
+Nothing explained this story when it was first hunted. Run up to 5 searches for anything published
+since `move_start_utc` that reports the development behind it.
 
-### Write the findings and record them
+### Write it up and record it
 
-Write `/tmp/findings-<move_id>.json`:
+Write `/tmp/story-<story_id>.json`:
 
 ```json
 {
+  "headline": "Plain, factual headline about what happened, in sentence case, under 90 characters",
+  "dek": "One sentence on why it matters or what changed.",
+  "summary": "Two to four sentences on what happened, with when and who.",
+  "why_moved": "One or two sentences connecting the news to the markets' move.",
   "sources": [
     {"url": "...", "title": "...", "outlet": "...", "published_at": "2026-11-04T13:05:00-05:00",
      "relation": "cause | consequence | market_coverage | background",
      "summary": "One sentence: what it says."}
   ],
-  "assessment": "Two or three sentences. Say plainly if you found no explanation.",
-  "check_next": ["Up to four concrete things a reporter should check next."],
-  "searched": ["every URL your searches returned, or that you fetched, during this item"],
+  "check_next": ["Up to three concrete open questions."],
+  "merge_with": [],
+  "searched": ["every URL your searches returned, or that you fetched, for this story"],
   "queries": ["each search query you ran"]
 }
 ```
 
 What each `relation` means:
-- `cause`: reports a development that plausibly drove the move.
+- `cause`: reports the development that drove the move.
 - `consequence`: reports that same development, but was published after the move started.
 - `market_coverage`: only reports the odds or the trading.
 - `background`: context, not a trigger.
 
-Leave `sources` empty if nothing relevant turned up. The code checks every source against
-`searched`, so list those URLs honestly and completely.
+Some rules for the write-up:
+- **When you found nothing:** the headline describes what the markets did, factually (for example
+  "Traders sharply cut the odds Rubio leaves the administration"), and the summary says plainly
+  that nothing published so far explains it. Never speculate about causes in the headline.
+- **`merge_with`:** the ids of other stories that are the same news. Their markets move into this
+  one.
+- **`searched`:** the code checks every source against this list, so list those URLs honestly and
+  completely.
+- **Style:** plain language, no hype, no em-dashes.
 
-Then record the item:
+Then record it:
 
 ```
-python3 -m residual --data /tmp/rdata record <move_id> /tmp/findings-<move_id>.json --kind <kind>
+python3 -m residual --data /tmp/rdata record <story_id> /tmp/story-<story_id>.json --kind <kind>
 ```
 
-The code decides the verdict and prints it. Don't override it.
+The code decides the status (reported, timing unclear, or nothing reported yet) from the sources and
+their times. Don't override it.
 
 ## 4. Publish the dashboard
 
@@ -136,11 +161,10 @@ git checkout -q --orphan snapshot && git add -A && git commit -qm "data $(date -
 
 ## 6. Summarize
 
-End with a short summary:
-- how many moves were flagged and investigated this run;
-- for each move whose verdict is `unexplained` or `unclear`: the question, the price change, and the
-  market link;
-- any re-check that found later reporting, with its lead time.
+End with a short summary, written for a phone notification:
+- the top three stories today by importance, each as a headline with its score;
+- any story hunted this run that came out "nothing reported yet", with the market question and the
+  price change;
+- the dashboard link https://claude.ai/artifact/4crkditFpW38tzKemS9aEW.
 
-If any move came out `unexplained` this run, lead the summary with it, and send a push notification
-if the tool is available. If nothing came out `unexplained`, keep the summary to one or two lines.
+If there were no stories, say so in one line.

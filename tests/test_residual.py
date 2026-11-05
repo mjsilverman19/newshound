@@ -53,10 +53,10 @@ def test_flags_sharp_move_and_respects_cooldown(env):
 def test_skips_small_moves_live_events_and_thin_markets(env):
     cfg, db = env
     base = market()
-    for i, p in enumerate([0.40, 0.42, 0.45]):
+    for i, p in enumerate([0.40, 0.41, 0.42]):
         db.add_snapshots([{**base, "price": p}], NOW - (30 - i * 10) * 60)
-    assert detect.find_moves(db, "kalshi", [{**base, "price": 0.45}], NOW, cfg) == []
-    assert not detect.eligible(market(category="Sports"), cfg, NOW)
+    assert detect.find_moves(db, "kalshi", [{**base, "price": 0.42}], NOW, cfg) == []
+    assert not detect.eligible(market(category="Climate and Weather"), cfg, NOW)
     assert not detect.eligible(market(end_ts=NOW + 3600), cfg, NOW)
     assert not detect.eligible(market(liquidity=10), cfg, NOW)
     assert not detect.eligible(market(question="Lakers vs. Celtics"), cfg, NOW)
@@ -200,21 +200,73 @@ def test_agent_that_never_submits_is_nudged_then_gives_up(env):
     assert client.calls[1]["messages"][-1]["content"].startswith("Now call submit_findings")
 
 
-# ---------- scheduled mode ----------
+# ---------- stories (scheduled mode) ----------
 
-def test_scheduled_queue_and_record(env, tmp_path):
-    from residual import scheduled
+def story_move(db, market_id="KXTEST-1", event="KXTEST", dp=0.30, vol=20_000, vm=10.0):
+    db.upsert_markets([market(market_id=market_id, event_id=event)])
+    return db.add_move({"platform": "kalshi", "market_id": market_id, "question": f"Q {market_id}", "url": "u",
+                        "detected_ts": NOW, "move_start_ts": START, "price_from": 0.40, "price_to": 0.40 + dp,
+                        "signals": {"window_volume_usd": vol, "volume_multiple": vm}, "series": []})
+
+
+def test_stories_group_by_event_and_score(env):
+    from residual import stories
     cfg, db = env
-    mv = add_move(db)
-    q = scheduled.queue(db, cfg)
-    assert [i["move_id"] for i in q] == [mv["id"]] and q[0]["kind"] == "investigate"
-    assert "70.0¢" in q[0]["brief_for_agent"]
+    a = story_move(db, "A-1", "EV1")
+    b = story_move(db, "A-2", "EV1", dp=0.10)
+    c = story_move(db, "B-1", "EV2", dp=0.05, vol=500, vm=1)
+    sids = stories.assign(db, [a, b, c], NOW)
+    assert len(sids) == 2
+    big = db.stories()[0]
+    assert big["markets"] == 2 and big["money_usd"] == 40_000
+    # 0.30*20000*sqrt(10) + 0.10*20000*sqrt(10) = 25,298 -> 10*log10(25,299) = 44.0
+    assert big["score"] == pytest.approx(44.0, abs=0.1)
+    small = db.stories()[1]
+    assert small["score"] < cfg.hunt_min_score
+    q = stories.queue(db, cfg)
+    assert [i["story_id"] for i in q] == [big["id"]] and q[0]["kind"] == "hunt"
+    assert "more likely" in q[0]["scent"] and "Resolves Yes if approved." in q[0]["scent"]
+
+
+def test_record_reported_merge_and_rehunt_gate(env):
+    from residual import scheduled, stories
+    cfg, db = env
+    s1, s2 = stories.assign(db, [story_move(db, "A-1", "EV1"), story_move(db, "B-1", "EV2")], NOW)
     url = "https://www.reuters.com/x"
-    done = scheduled.record(db, cfg, mv["id"], "investigate", {
+    st = scheduled.record(db, cfg, s1, "hunt", {
+        "headline": "Agency approves the drug", "dek": "d", "summary": "s", "why_moved": "w",
         "sources": [{"url": url, "relation": "cause", "published_at": iso(START - 60), "summary": "s"}],
-        "assessment": "a", "check_next": [], "searched": [url], "queries": ["q"]})
-    assert done["verdict"] == "explained"
-    assert scheduled.queue(db, cfg) == []
+        "merge_with": [s2], "searched": [url], "queries": ["q"]})
+    assert st["status"] == "reported" and st["markets"] == 2 and db.get_story(s2) is None
+    assert st["next_recheck_ts"] is None and st["sources"][0]["verified"]
+    assert stories.queue(db, cfg) == []  # already hunted at this score
+
+
+def test_unreported_story_gets_rechecked_and_confirmed(env):
+    from residual import scheduled, stories
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    st = scheduled.record(db, cfg, sid, "hunt", {"headline": "Traders raise the odds", "sources": [],
+                                                 "searched": [], "queries": []})
+    assert st["status"] == "unreported" and st["next_recheck_ts"] == pytest.approx(st["created_ts"] + 3600)
+    db.update_story(sid, next_recheck_ts=NOW - 1)
+    q = stories.queue(db, cfg)
+    assert q[0]["kind"] == "recheck"
+    url = "https://apnews.com/a"
+    st = scheduled.record(db, cfg, sid, "recheck", {"sources": [
+        {"url": url, "relation": "consequence", "published_at": iso(START + 45 * 60), "summary": "s"}],
+        "searched": [url]})
+    assert st["status"] == "unreported" and st["lead_minutes"] == 45 and st["rechecks_done"] == 1
+
+
+def test_front_page_renders(env):
+    from residual import frontpage, stories
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    db.update_story(sid, headline="Agency approves the drug", dek="A dek", status="reported")
+    page = frontpage.render(db, cfg, NOW)
+    assert page.startswith("<!DOCTYPE html>") and "Agency approves the drug" in page
+    assert f'id="s-{sid}"' in page and "<svg" in page
 
 
 def test_state_round_trip(tmp_path):

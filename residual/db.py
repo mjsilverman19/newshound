@@ -35,6 +35,19 @@ CREATE TABLE IF NOT EXISTS investigations (
     move_id INTEGER, stage TEXT, ran_ts REAL, model TEXT,
     findings TEXT, searched TEXT, usage TEXT
 );
+CREATE TABLE IF NOT EXISTS stories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day TEXT,                           -- Eastern date the story was first flagged, YYYY-MM-DD
+    created_ts REAL, updated_ts REAL,
+    score REAL, raw REAL,               -- importance index (0-100) and the underlying dollar-points
+    money_usd REAL, markets INTEGER, max_points REAL,
+    status TEXT DEFAULT 'pending',      -- pending | reported | unreported | quiet
+    headline TEXT, dek TEXT, summary TEXT, why_moved TEXT,
+    sources TEXT, check_next TEXT,
+    hunted_ts REAL, hunted_score REAL,
+    confirmed_ts REAL, lead_minutes REAL,
+    rechecks_done INTEGER DEFAULT 0, next_recheck_ts REAL
+);
 """
 
 
@@ -43,6 +56,10 @@ class DB:
         self.conn = sqlite3.connect(path)
         self.conn.row_factory = sqlite3.Row
         self.conn.executescript(SCHEMA)
+        cols = {r["name"] for r in self.conn.execute("PRAGMA table_info(moves)")}
+        if "story_id" not in cols:  # databases from before stories existed
+            self.conn.execute("ALTER TABLE moves ADD COLUMN story_id INTEGER")
+            self.conn.commit()
 
     # markets and snapshots
     def upsert_markets(self, rows: list[dict]):
@@ -159,3 +176,55 @@ def _move(r) -> dict:
     for k in ("signals", "series", "brief"):
         d[k] = json.loads(d[k]) if d.get(k) else None
     return d
+
+
+# ---------- stories ----------
+
+STORY_JSON = ("sources", "check_next")
+
+
+def _story(r) -> dict:
+    d = dict(r)
+    for k in STORY_JSON:
+        d[k] = json.loads(d[k]) if d.get(k) else []
+    return d
+
+
+def _story_methods():
+    def add_story(self, s: dict) -> int:
+        cols = list(s)
+        cur = self.conn.execute(
+            f"INSERT INTO stories ({', '.join(cols)}) VALUES ({', '.join('?' * len(cols))})",
+            [json.dumps(v) if k in STORY_JSON else v for k, v in s.items()])
+        self.conn.commit()
+        return cur.lastrowid
+
+    def update_story(self, story_id: int, **fields):
+        if not fields:
+            return
+        cols = ", ".join(f"{k}=?" for k in fields)
+        vals = [json.dumps(v) if k in STORY_JSON else v for k, v in fields.items()]
+        self.conn.execute(f"UPDATE stories SET {cols} WHERE id=?", (*vals, story_id))
+        self.conn.commit()
+
+    def get_story(self, story_id: int):
+        r = self.conn.execute("SELECT * FROM stories WHERE id=?", (story_id,)).fetchone()
+        return _story(r) if r else None
+
+    def stories(self, where: str = "1=1", params: tuple = (), order: str = "score DESC", limit: int = 500):
+        cur = self.conn.execute(f"SELECT * FROM stories WHERE {where} ORDER BY {order} LIMIT ?", (*params, limit))
+        return [_story(r) for r in cur]
+
+    def story_moves(self, story_id: int) -> list[dict]:
+        cur = self.conn.execute("SELECT * FROM moves WHERE story_id=? ORDER BY detected_ts", (story_id,))
+        return [_move(r) for r in cur]
+
+    def delete_story(self, story_id: int):
+        self.conn.execute("DELETE FROM stories WHERE id=?", (story_id,))
+        self.conn.commit()
+
+    for f in (add_story, update_story, get_story, stories, story_moves, delete_story):
+        setattr(DB, f.__name__, f)
+
+
+_story_methods()

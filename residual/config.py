@@ -21,7 +21,7 @@ class Config:
     kalshi_max_pages: int = 40             # 200 events per page
 
     # Detection
-    move_threshold: float = 0.10           # 10 points on a 0-1 price
+    move_threshold: float = 0.05           # 5 points on a 0-1 price
     window_minutes: int = 30
     cooldown_hours: float = 6.0            # one flag per market per cooldown, unless it moves again
     min_liquidity_usd: float = 5_000       # Polymarket order-book liquidity
@@ -31,7 +31,7 @@ class Config:
     min_window_volume_usd: float = 1_000   # skip moves with almost no money behind them
     excluded_categories: list[str] = field(default_factory=lambda: [
         # live events and markets that just track a public price feed
-        "sports", "climate and weather", "weather", "crypto", "financials",
+        "climate and weather", "weather", "crypto", "financials",
         "esports", "games", "up or down", "updown", "hit price", "equities", "stocks",
         "commodities", "recurring", "multi strikes",
     ])
@@ -52,6 +52,10 @@ class Config:
     deep_max_searches: int = 12
     max_investigations_per_hour: int = 20
     reaction_slack_minutes: int = 15       # a source this soon after the move starts can still be the cause
+
+    # Stories
+    hunt_min_score: float = 30             # importance needed before the agent goes looking
+    rehunt_gain: float = 10                # hunt again if a story's score rises this much
 
     # Scheduled mode (one scan per run; Claude in the session investigates)
     state_path: str = "prices.json.gz"
