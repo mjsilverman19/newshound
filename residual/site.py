@@ -290,7 +290,9 @@ def shell(cfg, now: float, title: str, body: str, desc: str = "") -> str:
 def ranked(stories: list[dict], cfg) -> list[dict]:
     """Stories with enough money behind them first, each group by score, so a thin market can't lead."""
     floor = cfg.lead_min_money_usd
-    return sorted(stories, key=lambda s: ((s.get("money_usd") or 0) >= floor, s["score"] or 0), reverse=True)
+    day = cfg.mode == "day"  # scores from the hourly detector are on another scale: rank them after
+    return sorted(stories, key=lambda s: ((s.get("money_usd") or 0) >= floor, not day or bool(s.get("scent_data")),
+                                          s["score"] or 0), reverse=True)
 
 
 def front(db, cfg, now: float, data: dict) -> str:

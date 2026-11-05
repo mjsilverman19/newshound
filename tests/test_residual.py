@@ -588,3 +588,11 @@ def test_day_links_the_same_subject_across_platforms():
                "platform": "kalshi", "extra": {"previous_price": 0.2}, "price": 0.6, "volume24h": 20_000}
     topics = day.group(day.score_markets([pm, k, counted], cfg, NOW), cfg)
     assert len(topics) == 1 and {e["platform"] for e in topics[0]["events"]} == {"polymarket", "kalshi"}
+
+
+def test_day_mode_ranks_day_scored_stories_before_hourly_ones():
+    from residual import site
+    cfg = Config()
+    hourly = {"score": 46, "money_usd": 30_000, "scent_data": None}
+    daily = {"score": 43, "money_usd": 140_000, "scent_data": {"rank": 1}}
+    assert site.ranked([hourly, daily], cfg) == [daily, hourly]
