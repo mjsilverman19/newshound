@@ -1,0 +1,16 @@
+# Copy to config.toml, change what you need, and run with --config config.toml.
+# Every setting and its default is in residual/config.py.
+
+db_path = "residual.db"
+briefs_dir = "briefs"
+poll_seconds = 120
+
+move_threshold = 0.10          # 10 points
+window_minutes = 30
+min_window_volume_usd = 1000
+
+max_investigations_per_hour = 20
+anthropic_model_quick = "claude-haiku-5-5"
+anthropic_model_deep = "claude-sonnet-5-5"
+
+recheck_after_hours = [1, 6, 24]

@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+*.db
+briefs/
+report.html
+prices.json.gz
