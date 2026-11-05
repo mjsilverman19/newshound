@@ -332,6 +332,7 @@ def cycle(db, cfg, client) -> dict:
         sid = item["story_id"]
         if sid in merged or not db.get_story(sid):
             continue  # folded into another story earlier this run
+        item = {**item, "other_stories_today": [o for o in stories.others_today(db) if o["story_id"] != sid]}
         try:
             f = hunt(client, cfg, item)
             if f is None:
@@ -339,11 +340,11 @@ def cycle(db, cfg, client) -> dict:
                 continue
             f["merge_with"] = [int(x) for x in f.get("merge_with") or [] if int(x) != sid and db.get_story(int(x))]
             st = scheduled.record(db, cfg, sid, item["kind"], f)
-            merged.update(f["merge_with"])
-            report["recorded"].append({"story_id": sid, "kind": item["kind"], "status": st["status"],
+            merged.update({sid, *f["merge_with"]} - {st["id"]})
+            report["recorded"].append({"story_id": st["id"], "kind": item["kind"], "status": st["status"],
                                        "score": st["score"], "headline": st.get("headline"),
                                        "question": st.get("question"), "usage": f.get("usage")})
-            log.info("story %s (%.0f): %s | %s", sid, st["score"], st["status"], st.get("headline") or st.get("question"))
+            log.info("story %s (%.0f): %s | %s", st["id"], st["score"], st["status"], st.get("headline") or st.get("question"))
         except Exception as e:
             log.exception("hunt failed for story %s", sid)
             report["failed"].append(f"story {sid}: {e}")

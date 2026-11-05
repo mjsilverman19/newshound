@@ -431,3 +431,35 @@ def test_api_hunt_resumes_paused_turns_nudges_once_and_labels(env):
 def test_x_post_time():
     from residual import hunter
     assert hunter._x_post_time("1853571232563740821").startswith("2024-11-04")
+
+
+def test_merging_into_a_new_story_keeps_the_published_one_and_its_url(env, tmp_path):
+    from residual import scheduled, site, stories
+    cfg, db = env
+    (old,) = stories.assign(db, [story_move(db, "A-1", "EV1")], NOW)
+    url = "https://www.reuters.com/world/rubio-denies"
+    st = scheduled.record(db, cfg, old, "hunt", {
+        "headline": "State Department denies Rubio report", "slug": "rubio-denies", "summary": "s",
+        "sources": [{"url": url, "relation": "cause", "published_at": iso(START - 60), "summary": "s"}],
+        "searched": [url]})
+    assert st["status"] == "reported"
+    (old_lead,) = stories.assign(db, [story_move(db, "C-1", "EV3")], NOW)
+    db.update_story(old_lead, slug="vance-lead", headline="Rubio report denied again", status="unclear")
+    (new,) = stories.assign(db, [story_move(db, "B-1", "EV2")], NOW)
+    db.update_story(new, created_ts=NOW + 3600)  # flagged in a later run
+    # a later hunt of the new story finds only an undated report, and says all three are the same news
+    other = "https://apnews.com/article/rubio"
+    st = scheduled.record(db, cfg, new, "hunt", {
+        "headline": "Rubio stays, State Department says", "merge_with": [old, old_lead],
+        "sources": [{"url": other, "relation": "cause", "published_at": None, "summary": "s"}],
+        "searched": [other]})
+    assert st["id"] == old and db.get_story(new) is None and db.get_story(old_lead) is None
+    assert st["slug"] == "rubio-denies" and st["markets"] == 3
+    assert st["status"] == "reported"  # the earlier, verified report still stands
+    assert {s["url"] for s in st["sources"]} == {url, other}
+    day = stories.et_day(NOW)
+    assert st["aliases"] == [f"{day}/vance-lead"]
+    out = tmp_path / "site"
+    site.build(db, cfg, out, NOW)
+    moved = (out / day.replace("-", "/") / "vance-lead" / "index.html").read_text()
+    assert f'url=/newshound/{day.replace("-", "/")}/rubio-denies/' in moved
