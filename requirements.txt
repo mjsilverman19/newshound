@@ -1,2 +1,2 @@
-anthropic>=0.70
+anthropic>=2.6
 pytest>=8

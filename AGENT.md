@@ -1,5 +1,9 @@
 # Newshound: instructions for a scheduled run
 
+> This is the playbook for running a cycle in a Claude session. The GitHub Actions workflow
+> (`.github/workflows/hourly.yml`) runs the same cycle on the Claude API with `python -m residual cycle`;
+> its rules live in `residual/hunter.py`. Keep the two in step when you change the rules.
+
 You are running one cycle of Newshound. Prediction markets (Polymarket and Kalshi) give the hound a
 scent: when expectations about something shift sharply, something probably happened. The code finds
 those shifts, groups them into stories and scores them. Your job is to chase each scent down with

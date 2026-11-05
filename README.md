@@ -22,9 +22,30 @@ sources. Odds, dollars and points appear only on the Method page.
 
 The Python package is called `residual`.
 
-## Scheduled mode (no server, no API key)
+## API mode (GitHub Actions, Claude API key)
 
-This is how it runs by default. A Claude scheduled task runs once an hour, and you can also start it
+This is how it runs by default. `.github/workflows/hourly.yml` runs once an hour (and whenever you start
+it from the Actions tab) and calls the Claude API directly, so it doesn't use your Claude account.
+
+Setup: create an API key at https://platform.claude.com, add it to the repo as the Actions secret
+`ANTHROPIC_API_KEY` (Settings > Secrets and variables > Actions), and turn off the old scheduled task in
+your Claude account so the two don't both run.
+
+Each run checks out the `data` and `gh-pages` branches, runs `python -m residual --data rdata cycle`
+(scan, queue, name the small stories, hunt each queued story with web search and web fetch, record), builds
+the site, pushes `gh-pages` and force-pushes `data`. The run summary appears on the workflow run's page.
+The sourcing and writing rules are the ones in `AGENT.md`, built into `residual/hunter.py`. One check is
+stricter than in a Claude session: sources are checked against the URLs the API's search and fetch tools
+actually returned, not against the list the model reports.
+
+Models and limits are in `residual/config.py`: `hunt_model` (default `claude-opus-5-5` at `medium` effort),
+`label_model` (`claude-haiku-5-5`), searches and fetches per story, and `max_new_per_run` /
+`max_rechecks_per_run` (6 each) to cap spend. To try a cheaper hunter, set `hunt_model =
+"claude-sonnet-5-5"` in a config file and pass it with `--config`.
+
+## Scheduled mode (Claude session, no API key)
+
+The earlier way to run it. A Claude scheduled task runs once an hour, and you can also start it
 whenever you like. Each run does the following, as set out in [`AGENT.md`](AGENT.md):
 
 1. Clones this repo, the `data` branch (database and saved prices) and the `gh-pages` branch (site).

@@ -1,0 +1,69 @@
+# One Newshound cycle an hour on the Claude API, instead of a scheduled Claude session.
+# Needs a repository secret ANTHROPIC_API_KEY (Settings > Secrets and variables > Actions).
+name: Hourly run
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newshound
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      REPO_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install "anthropic>=2.6"
+
+      - name: Get the data and the site
+        run: |
+          git clone --branch data --depth 1 "$REPO_URL" rdata \
+            || (mkdir -p rdata && cd rdata && git init -q && git remote add origin "$REPO_URL")
+          git clone --branch gh-pages --depth 1 "$REPO_URL" site \
+            || (mkdir -p site && cd site && git init -q && git checkout -q -b gh-pages && git remote add origin "$REPO_URL")
+          for d in rdata site; do
+            git -C $d config user.name "Residual"
+            git -C $d config user.email "residual@users.noreply.github.com"
+          done
+
+      - name: Scan, label and hunt
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m residual --data rdata cycle --summary summary.md
+
+      - name: Build and publish the site
+        if: ${{ !cancelled() }}
+        run: |
+          python -m residual --data rdata site --out site --clean
+          cd site
+          git add -A
+          git diff --cached --quiet || git commit -qm "site $(date -u +%FT%TZ)"
+          git push -q origin HEAD:gh-pages
+
+      - name: Save the data
+        if: ${{ !cancelled() }}
+        run: |
+          cd rdata
+          git checkout -q --orphan snapshot
+          git add -A
+          git commit -qm "data $(date -u +%FT%TZ)"
+          git push -q -f origin snapshot:data
+
+      - name: Summary
+        if: ${{ !cancelled() }}
+        run: test -f summary.md && cat summary.md >> "$GITHUB_STEP_SUMMARY" || true
