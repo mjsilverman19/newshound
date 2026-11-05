@@ -463,3 +463,48 @@ def test_merging_into_a_new_story_keeps_the_published_one_and_its_url(env, tmp_p
     site.build(db, cfg, out, NOW)
     moved = (out / day.replace("-", "/") / "vance-lead" / "index.html").read_text()
     assert f'url=/newshound/{day.replace("-", "/")}/rubio-denies/' in moved
+
+
+# ---------- recalibration: macro markets, grouping by name, front-page money floor ----------
+
+def test_macro_markets_kept_but_price_feeds_excluded():
+    cfg = Config()
+    base = {"platform": "kalshi", "liquidity": 50_000, "end_ts": NOW + 60 * 86400}
+    fed = dict(base, category="Financials", question="Will the Fed cut rates in December?")
+    assert detect.eligible(fed, cfg, NOW)
+    soon = dict(fed, end_ts=NOW + 2 * 86400)
+    assert not detect.eligible(soon, cfg, NOW)          # resolves too soon: tracks the live price
+    feed = dict(base, category="Financials", question="Will Apple close above $250?")
+    assert not detect.eligible(feed, cfg, NOW)          # finance market, but not about the economy
+    btc = dict(base, category="Crypto, Financials", question="Will there be a recession in 2027?")
+    assert not detect.eligible(btc, cfg, NOW)           # crypto stays out whatever the question
+    daily = dict(base, category="Equities", question="Nasdaq up or down on Friday?")
+    assert not detect.eligible(daily, cfg, NOW)
+
+
+def test_regroup_merges_stories_sharing_a_name(env):
+    from residual import stories
+    cfg, db = env
+    ids = []
+    for mid, ev, q in [("R-1", "EV1", "Will Marco Rubio leave the Trump administration?"),
+                       ("V-1", "EV2", "Vance's Republican nomination odds hit 40%?"),
+                       ("X-1", "EV3", "Will Gadi Eisenkot become prime minister?")]:
+        m = story_move(db, mid, ev)
+        db.upsert_markets([market(market_id=mid, event_id=ev, event_title=f"event {ev}", question=q)])
+        db.conn.execute("UPDATE moves SET question=? WHERE id=?", (q, m)); db.conn.commit()
+        ids.append(m)
+    stories.assign(db, ids, NOW)
+    assert len(db.stories()) == 3
+    r, v, x = (db.get_move(i)["story_id"] for i in ids)
+    db.update_story(v, headline="State Department denies report that Rubio will quit")
+    groups = stories.regroup(db, cfg, stories.et_day(NOW))
+    assert groups == [sorted([r, v])]
+    assert len(db.stories()) == 2                       # Trump alone never ties stories together
+
+
+def test_front_page_lead_needs_money_floor():
+    from residual import site
+    cfg = Config()
+    thin = {"score": 40, "money_usd": 3_000}
+    heavy = {"score": 30, "money_usd": 25_000}
+    assert site.ranked([thin, heavy], cfg) == [heavy, thin]

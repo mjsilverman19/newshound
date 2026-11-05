@@ -11,14 +11,27 @@ log = logging.getLogger(__name__)
 SOURCES = {"polymarket": polymarket, "kalshi": kalshi}
 
 
+def is_macro(cat: str, q: str, end, cfg, now: float) -> bool:
+    """A finance-category market about the economy (rates, recessions, index or oil levels) that
+    resolves far enough out to move on news rather than track a live price."""
+    if not any(c in cat for c in cfg.macro_categories):
+        return False
+    if any(c in cat for c in cfg.excluded_categories if c not in cfg.macro_categories):
+        return False  # also crypto, weather, recurring, multi strikes...
+    if not any(k in q for k in cfg.macro_keywords):
+        return False
+    return bool(end) and end - now >= cfg.macro_min_days_to_end * 86400
+
+
 def eligible(row: dict, cfg, now: float) -> bool:
     cat = (row.get("category") or "").lower()
-    if any(c in cat for c in cfg.excluded_categories):
-        return False
     q = f" {(row.get('question') or '').lower()} "
+    q = q.replace("?", " ").replace(",", " ")
+    end = row.get("end_ts")
+    if any(c in cat for c in cfg.excluded_categories) and not is_macro(cat, q, end, cfg, now):
+        return False
     if any(k in q for k in cfg.excluded_keywords):
         return False
-    end = row.get("end_ts")
     if end and end - now < cfg.skip_if_ends_within_hours * 3600:
         return False  # about to resolve, or already past its end and awaiting results
     liq = row.get("liquidity") or 0

@@ -287,10 +287,16 @@ def shell(cfg, now: float, title: str, body: str, desc: str = "") -> str:
 """
 
 
+def ranked(stories: list[dict], cfg) -> list[dict]:
+    """Stories with enough money behind them first, each group by score, so a thin market can't lead."""
+    floor = cfg.lead_min_money_usd
+    return sorted(stories, key=lambda s: ((s.get("money_usd") or 0) >= floor, s["score"] or 0), reverse=True)
+
+
 def front(db, cfg, now: float, data: dict) -> str:
     b = base_path(cfg)
     today = et_day(now)
-    todays = [s for s in data["stories"] if s["day"] == today]
+    todays = ranked([s for s in data["stories"] if s["day"] == today], cfg)
     parts = []
     if todays:
         lead, also = todays[0], todays[1:]
@@ -412,7 +418,7 @@ def method_page(cfg, now: float) -> str:
 </section>
 
 <h2>1. Signal</h2>
-<p>Markets are eligible if they have at least ${cfg.min_liquidity_usd:,.0f} of order-book liquidity (Polymarket) or {cfg.min_open_interest:,.0f} contracts of open interest (Kalshi), do not resolve within {cfg.skip_if_ends_within_hours:g} hours, and are not in categories that track a public feed or a live event, such as weather, crypto and asset prices, and games in progress. A market is flagged when its price, read as a probability, differs by at least {pts} points from the previous hourly reading (for Polymarket, also from the platform's own one-hour change). The start of the shift is estimated as the last time the price sat at its earlier level before covering a quarter of the move, using the market's recent price and trade history where available. Flagged moves with less than {floor_usd} traded since that start are discarded. A market is not flagged again for {cfg.cooldown_hours:g} hours unless it moves a further {pts} points.</p>
+<p>Markets are eligible if they have at least ${cfg.min_liquidity_usd:,.0f} of order-book liquidity (Polymarket) or {cfg.min_open_interest:,.0f} contracts of open interest (Kalshi), do not resolve within {cfg.skip_if_ends_within_hours:g} hours, and are not in categories that track a public feed or a live event, such as weather, crypto and asset prices, and games in progress. Markets about the economy (interest rates, recessions, inflation, and stock-index or oil levels) are the exception: they are kept when they resolve at least {cfg.macro_min_days_to_end:g} days out, because their prices move on news rather than tracking a live feed. A market is flagged when its price, read as a probability, differs by at least {pts} points from the previous hourly reading (for Polymarket, also from the platform's own one-hour change). The start of the shift is estimated as the last time the price sat at its earlier level before covering a quarter of the move, using the market's recent price and trade history where available. Flagged moves with less than {floor_usd} traded since that start are discarded. A market is not flagged again for {cfg.cooldown_hours:g} hours unless it moves a further {pts} points.</p>
 
 <h2>2. Scoring</h2>
 <p>For each flagged market <i>m</i>, let &Delta;<i>p</i><sub>m</sub> be the absolute price change (0 to 1), <i>V</i><sub>m</sub> the dollars traded since the shift began, and <i>r</i><sub>m</sub> the ratio of that trading to the market's usual pace over the same length of time (from its one-week volume on Polymarket and its 24-hour volume on Kalshi). The intensity of the move and the score of a story <i>s</i> are</p>
@@ -422,7 +428,8 @@ def method_page(cfg, now: float) -> str:
 <ul>{bands}</ul>
 
 <h2>3. Stories</h2>
-<p>A flagged market joins a story already holding that market, or another market from the same event on the same platform, on the same day (US Eastern time). Otherwise it starts a new story. During investigation the model may merge stories it finds to be the same news; merged stories are rescored.</p>
+<p>A flagged market joins a story already holding that market, or another market from the same event on the same platform, on the same day (US Eastern time). Otherwise it starts a new story. Stories on the same day that share a distinctive name (a person, organisation or place, ignoring words common to many stories) are then merged, so the same news told through different markets appears once. During investigation the model may also merge stories it finds to be the same news; merged stories are rescored.</p>
+<p>On the front page, stories with at least ${cfg.lead_min_money_usd:,.0f} traded across their markets come first, each group ordered by score. A thinly traded market can score highly on a small, sudden move, so it can be published but cannot lead the page.</p>
 
 <h2>4. Investigation</h2>
 <p>The model (<code>{e(cfg.hunt_model)}</code>) receives the shift: which markets moved, in which direction, when, how much was traded, and how each market resolves. It is instructed to infer what kind of development would produce the shift and to search for it, preferring primary sources (statements, filings, dockets, official pages, posts by the people involved) and wire services and established outlets. It may run up to {cfg.hunt_max_searches} web searches and {cfg.hunt_max_fetches} page retrievals per story ({cfg.recheck_max_searches} searches on a recheck). It records each source's publication time as shown on the page, or none if no time is shown, and returns a headline, summary, dateline, sources with their roles, and a lead image taken from a source's own page metadata. Topic names for smaller stories are written by <code>{e(cfg.label_model)}</code>.</p>
@@ -433,6 +440,7 @@ def method_page(cfg, now: float) -> str:
 <h2>6. Limitations</h2>
 <ul>
 <li><b>Coverage.</b> Only news that people bet on can be detected. Politics, sports and economics are overrepresented; news with no market behind it is invisible.</li>
+<li><b>Surprise, not importance.</b> The score measures how far expectations moved in the markets that exist, weighted by the money behind the move. Important news that was widely expected moves prices little and scores low; a surprise in a heavily traded market scores high whatever its wider significance.</li>
 <li><b>Timing.</b> Prices are compared an hour apart. Where a market's trade history is sparse, the start of a shift, and therefore the delay before the first report, is accurate only to about an hour.</li>
 <li><b>Publication times</b> are read from the pages by the model and can be wrong. Each story lists its sources with their times so readers can check.</li>
 <li><b>Model error.</b> The model can misread a source, overstate what it says, or attach a real source to the wrong development. The checks in section 5 limit invented sources and late reports but do not verify that a source says what the summary says.</li>
@@ -515,7 +523,7 @@ def build(db, cfg, out: str | Path, now: float | None = None, clean: bool = Fals
     for s in data["stories"]:
         put(f"{story_path(s)}index.html", story_page(cfg, now, s))
     for day, d in days.items():
-        put(f"{day_path(day)}/index.html", day_page(cfg, now, day, d["stories"], d["leads"], d["watching"]))
+        put(f"{day_path(day)}/index.html", day_page(cfg, now, day, ranked(d["stories"], cfg), d["leads"], d["watching"]))
     for s in data["every"]:  # URLs of published stories that were merged into another one
         target = base_path(cfg) + (story_path(s) if s in data["stories"] else f"{day_path(s['day'])}/")
         for alias in s.get("aliases") or []:

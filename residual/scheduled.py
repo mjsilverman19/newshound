@@ -95,7 +95,7 @@ def scan(db, cfg, state_path: Path) -> list[int]:
         state["saved_ts"][platform] = now
         state["prices"][platform] = {r["market_id"]: round(r["price"], 4) for r in live}
     save_state(state_path, state)
-    stories.assign(db, new_ids)
+    stories.assign(db, new_ids, cfg=cfg)
     return new_ids
 
 

@@ -39,6 +39,18 @@ class Config:
         " vs. ", " vs ", "up or down", "game 1", "game 2", "game 3", "map 1", "map 2",
         "temperature", "temp in", "price of bitcoin", "bitcoin above", "ethereum above",
     ])
+    # Macro markets let back in from the excluded finance categories: rates, recessions, index and oil
+    # levels shift on real news. Only long-dated ones count, so same-day price feeds stay out.
+    macro_categories: list[str] = field(default_factory=lambda: [
+        "financials", "equities", "stocks", "commodities",
+    ])
+    macro_keywords: list[str] = field(default_factory=lambda: [
+        " fed ", "federal reserve", "fomc", "interest rate", "rate cut", "rate hike", "recession",
+        "inflation", " cpi ", " gdp ", "unemployment", "jobless", "s&p", "nasdaq", " dow ",
+        " oil ", "brent", " wti ", "bank of england", " ecb ", "bank of japan", "tariff", "treasury", "yield",
+        "default", "shutdown",
+    ])
+    macro_min_days_to_end: float = 7
 
     # Wallet signals (Polymarket only)
     fresh_wallet_max_trades: int = 10
@@ -56,6 +68,23 @@ class Config:
     # Stories
     hunt_min_score: float = 25             # importance needed before the agent goes looking
     rehunt_gain: float = 10                # hunt again if a story's score rises this much
+    # A story needs this much traded across its markets to lead the front page or rank above heavier
+    # stories; thinner ones are still published, listed after the rest.
+    lead_min_money_usd: float = 10_000
+    # Words that never tie two stories together when grouping by the names in them (too common)
+    group_stopwords: list[str] = field(default_factory=lambda: [
+        "will", "who", "what", "which", "when", "before", "after", "next", "trump", "biden", "harris",
+        "president", "presidential", "prime", "minister", "secretary", "state", "states", "united",
+        "house", "senate", "congress", "cabinet", "administration", "white", "government", "party",
+        "election", "elections", "republican", "republicans", "democrat", "democrats", "democratic",
+        "nominee", "nomination", "odds", "january", "february", "march", "april", "june", "july",
+        "august", "september", "october", "november", "december", "us", "usa", "uk", "eu", "et", "gop",
+        "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "sept", "oct", "nov", "dec",
+        "winner", "win", "place", "department", "representatives", "seat", "seats", "most", "first",
+        "second", "third", "mayor", "governor", "court", "supreme", "federal", "national", "general",
+        "legislative", "parliament", "leader", "out", "end", "year", "the", "and", "new", "today", "is",
+        "does", "did", "has", "have", "can", "how", "why", "any", "there", "this", "that", "yes", "no",
+    ])
 
     # Scheduled mode (one scan per run; Claude in the session investigates)
     state_path: str = "prices.json.gz"

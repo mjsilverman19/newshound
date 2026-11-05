@@ -72,8 +72,80 @@ def _story_for(db, day: str, platform: str, market_id: str, event_id: str | None
     return r[0] if r else None
 
 
-def assign(db, move_ids: list[int], now: float | None = None) -> list[int]:
-    """Attach new moves to today's stories (same market or same event), creating stories as needed."""
+_WORD = r"(?:[A-Z][a-zA-Z\-]{2,}|[A-Z]{2,5})"
+_RUN = re.compile(rf"\b{_WORD}(?:\s+{_WORD})*\b")
+
+
+def names(text: str, stop) -> set[str]:
+    """The proper names in a text, one per run of capitalised words: its last word that isn't a common
+    word, so "Marco Rubio" gives "rubio" and two people who share a first name stay apart."""
+    text = (text or "").replace("’s", "").replace("'s", "")
+    stop = set(stop)
+    out = set()
+    for run in _RUN.findall(text):
+        words = [w.lower() for w in run.split() if w.lower() not in stop]
+        if words:
+            out.add(words[-1])
+    return out
+
+
+def story_names(db, story: dict, stop) -> set[str]:
+    out = set()
+    for m in db.story_moves(story["id"]):
+        out |= names(m["question"], stop)
+        mk = db.market(m["platform"], m["market_id"]) or {}
+        out |= names(mk.get("event_title") or "", stop)
+    for k in ("headline", "question", "topic"):
+        out |= names(story.get(k) or "", stop)
+    return out
+
+
+def _distinctive(sets: dict[int, set[str]]) -> dict[int, set[str]]:
+    """Drop names that turn up in so many of the day's stories that they say nothing about which is which."""
+    if len(sets) < 5:
+        return sets
+    count: dict[str, int] = {}
+    for ns in sets.values():
+        for n in ns:
+            count[n] = count.get(n, 0) + 1
+    common = {n for n, c in count.items() if c > 0.4 * len(sets)}
+    return {k: v - common for k, v in sets.items()}
+
+
+def regroup(db, cfg, day: str | None = None) -> list[list[int]]:
+    """Merge the day's stories that share a distinctive name (a person, organisation or place), so the
+    same news told through different markets appears once. Returns the groups that were merged."""
+    day = day or et_day(time.time())
+    todays = db.stories("day=?", (day,))
+    sets = _distinctive({s["id"]: story_names(db, s, cfg.group_stopwords) for s in todays})
+    parent = {i: i for i in sets}
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    ids = list(sets)
+    for a_i, a in enumerate(ids):
+        for b in ids[a_i + 1:]:
+            if sets[a] & sets[b]:
+                parent[find(a)] = find(b)
+    groups: dict[int, list[int]] = {}
+    for i in ids:
+        groups.setdefault(find(i), []).append(i)
+    merged = []
+    for g in groups.values():
+        if len(g) > 1:
+            g.sort()
+            merge(db, g[0], g[1:])
+            merged.append(g)
+    return merged
+
+
+def assign(db, move_ids: list[int], now: float | None = None, cfg=None) -> list[int]:
+    """Attach new moves to today's stories (same market or same event), creating stories as needed.
+    With a config, stories that share a distinctive name are then merged (see `regroup`)."""
     now = now or time.time()
     day = et_day(now)
     touched = set()
@@ -87,6 +159,10 @@ def assign(db, move_ids: list[int], now: float | None = None) -> list[int]:
         touched.add(sid)
     for sid in touched:
         recompute(db, sid)
+    if cfg is not None and touched:
+        regroup(db, cfg, day)
+        touched = {s["id"] for s in db.stories("day=?", (day,))} & touched | \
+            {db.get_move(m)["story_id"] for m in move_ids}
     return sorted(touched)
 
 
