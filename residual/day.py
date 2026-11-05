@@ -134,7 +134,8 @@ def group(markets: list[dict], cfg, max_events: int | None = None) -> list[dict]
         for j in range(i + 1, len(events)):
             b = events[j]
             tags = a["spec"] & b["spec"]
-            if len(tags) >= 2 or (tags and a["names"] & b["names"]) or (a["title_names"] & b["title_names"]):
+            cross = a["platform"] != b["platform"] and a["names"] & b["names"]  # Kalshi has no tags
+            if len(tags) >= 2 or (tags and a["names"] & b["names"]) or (a["title_names"] & b["title_names"]) or cross:
                 parent[find(i)] = find(j)
     groups = defaultdict(list)
     for i, e in enumerate(events):

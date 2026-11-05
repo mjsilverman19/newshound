@@ -574,3 +574,17 @@ def test_day_sources_from_earlier_days_are_background(env):
         "headline": "h", "summary": "s", "searched": [new], "queries": [],
         "sources": [{"url": new, "relation": "cause", "published_at": iso(NOW - 3600), "summary": "s"}]})
     assert st["status"] == "reported"
+
+
+def test_day_links_the_same_subject_across_platforms():
+    from residual import day
+    cfg = Config()
+    pm = day_row("a", "E1", "Will J.D. Vance win the 2028 Republican presidential nomination?", 0.06, 7 * 63_000,
+                 title="Republican Presidential Nominee 2028")
+    k = {**day_row("b", "K1", "2028 Republican presidential nominee [J.D. Vance]", 0.0, 7 * 20_000,
+                   tags="Elections", title="2028 Republican presidential nominee"),
+         "platform": "kalshi", "extra": {"previous_price": 0.30}, "price": 0.37, "volume24h": 50_000}
+    counted = {**day_row("c", "K2", "South Dakota Senate margin of victory [10+]", 0.4, 7 * 9_000, tags="Elections"),
+               "platform": "kalshi", "extra": {"previous_price": 0.2}, "price": 0.6, "volume24h": 20_000}
+    topics = day.group(day.score_markets([pm, k, counted], cfg, NOW), cfg)
+    assert len(topics) == 1 and {e["platform"] for e in topics[0]["events"]} == {"polymarket", "kalshi"}

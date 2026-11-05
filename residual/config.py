@@ -63,10 +63,12 @@ class Config:
     day_soft_tags: list[str] = field(default_factory=lambda: [
         "sports", "sport", "games", "movies", "oscars", "culture", "music", "gaming", "box office", "awards",
         "celebrities", "esports", "tennis", "soccer", "nfl", "nba", "mlb", "nhl", "golf", "cricket", "f1",
+        "entertainment",
     ])
     day_settling_tags: list[str] = field(default_factory=lambda: ["election night"])
     day_excluded_keywords: list[str] = field(default_factory=lambda: [
         "exact score", "halftime", " win on 20",
+        "margin of victory",               # races already decided, being counted
     ])
     # Tags too broad to tie two events together (a tag also counts as broad when it is on more than
     # day_tag_rarity of the day's moving events)
