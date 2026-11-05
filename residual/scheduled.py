@@ -34,6 +34,9 @@ def save_state(path: Path, state: dict):
 
 
 def scan(db, cfg, state_path: Path) -> list[int]:
+    if cfg.mode == "day":
+        from . import day
+        return day.scan(db, cfg)
     state = load_state(state_path)
     new_ids = []
     for platform in cfg.platforms:

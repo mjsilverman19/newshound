@@ -73,14 +73,17 @@ def counts_as(s: dict) -> str:
 
 
 def assess(sources: list[dict], searched: list[dict], move_start_ts: float, slack_minutes: float,
-           background_domains=()) -> dict:
+           background_domains=(), not_before_ts: float | None = None) -> dict:
+    """not_before_ts (day mode): a source published before this is too old to be what changed today,
+    so it counts as background however the agent labelled it."""
     searched_urls = {norm_url(s["url"]) for s in searched if s.get("url")}
     checked = []
     for s in sources:
         when, ts = timing(s.get("published_at"), move_start_ts, slack_minutes * 60)
+        stale = bool(not_before_ts and ts is not None and ts < not_before_ts)
         checked.append({**s, "verified": is_verified(s.get("url", ""), searched_urls),
-                        "background_only": background_only(s.get("url", ""), background_domains),
-                        "timing": when, "published_ts": ts})
+                        "background_only": background_only(s.get("url", ""), background_domains) or stale,
+                        "stale": stale, "timing": when, "published_ts": ts})
 
     causes = [s for s in checked if counts_as(s) == "cause" and s["verified"]]
     if any(s["timing"] == "before" for s in causes):

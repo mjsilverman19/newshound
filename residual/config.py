@@ -14,10 +14,14 @@ class Config:
     db_path: str = "residual.db"
     briefs_dir: str = "briefs"
 
+    # How stories are found. "day": each run ranks topics by how much expectations changed over the last
+    # 24 hours (residual/day.py). "hourly": the original detector of sharp moves between hourly runs.
+    mode: str = "day"
+
     # Polling
     poll_seconds: int = 120
     platforms: list[str] = field(default_factory=lambda: ["polymarket", "kalshi"])
-    polymarket_max_events: int = 3000      # events sorted by 24h volume
+    polymarket_max_events: int = 6000      # events sorted by 24h volume
     kalshi_max_pages: int = 40             # 200 events per page
 
     # Detection
@@ -51,6 +55,39 @@ class Config:
         "default", "shutdown",
     ])
     macro_min_days_to_end: float = 7
+
+    # Day mode (see residual/day.py)
+    day_min_change: float = 0.03           # a market must have moved at least 3 points in 24 hours
+    day_min_usd: float = 500               # and traded at least this much in those 24 hours
+    day_min_hours_to_end: float = 24       # skip markets resolving within a day (live games, counts)
+    day_soft_tags: list[str] = field(default_factory=lambda: [
+        "sports", "sport", "games", "movies", "oscars", "culture", "music", "gaming", "box office", "awards",
+        "celebrities", "esports", "tennis", "soccer", "nfl", "nba", "mlb", "nhl", "golf", "cricket", "f1",
+    ])
+    day_settling_tags: list[str] = field(default_factory=lambda: ["election night"])
+    day_excluded_keywords: list[str] = field(default_factory=lambda: [
+        "exact score", "halftime", " win on 20",
+    ])
+    # Tags too broad to tie two events together (a tag also counts as broad when it is on more than
+    # day_tag_rarity of the day's moving events)
+    day_generic_tags: list[str] = field(default_factory=lambda: [
+        "politics", "geopolitics", "world", "trump", "united states", "elections", "global elections",
+        "main election", "world elections", "us election", "business", "finance", "economy", "tech", "ai",
+        "culture", "middle east", "military", "earn 3.25%", "hide from new", "derivatives", "post election",
+        "big tech", "trump presidency", "peace deal", "international election props", "polling", "primaries",
+        "climate & science", "science", "qualification", "season stats", "ipos", "ipo", "midterms",
+        "2028 election", "commodities", "negotiation topics", "debut", "ai releases", "parent for derivative",
+    ])
+    day_tag_rarity: float = 0.06
+    day_name_max_events: int = 4           # a name ties events together only if at most this many share it
+    day_max_events: int = 400              # the biggest moving events considered for grouping
+    day_story_min_score: float = 30        # topics below this are not tracked as stories
+    day_max_topics: int = 20               # tracked per run
+    day_hunt_min_score: float = 33         # a topic needs this to be hunted
+    day_strong_score: float = 37           # "strong" signal: this score and this much normal trading
+    day_strong_usd: float = 40_000
+    day_timing_topics: int = 10            # read intraday price history for this many leading topics
+    day_source_lookback_hours: float = 36  # a cause must be published within this long before the window
 
     # Wallet signals (Polymarket only)
     fresh_wallet_max_trades: int = 10
@@ -100,6 +137,7 @@ class Config:
     web_fetch_tool_api: str = "web_fetch_20260209"
     hunt_max_searches: int = 13            # 2-3 first searches, then up to about 10 more
     recheck_max_searches: int = 5
+    weak_max_searches: int = 3             # day mode: searches for a topic with a weak signal
     hunt_max_fetches: int = 10
     hunt_max_turns: int = 20               # API round trips per story
 

@@ -2,18 +2,22 @@
 
 The day's news, found by following where expectations shifted.
 
-Prediction markets give the hound a scent. Every hour, Newshound compares about 55,000 Polymarket
-and Kalshi prices with an hour earlier. Markets that move 5 points or more with real money behind
-them are grouped into **stories** by what they are about, and each story is scored by how much it
-shifted expectations:
+Prediction markets give the hound a scent. Every hour, Newshound compares tens of thousands of
+Polymarket and Kalshi prices with their prices **24 hours earlier**, weights each market's change by
+how much money normally trades in it, and groups markets about the same subject into **topics**. Each
+topic is scored by how much it changed expectations over the day:
 
-> for each market, points moved × dollars traded during the move × √(trading pace vs normal),
-> summed over the story's markets; the score is 10 × log10(1 + that sum), capped at 100.
+> for each market, |points moved over 24 hours| × its normal daily dollars, summed over the topic's
+> markets; the score is 10 × log10(1 + that sum), capped at 100.
 
-Stories scoring 25 or more are chased. Claude starts from the scent (what moved, which way, when,
-and how the market resolves), finds what happened and writes it up. The code checks every source
-against the searches that found it and against the time of the shift, and won't let aggregators or
-partisan blogs explain a story. Only what the hunt catches is published. Leads with nothing reported
+A move that reverses adds little, and a move in a heavily traded market counts for more than the same
+move in a thin one. The original detector of sharp hourly moves is still there: set `mode = "hourly"`
+in the config. `residual/day.py` describes the day-level method.
+
+Topics scoring 33 or more are chased. Claude starts from the scent (the whole topic: what moved and
+which way, how strong the signal is, and when during the day it moved), finds what happened today and
+writes it up. The code checks every source against the searches that found it and that it is from
+the day of the shift, and won't let aggregators or partisan blogs explain a story. Only what the hunt catches is published. Leads with nothing reported
 go "On the trail" as open questions and are searched again after 1, 6 and 24 hours.
 
 The site is at https://mjsilverman19.github.io/newshound/ (built into the `gh-pages` branch). Story

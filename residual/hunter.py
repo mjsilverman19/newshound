@@ -130,6 +130,22 @@ relation (the code uses it to decide the status):
 - market_coverage: only reports the odds or the trading.
 role is what readers see next to each source: pick the one that describes what the source is.
 
+## Day mode (when the item's mode is "day")
+The scent is a whole topic: every market about it that moved over the last 24 hours, how strong the \
+signal is, and when during the day the lead market moved. Your question is what happened today on this \
+topic and how much it matters, not what happened in one particular minute.
+- Find the development behind the shift as a whole. If several markets point to one development, that is \
+the story. If this topic and one in other_stories_today have the same cause (for example a market rout \
+that moved both an IPO's timing and rate expectations), list the other's story_id in merge_with and write \
+the story about the shared cause.
+- A cause must be from the day of the shift. Reports from earlier days are background: the code treats \
+anything published more than about a day and a half before the window as background, whatever you call it.
+- If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary \
+and write about the bigger news if you can source it. Otherwise submit an open lead.
+- Follow the strength note. For a weak signal, run two or three searches and stop if nothing specific \
+turns up: an open lead is the right result and saves the budget for real news.
+- why_it_matters should say how much this changes things, in plain terms.
+
 ## Hunts and rechecks
 - kind "hunt": start with 2 or 3 searches on the most likely development. If you find it, confirm it, get the \
 publication time of the earliest report, and stop. Otherwise dig deeper with up to about 10 more searches. \
@@ -215,6 +231,8 @@ def _call(client, cfg, system, tools, messages):
 def hunt(client, cfg, item: dict) -> dict | None:
     """One story. Returns findings in the shape `record` takes, or None if the model refused."""
     n_search = cfg.hunt_max_searches if item["kind"] == "hunt" else cfg.recheck_max_searches
+    if item.get("strength") == "weak":
+        n_search = min(n_search, cfg.weak_max_searches)
     tools = [
         {"type": cfg.web_search_tool_api, "name": "web_search", "max_uses": n_search},
         {"type": cfg.web_fetch_tool_api, "name": "web_fetch", "max_uses": cfg.hunt_max_fetches},

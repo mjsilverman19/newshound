@@ -451,7 +451,46 @@ def method_page(cfg, now: float) -> str:
 <h2>7. Reproducibility and corrections</h2>
 <p>The code, including every threshold above, is public at <a href="{REPO_URL}">{e(REPO_URL.removeprefix("https://"))}</a>; the numbers on this page are read from its configuration when the site is built. To report an error in a story, open an issue there with the story's link.</p>
 </main>"""
+    if cfg.mode == "day":
+        body = _day_method(cfg, body, recheck, bands)
     return shell(cfg, now, "Method", body)
+
+
+def _day_method(cfg, body: str, recheck: str, bands: str) -> str:
+    """The Method page for day mode: sections 1 to 3 and the timing rule in section 5 differ."""
+    lo, mv, usd = cfg.day_hunt_min_score, f"{cfg.day_min_change * 100:.0f}", f"${cfg.day_min_usd:,.0f}"
+    look = f"{cfg.day_source_lookback_hours:g}"
+    top = f"""<section class="abstract"><h2>Abstract</h2>
+<p>Newshound is an automated news service that ranks the day's news by how much it changed expectations. Each hour it compares the prices of tens of thousands of Polymarket and Kalshi markets with their prices 24 hours earlier, weights each market's change by how much money normally trades in it, groups markets about the same subject into topics, and scores each topic on a logarithmic scale from 0 to 100. Topics scoring {lo:.0f} or more are investigated by a language model (Claude, made by Anthropic) using web search and page retrieval, starting from a description of the whole topic: which markets moved and which way, how strong the signal is, and when during the day it moved. The model proposes an account of what happened and the sources for it; deterministic code, not the model, decides whether the account is published. Publication requires a source that the model's own searches returned, that is not on a list of aggregators and partisan sites, and that is from the day of the shift. Topics without such a source are kept as open questions and searched again after {recheck} hours. Stories are written and published without human review. Market prices are used only to find and rank stories and never appear in them.</p>
+</section>
+
+<h2>1. Signal</h2>
+<p>A market counts toward the day's news if its price, read as a probability, has moved at least {mv} points over the past 24 hours with at least {usd} traded in that time, and it does not resolve within {cfg.day_min_hours_to_end:g} hours. Markets that track a public feed or a live event (weather, crypto and asset prices, games in progress) are left out, except markets about the economy (interest rates, recessions, inflation, and stock-index or oil levels) that resolve at least {cfg.macro_min_days_to_end:g} days out. Sports and entertainment markets are set aside as soft news, and markets settling a finished vote count are left out.</p>
+
+<h2>2. Scoring</h2>
+<p>For each market <i>m</i>, let &Delta;<i>p</i><sub>m</sub> be the absolute change in its price over 24 hours (0 to 1) and <i>N</i><sub>m</sub> its normal daily trading in dollars: a week's trading divided by seven on Polymarket, and the last 24 hours' trading on Kalshi, which reports no weekly figure. The day score of a market and the score of a topic <i>t</i> are</p>
+<p class="eq"><i>D</i><sub>m</sub> = &Delta;<i>p</i><sub>m</sub> &middot; <i>N</i><sub>m</sub></p>
+<p class="eq"><i>S</i> = min(100, 10 &middot; log<sub>10</sub>(1 + &Sigma;<sub>m&isin;t</sub> <i>D</i><sub>m</sub>))</p>
+<p>The net change counts, not how much a price swung in between, so a rumour that rose and fell back adds little. Weighting by normal trading means a move in a market where a lot of money usually trades counts for more than the same move in a thin one. Each 10 points of <i>S</i> is a tenfold increase. Topics scoring {lo:.0f} or more are investigated; topics between {cfg.day_story_min_score:.0f} and {lo:.0f} are listed under a short topic name. Each topic also gets a signal strength: <b>strong</b> with a score of at least {cfg.day_strong_score:.0f} and at least ${cfg.day_strong_usd:,.0f} of normal daily trading, <b>weak</b> with under ${cfg.lead_min_money_usd:,.0f}, or a single small market, and <b>moderate</b> otherwise. A weak topic gets at most {cfg.weak_max_searches} searches. Published stories carry a label for the size of the shift:</p>
+<ul>{bands}</ul>
+
+<h2>3. Stories</h2>
+<p>Markets in the same event form one group. Groups join a topic when they share two specific tags (tags on at most {cfg.day_tag_rarity:.0%} of the day's moving groups), or one specific tag and a name, or a name in both group titles; a name counts only if at most {cfg.day_name_max_events} groups share it, so "Hegseth" ties groups together and "Israel" does not. Each topic becomes a story, or updates the story it already is when they share a group; a topic touching several of the day's stories merges them. During investigation the model may also merge stories it finds to have the same cause, such as a market rout that moved both a company's listing plans and interest-rate expectations; merged stories are rescored. A published story is investigated again only if its score rises by {cfg.rehunt_gain:.0f} or more.</p>
+<p>On the front page, stories with at least ${cfg.lead_min_money_usd:,.0f} of normal daily trading across their markets come first, each group ordered by score, so a thin market cannot lead the page.</p>
+"""
+    i, j = body.index('<section class="abstract">'), body.index("<h2>4. Investigation</h2>")
+    body = body[:i] + top + "\n" + body[j:]
+    old_timing = (f"and (c) its publication time is no later than {cfg.reaction_slack_minutes} minutes after the shift began. "
+                  "A date with no time counts as before the shift only if it is a full day earlier.")
+    new_timing = (f"and (c) it was published no more than {look} hours before the 24-hour window began; an older report "
+                  "is treated as background, because it cannot be what changed expectations that day.")
+    body = body.replace(old_timing, new_timing)
+    body = body.replace("If a later search finds a qualifying report published after the shift, the story is published "
+                        "with the delay between the shift and the first report.",
+                        "If a later search finds a qualifying report, the story is published.")
+    body = body.replace("receives the shift: which markets moved, in which direction, when, how much was traded, and how each market resolves.",
+                        "receives the topic: which markets moved over the day and in which direction, how much money normally trades in them, how strong the signal is, when the lead market moved, and how the biggest market resolves.")
+    return body
 
 
 def feed(cfg, now: float, stories: list[dict]) -> str:
@@ -479,7 +518,8 @@ def collect(db, cfg, now: float) -> dict:
     stories = [s for s in every if is_story(s)]
     leads = sorted([s for s in every if is_lead(s) and s["day"] >= week_ago],
                    key=lambda s: (s["day"], s["score"]), reverse=True)
-    watching = [s for s in every if s["status"] == "pending" and s.get("topic") and (s["score"] or 0) < cfg.hunt_min_score]
+    watching = [s for s in every if s["status"] == "pending" and s.get("topic")
+                and (s["score"] or 0) < (cfg.day_hunt_min_score if s.get("scent_data") else cfg.hunt_min_score)]
     return {"every": every, "stories": stories, "leads": leads, "watching": watching}
 
 

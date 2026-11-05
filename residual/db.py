@@ -61,6 +61,7 @@ STORY_COLUMNS = {
     "image": "TEXT",           # JSON: url, source_url, credit, caption, alt
     "checked_domains": "TEXT", # JSON list of the outlets searched so far
     "aliases": "TEXT",         # JSON list of "YYYY-MM-DD/slug" of published stories merged into this one
+    "scent_data": "TEXT",      # JSON, day mode: the topic's rank, signal strength, timing and market groups
 }
 
 
@@ -198,13 +199,13 @@ def _move(r) -> dict:
 
 # ---------- stories ----------
 
-STORY_JSON = ("sources", "check_next", "image", "checked_domains", "aliases")
+STORY_JSON = ("sources", "check_next", "image", "checked_domains", "aliases", "scent_data")
 
 
 def _story(r) -> dict:
     d = dict(r)
     for k in STORY_JSON:
-        d[k] = json.loads(d[k]) if d.get(k) else ([] if k != "image" else None)
+        d[k] = json.loads(d[k]) if d.get(k) else ([] if k not in ("image", "scent_data") else None)
     return d
 
 

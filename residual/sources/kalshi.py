@@ -46,6 +46,14 @@ def fetch_markets(cfg) -> list[dict]:
     return out
 
 
+def _prev(m: dict) -> float | None:
+    """The price a day ago: previous_price_dollars, or the older previous_price in cents."""
+    p = _f(m.get("previous_price_dollars"))
+    if p is None and _f(m.get("previous_price")) is not None:
+        p = _f(m.get("previous_price")) / 100
+    return p or None
+
+
 def _normalize(m: dict, ev: dict, cfg) -> dict | None:
     if m.get("status") not in (None, "active", "open"):
         return None
@@ -72,7 +80,7 @@ def _normalize(m: dict, ev: dict, cfg) -> dict | None:
         "category": ev.get("category") or "",
         "end_ts": _ts(m.get("close_time")),
         "rules": ((m.get("rules_primary") or "") + "\n" + (m.get("rules_secondary") or "")).strip()[:2000],
-        "extra": {"series": series},
+        "extra": {"series": series, "previous_price": _prev(m)},
         "price": price,
         "volume24h": _f(m.get("volume_24h_fp")),
         "liquidity": _f(m.get("open_interest_fp")),

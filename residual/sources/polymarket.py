@@ -89,6 +89,7 @@ def _normalize(m: dict, ev: dict, tags: list[str], cfg) -> dict | None:
         "extra": {
             "yes_token": tokens[0], "no_token": tokens[1], "outcome": outcomes[0] if outcomes else "Yes",
             "volume1wk": _f(m.get("volume1wk")), "one_hour_change": _f(m.get("oneHourPriceChange")),
+            "one_day_change": _f(m.get("oneDayPriceChange")),
         },
         "price": price,
         "volume24h": _f(m.get("volume24hr")),

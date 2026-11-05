@@ -251,15 +251,24 @@ def scent(db, story: dict) -> str:
 
 # ---------- the hunt queue ----------
 
+def _threshold(s: dict, cfg) -> float:
+    return cfg.day_hunt_min_score if s.get("scent_data") else cfg.hunt_min_score
+
+
 def queue(db, cfg) -> list[dict]:
+    from . import day
     now = time.time()
     today = et_day(now)
-    todays = db.stories("day=?", (today,))
-    hunts = [s for s in todays if s["score"] >= cfg.hunt_min_score
+    todays = [s for s in db.stories("day=?", (today,)) if db.story_moves(s["id"])]
+    hunts = [s for s in todays if s["score"] >= _threshold(s, cfg)
              and (s["hunted_ts"] is None or s["score"] >= (s["hunted_score"] or 0) + cfg.rehunt_gain)]
     hunts = hunts[: cfg.max_new_per_run]
-    due = db.stories("status IN ('unreported','unclear') AND next_recheck_ts IS NOT NULL AND next_recheck_ts <= ?",
-                     (now,), order="next_recheck_ts")[: cfg.max_rechecks_per_run]
+    hunting = {s["id"] for s in hunts}
+    # only open leads are rechecked: a published story doesn't need more sources
+    due = [s for s in db.stories("status='unreported' AND next_recheck_ts IS NOT NULL AND next_recheck_ts <= ?",
+                                 (now,), order="next_recheck_ts")
+           if s["id"] not in hunting and db.story_moves(s["id"])
+           and (cfg.mode != "day" or s.get("scent_data"))][: cfg.max_rechecks_per_run]
     others = others_today(db, todays)
     out = []
     for kind, group in (("hunt", hunts), ("recheck", due)):
@@ -267,8 +276,10 @@ def queue(db, cfg) -> list[dict]:
             moves = db.story_moves(s["id"])
             out.append({
                 "story_id": s["id"], "kind": kind, "score": s["score"],
+                "mode": "day" if s.get("scent_data") else "hourly",
+                "strength": (s.get("scent_data") or {}).get("strength"),
                 "move_start_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(min(m["move_start_ts"] for m in moves))),
-                "scent": scent(db, s),
+                "scent": day.scent(db, s) if s.get("scent_data") else scent(db, s),
                 "other_stories_today": [o for o in others if o["story_id"] != s["id"]],
             })
     return out
@@ -331,7 +342,14 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
     for src in f.get("sources") or []:
         role = (src.get("role") or "").lower().strip()
         src["role"] = role if role in ROLES else DEFAULT_ROLE.get(src.get("relation"), "context")
-    a = V.assess(f.get("sources") or [], searched, start, cfg.reaction_slack_minutes, cfg.background_only_domains)
+    if story.get("scent_data"):
+        # day mode: a cause must come from the day of the shift (or shortly before), and may be published
+        # at any time up to now
+        floor = (story["scent_data"].get("window_start_ts") or start) - cfg.day_source_lookback_hours * 3600
+        start = time.time()
+        a = V.assess(f.get("sources") or [], searched, start, 0, cfg.background_only_domains, not_before_ts=floor)
+    else:
+        a = V.assess(f.get("sources") or [], searched, start, cfg.reaction_slack_minutes, cfg.background_only_domains)
 
     # keep earlier verified sources, add the new ones
     seen = {V.norm_url(s["url"]) for s in a["sources"]}
@@ -392,9 +410,11 @@ def unlabeled(db, cfg, day: str | None = None) -> list[dict]:
     """Today's stories below the hunt threshold that have no short topic label yet."""
     day = day or et_day(time.time())
     out = []
-    for s in db.stories("day=? AND score<? AND topic IS NULL", (day, cfg.hunt_min_score)):
+    for s in db.stories("day=? AND topic IS NULL AND headline IS NULL", (day,)):
+        if s["score"] >= _threshold(s, cfg) or not db.story_moves(s["id"]):
+            continue
         out.append({"story_id": s["id"], "score": s["score"],
-                    "markets": [m["question"] for m in db.story_moves(s["id"])]})
+                    "markets": [m["question"] for m in db.story_moves(s["id"])][:8]})
     return out
 
 

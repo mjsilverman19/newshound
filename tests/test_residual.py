@@ -246,6 +246,7 @@ def test_record_reported_merge_and_rehunt_gate(env):
 def test_unreported_story_gets_rechecked_and_confirmed(env):
     from residual import scheduled, stories
     cfg, db = env
+    cfg.mode = "hourly"
     (sid,) = stories.assign(db, [story_move(db)], NOW)
     st = scheduled.record(db, cfg, sid, "hunt", {"headline": "Traders raise the odds", "sources": [],
                                                  "searched": [], "queries": []})
@@ -508,3 +509,68 @@ def test_front_page_lead_needs_money_floor():
     thin = {"score": 40, "money_usd": 3_000}
     heavy = {"score": 30, "money_usd": 25_000}
     assert site.ranked([thin, heavy], cfg) == [heavy, thin]
+
+
+# ---------- day mode ----------
+
+def day_row(mid, ev, q, chg, week, tags="Politics; Fed", title=None, price=0.5):
+    return {"platform": "polymarket", "market_id": mid, "question": q, "url": "https://polymarket.com/x",
+            "event_id": ev, "event_title": title or q, "category": tags, "end_ts": NOW + 60 * 86400,
+            "rules": "Resolves Yes if it happens.", "extra": {"volume1wk": week, "one_day_change": chg},
+            "price": price, "volume24h": week / 7, "liquidity": 10_000}
+
+
+def test_day_scores_by_net_change_times_normal_dollars():
+    from residual import day
+    cfg = Config()
+    rows = [day_row("a", "E1", "Another Fed rate hike in 2026?", -0.14, 7 * 41_000),
+            day_row("b", "E2", "Will 2 Fed rate hikes happen in 2026?", -0.02, 7 * 50_000),   # too small a move
+            day_row("c", "E3", "Jordan vs. Indonesia exact score?", 0.20, 7 * 6_000, tags="Sports; Soccer"),
+            day_row("d", "E4", "Will it rain in Paris?", 0.10, 7 * 9_000, tags="Weather")]
+    ms = day.score_markets(rows, cfg, NOW)
+    assert [m["market_id"] for m in ms] == ["a"]
+    assert ms[0]["s"] == pytest.approx(0.14 * 41_000)
+
+
+def test_day_groups_by_specific_tags_not_broad_names():
+    from residual import day
+    cfg = Config()
+    rows = [day_row("a", "E1", "Will Anthropic IPO by December 31?", -0.18, 7 * 20_000, tags="Finance; Anthropic IPO; Dario"),
+            day_row("b", "E2", "How much will Anthropic raise?", -0.17, 7 * 5_000, tags="IPO; Anthropic IPO; Dario"),
+            day_row("c", "E3", "Netanyahu out by June 30, 2027?", 0.14, 7 * 22_000, tags="Israel; Politics"),
+            day_row("d", "E4", "US-Iran Hormuz agreement by November 30?", -0.08, 7 * 39_000, tags="Iran; Oil; Strait of Hormuz")]
+    topics = day.group(day.score_markets(rows, cfg, NOW), cfg)
+    assert [sorted(e["event_id"] for e in t["events"]) for t in topics] == [["E1", "E2"], ["E4"], ["E3"]]
+    assert day.strength(topics[0], cfg) in ("moderate", "strong")
+
+
+def test_day_topics_become_stories_and_published_ones_are_not_rehunted(env):
+    from residual import day, stories
+    cfg, db = env
+    rows = [day_row("a", "E1", "Another Fed rate hike in 2026?", -0.14, 7 * 400_000)]
+    topics = day.group(day.score_markets(rows, cfg, NOW), cfg)
+    (sid,) = day.attach(db, cfg, topics, NOW)
+    st = db.get_story(sid)
+    assert st["scent_data"]["rank"] == 1 and st["score"] >= cfg.day_hunt_min_score
+    q = stories.queue(db, cfg)
+    assert q[0]["mode"] == "day" and "Another Fed rate hike" in q[0]["scent"] and "Find:" in q[0]["scent"]
+    db.update_story(sid, status="reported", headline="Fed hike bets fade", hunted_ts=NOW, hunted_score=st["score"])
+    topics = day.group(day.score_markets([day_row("a", "E1", "Another Fed rate hike in 2026?", -0.15, 7 * 400_000)], cfg, NOW), cfg)
+    assert day.attach(db, cfg, topics, NOW + 3600) == [sid]          # the same story, not a new one
+    assert stories.queue(db, cfg) == []                               # small change: no second hunt
+
+
+def test_day_sources_from_earlier_days_are_background(env):
+    from residual import day, scheduled
+    cfg, db = env
+    topics = day.group(day.score_markets([day_row("a", "E1", "Another Fed rate hike in 2026?", -0.14, 7 * 400_000)], cfg, NOW), cfg)
+    (sid,) = day.attach(db, cfg, topics, NOW)
+    old, new = "https://www.reuters.com/old", "https://www.reuters.com/new"
+    st = scheduled.record(db, cfg, sid, "hunt", {
+        "headline": "h", "summary": "s", "searched": [old], "queries": [],
+        "sources": [{"url": old, "relation": "cause", "published_at": iso(NOW - 5 * 86400), "summary": "s"}]})
+    assert st["status"] == "unreported"                               # a five-day-old report can't explain today
+    st = scheduled.record(db, cfg, sid, "hunt", {
+        "headline": "h", "summary": "s", "searched": [new], "queries": [],
+        "sources": [{"url": new, "relation": "cause", "published_at": iso(NOW - 3600), "summary": "s"}]})
+    assert st["status"] == "reported"

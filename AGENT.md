@@ -72,6 +72,24 @@ If several markets moved together, find the single development behind all of the
 stories, or a queued story and one in `other_stories_today`, are really the same news, merge them
 (see `merge_with` below).
 
+### Day mode (items whose `mode` is `day`, the default)
+
+The scent is a whole topic: every market about it that moved over the last 24 hours, how much money
+normally trades in them, a signal strength (`strong`, `moderate` or `weak`), and when during the day
+the lead market moved. The question is what happened today on this topic and how much it matters, not
+what happened in one particular minute.
+
+- Find the development behind the shift as a whole. If this topic and one in `other_stories_today`
+  have the same cause (a market rout that moved both an IPO's timing and rate expectations, say),
+  merge them and write the story about the shared cause.
+- A cause must be from the day of the shift. The code treats anything published more than about a day
+  and a half before the 24-hour window as background, whatever you call it.
+- If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the
+  summary and write about the bigger news if you can source it. Otherwise record an open lead.
+- For a `weak` signal, run two or three searches. If nothing specific turns up, record an open lead
+  and move on.
+- `why_it_matters` should say how much this changes things, in plain terms.
+
 ### Sourcing
 
 - Report only sources that really appeared in your search results or that you fetched. Never invent
