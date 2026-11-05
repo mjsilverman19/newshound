@@ -97,8 +97,10 @@ def is_lead(s: dict) -> bool:
 
 
 def shown_sources(s: dict) -> list[dict]:
-    out = [x for x in s.get("sources") or [] if x.get("verified") and x.get("relation") != "market_coverage"
-           and not (x.get("background_only") and x.get("role", "context") == "context")]
+    legacy = {"cause": "confirmation", "consequence": "follow-up", "background": "context"}
+    out = [{**x, "role": x.get("role") or legacy.get(x.get("relation"), "context")}
+           for x in s.get("sources") or [] if x.get("verified") and x.get("relation") != "market_coverage"]
+    out = [x for x in out if not (x.get("background_only") and x["role"] == "context")]
     order = {r: i for i, r in enumerate(ROLE_ORDER)}
     return sorted(out, key=lambda x: (order.get(x.get("role"), 99), x.get("published_ts") or 9e12))
 
