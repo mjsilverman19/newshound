@@ -60,6 +60,7 @@ STORY_COLUMNS = {
     "topic": "TEXT",           # a few words naming an unhunted story, e.g. "Nigeria's 2027 race"
     "image": "TEXT",           # JSON: url, source_url, credit, caption, alt
     "checked_domains": "TEXT", # JSON list of the outlets searched so far
+    "aliases": "TEXT",         # JSON list of "YYYY-MM-DD/slug" of published stories merged into this one
 }
 
 
@@ -197,7 +198,7 @@ def _move(r) -> dict:
 
 # ---------- stories ----------
 
-STORY_JSON = ("sources", "check_next", "image", "checked_domains")
+STORY_JSON = ("sources", "check_next", "image", "checked_domains", "aliases")
 
 
 def _story(r) -> dict:

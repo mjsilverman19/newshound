@@ -475,6 +475,14 @@ def collect(db, cfg, now: float) -> dict:
     return {"every": every, "stories": stories, "leads": leads, "watching": watching}
 
 
+def redirect_page(target: str) -> str:
+    t = e(target)
+    return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved</title>'
+            f'<link rel="canonical" href="{t}"><meta http-equiv="refresh" content="0; url={t}">'
+            f'<meta name="robots" content="noindex"></head><body><p>This story was combined with another. '
+            f'<a href="{t}">Read it here</a>.</p></body></html>')
+
+
 def build(db, cfg, out: str | Path, now: float | None = None, clean: bool = False) -> list[str]:
     now = now or time.time()
     out = Path(out)
@@ -508,6 +516,11 @@ def build(db, cfg, out: str | Path, now: float | None = None, clean: bool = Fals
         put(f"{story_path(s)}index.html", story_page(cfg, now, s))
     for day, d in days.items():
         put(f"{day_path(day)}/index.html", day_page(cfg, now, day, d["stories"], d["leads"], d["watching"]))
+    for s in data["every"]:  # URLs of published stories that were merged into another one
+        target = base_path(cfg) + (story_path(s) if s in data["stories"] else f"{day_path(s['day'])}/")
+        for alias in s.get("aliases") or []:
+            day, _, slug = alias.partition("/")
+            put(f"{day_path(day)}/{slug}/index.html", redirect_page(target))
     put("archive/index.html", archive_page(cfg, now, days))
     put("feed.xml", feed(cfg, now, data["stories"]))
     put("404.html", shell(cfg, now, "Not found", '<main class="page"><h1>Not found</h1>'

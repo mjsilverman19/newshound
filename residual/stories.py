@@ -90,14 +90,36 @@ def assign(db, move_ids: list[int], now: float | None = None) -> list[int]:
     return sorted(touched)
 
 
-def merge(db, into_id: int, other_ids: list[int]) -> None:
-    for oid in other_ids:
-        if oid == into_id or not db.get_story(oid):
+def merge(db, into_id: int, other_ids: list[int]) -> int:
+    """Fold stories that are the same news into one, and return the id of the one that remains.
+
+    The story that remains is the earliest published one (or the earliest, if none is published), so a
+    published story's URL never disappears. Any other published story's URL is kept as an alias, and the
+    site redirects it. Sources found for each story are kept.
+    """
+    sts = [db.get_story(i) for i in dict.fromkeys([into_id, *other_ids])]
+    sts = [x for x in sts if x]
+    published = [x for x in sts if x.get("slug")]
+    keep = min(published or sts, key=lambda x: (x["created_ts"] or 0, x["id"]))
+    aliases = list(keep.get("aliases") or [])
+    sources = list(keep["sources"] or [])
+    seen = {V.norm_url(x["url"]) for x in sources}
+    for x in sts:
+        if x["id"] == keep["id"]:
             continue
-        db.conn.execute("UPDATE moves SET story_id=? WHERE story_id=?", (into_id, oid))
+        db.conn.execute("UPDATE moves SET story_id=? WHERE story_id=?", (keep["id"], x["id"]))
         db.conn.commit()
-        db.delete_story(oid)
-    recompute(db, into_id)
+        if x.get("slug"):
+            aliases.append(f"{x['day']}/{x['slug']}")
+        aliases += x.get("aliases") or []
+        for src in x["sources"] or []:
+            if V.norm_url(src["url"]) not in seen:
+                seen.add(V.norm_url(src["url"]))
+                sources.append(src)
+        db.delete_story(x["id"])
+    db.update_story(keep["id"], aliases=list(dict.fromkeys(aliases)), sources=sources)
+    recompute(db, keep["id"])
+    return keep["id"]
 
 
 # ---------- the scent ----------
@@ -162,8 +184,7 @@ def queue(db, cfg) -> list[dict]:
     hunts = hunts[: cfg.max_new_per_run]
     due = db.stories("status IN ('unreported','unclear') AND next_recheck_ts IS NOT NULL AND next_recheck_ts <= ?",
                      (now,), order="next_recheck_ts")[: cfg.max_rechecks_per_run]
-    others = [{"story_id": s["id"], "score": s["score"],
-               "about": s["headline"] or (db.story_moves(s["id"]) or [{}])[0].get("question")} for s in todays]
+    others = others_today(db, todays)
     out = []
     for kind, group in (("hunt", hunts), ("recheck", due)):
         for s in group:
@@ -175,6 +196,15 @@ def queue(db, cfg) -> list[dict]:
                 "other_stories_today": [o for o in others if o["story_id"] != s["id"]],
             })
     return out
+
+
+def others_today(db, todays: list[dict] | None = None) -> list[dict]:
+    """Today's stories as the hunter sees them, so it can spot the same news told twice."""
+    if todays is None:
+        todays = db.stories("day=?", (et_day(time.time()),))
+    return [{"story_id": s["id"], "score": s["score"],
+             "about": s["headline"] or s.get("question") or (db.story_moves(s["id"]) or [{}])[0].get("question")}
+            for s in todays]
 
 
 # ---------- recording what the agent found ----------
@@ -217,7 +247,7 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
     if not story:
         raise SystemExit(f"no story {story_id}")
     if f.get("merge_with"):
-        merge(db, story_id, [int(x) for x in f["merge_with"]])
+        story_id = merge(db, story_id, [int(x) for x in f["merge_with"]])
         story = db.get_story(story_id)
     moves = db.story_moves(story_id)
     start = min(m["move_start_ts"] for m in moves)
@@ -234,6 +264,14 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
     new = a["verdict"]
     if kind == "recheck" and new != "explained" and earlier:
         new = earlier  # a later report confirms an unreported story; it doesn't make it reported
+    # sources verified in an earlier hunt still count: a new hunt never downgrades a story
+    rank = {"unexplained": 0, "unclear": 1, "explained": 2}
+    for src in story["sources"] or []:
+        if src.get("verified") and V.counts_as(src) == "cause":
+            when, _ = V.timing(src.get("published_at"), start, cfg.reaction_slack_minutes * 60)
+            prior = {"before": "explained", "unknown": "unclear"}.get(when, "unexplained")
+            if rank[prior] > rank[new]:
+                new = prior
     status = {"explained": "reported", "unclear": "unclear", "unexplained": "unreported"}[new]
 
     domains = sorted(set(story["checked_domains"] or []) | {V.host(s["url"]) for s in searched if s.get("url")} - {""})
