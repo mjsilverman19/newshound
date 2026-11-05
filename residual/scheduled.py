@@ -96,6 +96,7 @@ def scan(db, cfg, state_path: Path) -> list[int]:
         state["prices"][platform] = {r["market_id"]: round(r["price"], 4) for r in live}
     save_state(state_path, state)
     stories.assign(db, new_ids, cfg=cfg)
+    stories.regroup(db, cfg)  # also merges stories already in the database, even in an hour with no new moves
     return new_ids
 
 
