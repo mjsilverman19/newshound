@@ -65,6 +65,31 @@ class Config:
     # Re-checks for moves nobody explained
     recheck_after_hours: list[float] = field(default_factory=lambda: [1, 6, 24])
 
+    # Sourcing: sites that may appear as context but never count as the report that explains a story
+    # (aggregators, re-posters and partisan blogs). Matched on the end of the host name.
+    background_only_domains: list[str] = field(default_factory=lambda: [
+        # aggregators and re-posters
+        "newsbeep.com", "biztoc.com", "newswav.com", "headtopics.com", "pressbee.net", "pricer.lt",
+        "newscord.org", "ground.news", "newsbreak.com", "inkl.com", "flipboard.com", "politicalwire.com",
+        "osint613.com", "zerohedge.com", "thelibertydaily.com", "newsnow.co.uk", "memeorandum.com",
+        "allsides.com", "theconservativetreehouse.com",
+        # partisan blogs
+        "townhall.com", "rawstory.com", "dailykos.com", "breitbart.com", "thegatewaypundit.com",
+        "redstate.com", "alternet.org", "occupydemocrats.com", "twitchy.com", "hotair.com",
+        "pjmedia.com", "commondreams.org", "palmerreport.com", "westernjournal.com", "bizpacreview.com",
+    ])
+
+    # Image hosts that refuse to be shown on other sites (the browser blocks them)
+    unembeddable_image_hosts: list[str] = field(default_factory=lambda: ["yimg.com", "zenfs.com"])
+
+    # The public site
+    site_url: str = "https://mjsilverman19.github.io/newshound/"
+    site_title: str = "Newshound"
+    # Importance score -> how the page names the shift in expectations (highest band first)
+    shift_bands: list[list] = field(default_factory=lambda: [
+        [50, "Extraordinary shift"], [38, "Major shift"], [34, "Large shift"], [30, "Notable shift"], [0, "Small shift"],
+    ])
+
     @classmethod
     def load(cls, path: str | None) -> "Config":
         cfg = cls()

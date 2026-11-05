@@ -14,6 +14,7 @@ A 17-point move on $20,000 of trading at ten times the usual pace scores about 4
 from __future__ import annotations
 
 import math
+import re
 import time
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
@@ -138,6 +139,10 @@ def scent(db, story: dict) -> str:
     top = db.market(moves[0]["platform"], moves[0]["market_id"]) or {}
     if top.get("rules"):
         lines += ["", f"How the biggest market resolves: {top['rules'][:1200]}"]
+    if story.get("question") and not story.get("headline"):
+        lines += ["", f"Open question from the first hunt: {story['question']}"]
+        if story.get("checked_domains"):
+            lines.append(f"Outlets already searched: {', '.join(story['checked_domains'][:40])}")
     if story.get("headline"):
         lines += ["", f"Already reported on this story: {story['headline']}. {story.get('summary') or ''}"]
         for src in story.get("sources") or []:
@@ -174,6 +179,39 @@ def queue(db, cfg) -> list[dict]:
 
 # ---------- recording what the agent found ----------
 
+ROLES = ("original report", "denial", "confirmation", "statement", "announcement", "filing", "data",
+         "follow-up", "analysis", "context")
+DEFAULT_ROLE = {"cause": "original report", "consequence": "follow-up", "background": "context"}
+
+
+def slugify(text: str, words: int = 6) -> str:
+    w = re.findall(r"[a-z0-9]+", (text or "").lower().replace("'", ""))
+    stop = {"a", "an", "the", "of", "to", "and", "for", "in", "on", "that", "is", "as", "at", "by", "with"}
+    keep = [x for x in w if x not in stop][:words] or w[:words] or ["story"]
+    return "-".join(keep)[:60].strip("-")
+
+
+def unique_slug(db, day: str, want: str, story_id: int) -> str:
+    taken = {r["slug"] for r in db.stories("day=? AND id<>? AND slug IS NOT NULL", (day, story_id))}
+    slug, n = want, 2
+    while slug in taken:
+        slug, n = f"{want}-{n}", n + 1
+    return slug
+
+
+def clean_image(img, verified_urls: set[str], blocked_hosts=()):
+    """Keep the lead image only if it is an https URL, can be shown on another site, and comes from a
+    page this run actually found."""
+    if not isinstance(img, dict) or not str(img.get("url", "")).startswith("https://"):
+        return None
+    if V.background_only(img["url"], blocked_hosts):
+        return None
+    src = img.get("source_url") or ""
+    if not src or V.norm_url(src) not in verified_urls:
+        return None
+    return {k: img.get(k) for k in ("url", "source_url", "outlet", "credit", "caption", "alt") if img.get(k)}
+
+
 def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
     story = db.get_story(story_id)
     if not story:
@@ -184,7 +222,10 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
     moves = db.story_moves(story_id)
     start = min(m["move_start_ts"] for m in moves)
     searched = [{"url": u} if isinstance(u, str) else u for u in f.get("searched", [])]
-    a = V.assess(f.get("sources") or [], searched, start, cfg.reaction_slack_minutes)
+    for src in f.get("sources") or []:
+        role = (src.get("role") or "").lower().strip()
+        src["role"] = role if role in ROLES else DEFAULT_ROLE.get(src.get("relation"), "context")
+    a = V.assess(f.get("sources") or [], searched, start, cfg.reaction_slack_minutes, cfg.background_only_domains)
 
     # keep earlier verified sources, add the new ones
     seen = {V.norm_url(s["url"]) for s in a["sources"]}
@@ -195,13 +236,21 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
         new = earlier  # a later report confirms an unreported story; it doesn't make it reported
     status = {"explained": "reported", "unclear": "unclear", "unexplained": "unreported"}[new]
 
+    domains = sorted(set(story["checked_domains"] or []) | {V.host(s["url"]) for s in searched if s.get("url")} - {""})
     fields = {
-        "status": status, "sources": sources, "updated_ts": time.time(),
+        "status": status, "sources": sources, "updated_ts": time.time(), "checked_domains": domains,
         "check_next": f.get("check_next") or story["check_next"],
     }
-    for k in ("headline", "dek", "summary", "why_moved"):
+    for k in ("headline", "dek", "summary", "why_it_matters", "dateline", "question", "trail_note"):
         if f.get(k):
             fields[k] = f[k]
+    verified = {V.norm_url(s["url"]) for s in sources if s.get("verified")}
+    img = clean_image(f.get("image"), verified | {V.norm_url(s["url"]) for s in searched if s.get("url")},
+                      cfg.unembeddable_image_hosts)
+    if img:
+        fields["image"] = img
+    if fields.get("headline") and not story.get("slug"):  # set once, so the story's URL never changes
+        fields["slug"] = unique_slug(db, story["day"], slugify(f.get("slug") or fields["headline"], 8), story_id)
     if kind == "hunt":
         fields.update(hunted_ts=time.time(), hunted_score=story["score"])
     else:
@@ -213,7 +262,28 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
         done = fields.get("rechecks_done", story["rechecks_done"] or 0)
         delays = cfg.recheck_after_hours
         fields["next_recheck_ts"] = story["created_ts"] + delays[done] * 3600 if done < len(delays) else None
+        if fields.get("confirmed_ts") or story["confirmed_ts"]:
+            fields["next_recheck_ts"] = None  # reporting found: the lead becomes a story, no more rechecks
     else:
         fields["next_recheck_ts"] = None
     db.update_story(story_id, **fields)
+    return db.get_story(story_id)
+
+
+# ---------- naming the stories nobody hunts ----------
+
+def unlabeled(db, cfg, day: str | None = None) -> list[dict]:
+    """Today's stories below the hunt threshold that have no short topic label yet."""
+    day = day or et_day(time.time())
+    out = []
+    for s in db.stories("day=? AND score<? AND topic IS NULL", (day, cfg.hunt_min_score)):
+        out.append({"story_id": s["id"], "score": s["score"],
+                    "markets": [m["question"] for m in db.story_moves(s["id"])]})
+    return out
+
+
+def label(db, story_id: int, topic: str) -> dict:
+    if not db.get_story(story_id):
+        raise SystemExit(f"no story {story_id}")
+    db.update_story(story_id, topic=topic.strip())
     return db.get_story(story_id)

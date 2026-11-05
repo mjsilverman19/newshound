@@ -3,7 +3,8 @@
 The agent is never trusted on its own conclusion. A move counts as explained only if:
   * the agent marked a source as the cause,
   * that source's URL actually came back from a web search in this run (no invented links), and
-  * the source was published before the move started, plus a short reaction allowance.
+  * the source was published before the move started, plus a short reaction allowance, and
+  * the source is not an aggregator, re-poster or partisan blog (those count as background at most).
 """
 
 from __future__ import annotations
@@ -21,6 +22,15 @@ def norm_url(u: str) -> str:
 def is_verified(url: str, searched_urls: set[str]) -> bool:
     n = norm_url(url)
     return bool(n) and any(n == s or n.startswith(s + "/") or s.startswith(n + "/") for s in searched_urls)
+
+
+def host(url: str) -> str:
+    return urlparse(url.strip()).netloc.lower().removeprefix("www.")
+
+
+def background_only(url: str, domains) -> bool:
+    h = host(url)
+    return any(h == d or h.endswith("." + d) for d in domains or ())
 
 
 def parse_published(s: str | None) -> tuple[float | None, bool]:
@@ -55,15 +65,24 @@ def timing(published: str | None, move_start_ts: float, slack_s: float) -> tuple
     return ("before" if ts <= move_start_ts + slack_s else "after"), ts
 
 
-def assess(sources: list[dict], searched: list[dict], move_start_ts: float, slack_minutes: float) -> dict:
+def counts_as(s: dict) -> str:
+    """The relation the verdict uses: what the agent said, unless the source may only be background."""
+    if s.get("background_only") and s.get("relation") in ("cause", "consequence"):
+        return "background"
+    return s.get("relation") or "background"
+
+
+def assess(sources: list[dict], searched: list[dict], move_start_ts: float, slack_minutes: float,
+           background_domains=()) -> dict:
     searched_urls = {norm_url(s["url"]) for s in searched if s.get("url")}
     checked = []
     for s in sources:
         when, ts = timing(s.get("published_at"), move_start_ts, slack_minutes * 60)
         checked.append({**s, "verified": is_verified(s.get("url", ""), searched_urls),
+                        "background_only": background_only(s.get("url", ""), background_domains),
                         "timing": when, "published_ts": ts})
 
-    causes = [s for s in checked if s["relation"] == "cause" and s["verified"]]
+    causes = [s for s in checked if counts_as(s) == "cause" and s["verified"]]
     if any(s["timing"] == "before" for s in causes):
         verdict = "explained"
     elif any(s["timing"] == "unknown" for s in causes):
@@ -72,6 +91,6 @@ def assess(sources: list[dict], searched: list[dict], move_start_ts: float, slac
         verdict = "unexplained"
 
     later = [s for s in checked if s["verified"] and s["timing"] == "after"
-             and s["relation"] in ("cause", "consequence") and s["published_ts"]]
+             and counts_as(s) in ("cause", "consequence") and s["published_ts"]]
     first_later = min((s["published_ts"] for s in later), default=None)
     return {"verdict": verdict, "sources": checked, "first_later_report_ts": first_later}

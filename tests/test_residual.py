@@ -234,7 +234,7 @@ def test_record_reported_merge_and_rehunt_gate(env):
     s1, s2 = stories.assign(db, [story_move(db, "A-1", "EV1"), story_move(db, "B-1", "EV2")], NOW)
     url = "https://www.reuters.com/x"
     st = scheduled.record(db, cfg, s1, "hunt", {
-        "headline": "Agency approves the drug", "dek": "d", "summary": "s", "why_moved": "w",
+        "headline": "Agency approves the drug", "dek": "d", "summary": "s", "why_it_matters": "w",
         "sources": [{"url": url, "relation": "cause", "published_at": iso(START - 60), "summary": "s"}],
         "merge_with": [s2], "searched": [url], "queries": ["q"]})
     assert st["status"] == "reported" and st["markets"] == 2 and db.get_story(s2) is None
@@ -259,14 +259,68 @@ def test_unreported_story_gets_rechecked_and_confirmed(env):
     assert st["status"] == "unreported" and st["lead_minutes"] == 45 and st["rechecks_done"] == 1
 
 
-def test_front_page_renders(env):
-    from residual import frontpage, stories
+def test_aggregators_and_partisan_blogs_never_explain_a_story(env):
+    from residual import scheduled, stories
     cfg, db = env
     (sid,) = stories.assign(db, [story_move(db)], NOW)
-    db.update_story(sid, headline="Agency approves the drug", dek="A dek", status="reported")
-    page = frontpage.render(db, cfg, NOW)
-    assert page.startswith("<!DOCTYPE html>") and "Agency approves the drug" in page
-    assert f'id="s-{sid}"' in page and "<svg" in page
+    url = "https://townhall.com/news/x"
+    st = scheduled.record(db, cfg, sid, "hunt", {
+        "question": "Did the agency act?", "searched": [url],
+        "sources": [{"url": url, "relation": "cause", "role": "denial", "published_at": iso(START - 600)}]})
+    assert st["status"] == "unreported"
+    assert st["sources"][0]["verified"] and st["sources"][0]["background_only"] and st["sources"][0]["role"] == "denial"
+
+
+def test_record_sets_slug_once_and_checks_the_image(env):
+    from residual import scheduled, stories
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    url = "https://www.reuters.com/world/agency-approves"
+    src = {"url": url, "relation": "cause", "role": "original report", "outlet": "Reuters",
+           "published_at": iso(START - 60)}
+    st = scheduled.record(db, cfg, sid, "hunt", {
+        "headline": "Agency approves the drug", "slug": "agency-approves-drug", "dateline": "Washington",
+        "sources": [src], "searched": [url],
+        "image": {"url": "https://img.example.com/a.jpg", "source_url": "https://invented.example.com/x"}})
+    assert st["slug"] == "agency-approves-drug" and st["image"] is None  # image page never came up in a search
+    st = scheduled.record(db, cfg, sid, "hunt", {
+        "headline": "Agency approves the drug after review", "sources": [src], "searched": [url],
+        "image": {"url": "https://img.example.com/a.jpg", "source_url": url, "credit": "Jane Doe/Reuters"}})
+    assert st["slug"] == "agency-approves-drug" and st["image"]["credit"] == "Jane Doe/Reuters"
+
+
+def test_site_shows_what_the_hunt_caught_and_nothing_about_the_markets(env, tmp_path):
+    from residual import scheduled, site, stories
+    cfg, db = env
+    a, b, c = stories.assign(db, [story_move(db, "A-1", "EV1"), story_move(db, "B-1", "EV2"),
+                                  story_move(db, "C-1", "EV3", dp=0.05, vol=500, vm=1)], NOW)
+    url = "https://apnews.com/article/agency"
+    scheduled.record(db, cfg, a, "hunt", {
+        "headline": "Agency approves the drug", "dek": "The first approval of its kind.", "dateline": "Washington",
+        "summary": "On Thursday the agency approved it.", "why_it_matters": "Patients get access.",
+        "sources": [{"url": url, "relation": "cause", "role": "original report", "outlet": "AP",
+                     "published_at": iso(START - 60)}], "searched": [url]})
+    scheduled.record(db, cfg, b, "hunt", {"headline": "Traders raise the odds", "question": "Has the merger stalled?",
+                                          "trail_note": "The shift came late in the day.", "sources": [],
+                                          "searched": ["https://example.com/a"]})
+    assert stories.unlabeled(db, cfg)[0]["story_id"] == c
+    stories.label(db, c, "Nigeria's 2027 race")
+    out = tmp_path / "site"
+    files = site.build(db, cfg, out, NOW)
+    front = (out / "index.html").read_text()
+    st = db.get_story(a)
+    page = (out / site.story_path(st) / "index.html").read_text()
+    assert "Agency approves the drug" in front and "Has the merger stalled?" in front
+    assert "Traders raise the odds" not in front and "Q B-1" not in front and "Q C-1" not in front
+    assert "Also watching Nigeria&#x27;s 2027 race" in front
+    assert "The shift came late in the day." in front and "rechecking at" in front
+    for text in (front, page):
+        text = text.split("</style>", 1)[1]
+        assert "·" not in text and "<svg class=\"chart" not in text and "$" not in text and "%" not in text
+    assert "Why it matters" in page and "Original report" in page and "Washington" in page
+    assert "Why the money moved" not in page and "What to check next" not in page
+    assert "feed.xml" in files and "archive/index.html" in files and ".nojekyll" in files
+    assert "<link>https://mjsilverman19.github.io/newshound/" in (out / "feed.xml").read_text()
 
 
 def test_state_round_trip(tmp_path):

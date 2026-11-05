@@ -50,6 +50,18 @@ CREATE TABLE IF NOT EXISTS stories (
 );
 """
 
+# Columns added to stories after the first release; DB() adds any that are missing.
+STORY_COLUMNS = {
+    "dateline": "TEXT",        # where the news happened, e.g. "Washington"
+    "why_it_matters": "TEXT",
+    "slug": "TEXT",            # set once, so a story's URL never changes
+    "question": "TEXT",        # for a lead with nothing reported: an open question about the world
+    "trail_note": "TEXT",      # one short sentence of context for that lead
+    "topic": "TEXT",           # a few words naming an unhunted story, e.g. "Nigeria's 2027 race"
+    "image": "TEXT",           # JSON: url, source_url, credit, caption, alt
+    "checked_domains": "TEXT", # JSON list of the outlets searched so far
+}
+
 
 class DB:
     def __init__(self, path: str):
@@ -60,6 +72,11 @@ class DB:
         if "story_id" not in cols:  # databases from before stories existed
             self.conn.execute("ALTER TABLE moves ADD COLUMN story_id INTEGER")
             self.conn.commit()
+        have = {r["name"] for r in self.conn.execute("PRAGMA table_info(stories)")}
+        for col, typ in STORY_COLUMNS.items():
+            if col not in have:
+                self.conn.execute(f"ALTER TABLE stories ADD COLUMN {col} {typ}")
+        self.conn.commit()
 
     # markets and snapshots
     def upsert_markets(self, rows: list[dict]):
@@ -180,13 +197,13 @@ def _move(r) -> dict:
 
 # ---------- stories ----------
 
-STORY_JSON = ("sources", "check_next")
+STORY_JSON = ("sources", "check_next", "image", "checked_domains")
 
 
 def _story(r) -> dict:
     d = dict(r)
     for k in STORY_JSON:
-        d[k] = json.loads(d[k]) if d.get(k) else []
+        d[k] = json.loads(d[k]) if d.get(k) else ([] if k != "image" else None)
     return d
 
 

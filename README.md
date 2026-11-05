@@ -1,23 +1,24 @@
 # Newshound
 
-A front page that ranks the day's news by how much money moved on it.
+The day's news, found by following where expectations shifted.
 
-Every hour, Newshound compares about 55,000 Polymarket and Kalshi prices with an hour earlier.
-Markets that move 5 points or more with real money behind them become **stories**, grouped by the
-event they are about. Each story gets an **importance index**:
+Prediction markets give the hound a scent. Every hour, Newshound compares about 55,000 Polymarket
+and Kalshi prices with an hour earlier. Markets that move 5 points or more with real money behind
+them are grouped into **stories** by what they are about, and each story is scored by how much it
+shifted expectations:
 
 > for each market, points moved × dollars traded during the move × √(trading pace vs normal),
-> summed over the story's markets; the index is 10 × log10(1 + that sum), capped at 100.
+> summed over the story's markets; the score is 10 × log10(1 + that sum), capped at 100.
 
-Stories scoring 30 or more are hunted. Claude starts from the scent the markets give (what moved,
-in which direction, when, with how much money, and how the market resolves), finds what happened
-and writes it up. The code checks every source against the searches that found it and against the
-time of the move, and labels the story *reported*, *timing unclear* or *nothing reported yet*.
-Stories with nothing reported are searched again after 1, 6 and 24 hours, which measures how far
-ahead of the news the markets were.
+Stories scoring 30 or more are chased. Claude starts from the scent (what moved, which way, when,
+and how the market resolves), finds what happened and writes it up. The code checks every source
+against the searches that found it and against the time of the shift, and won't let aggregators or
+partisan blogs explain a story. Only what the hunt catches is published. Leads with nothing reported
+go "On the trail" as open questions and are searched again after 1, 6 and 24 hours.
 
-The front page, [Newshound](https://claude.ai/artifact/4crkditFpW38tzKemS9aEW), follows the
-Book Critic Data style. Each story's image is its own price chart.
+The site is at https://mjsilverman19.github.io/newshound/ (built into the `gh-pages` branch). Story
+pages carry a headline, dateline, the source's lead image with credit, the body, why it matters and
+sources. Odds, dollars and points appear only on the Method page.
 
 The Python package is called `residual`.
 
@@ -26,12 +27,12 @@ The Python package is called `residual`.
 This is how it runs by default. A Claude scheduled task runs once an hour, and you can also start it
 whenever you like. Each run does the following, as set out in [`AGENT.md`](AGENT.md):
 
-1. Clones this repo, plus the `data` branch that holds the database, saved prices and briefs.
+1. Clones this repo, the `data` branch (database and saved prices) and the `gh-pages` branch (site).
 2. Runs `scan` to compare prices with the previous run (and with Polymarket's own one-hour change),
-   then `queue` to pick the moves to look at.
-3. Claude hunts each queued story with its own web search, writes it up as JSON and runs
-   `record`. The code decides the status from the sources and their times.
-4. Publishes `report.html` to the Newshound dashboard on claude.ai and force-pushes the `data`
+   `queue` to pick the stories to chase, and `label` to name the small ones in a few words.
+3. Claude hunts each queued story with its own web search, finds a lead image with `image`, writes
+   it up as JSON and runs `record`. The code decides the status from the sources and their times.
+4. Runs `site` to build the static site and pushes it to `gh-pages`, then force-pushes the `data`
    branch, which is kept to a single commit so the repo doesn't grow.
 5. Ends with a summary of the top stories, which arrives as a push notification.
 
@@ -58,7 +59,7 @@ python -m residual run                     # watch, flag and investigate on a lo
 python -m residual run --no-investigate    # watch and flag only (no API key needed)
 python -m residual once                    # one cycle, then exit
 python -m residual investigate 12          # investigate one move by id
-python -m residual report                  # write report.html
+python -m residual site --out site          # build the static site into ./site
 ```
 
 Run it somewhere that stays on, such as a small server or a `tmux` session, because the re-checks

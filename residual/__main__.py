@@ -10,9 +10,12 @@ Scheduled mode (Claude in a scheduled session does the investigating; see AGENT.
   python -m residual --data DIR scan                    compare prices with the last run, flag moves
   python -m residual --data DIR queue --out queue.json  stories to hunt or re-check now
   python -m residual --data DIR record 7 findings.json --kind hunt|recheck
+  python -m residual --data DIR unlabeled               small stories that still need a topic label
+  python -m residual --data DIR label 9 "Nigeria's 2027 race"
+  python -m residual image https://example.com/article  a news article's lead image and credit
 
 Both:
-  python -m residual report --out report.html    the front page
+  python -m residual site --out DIR [--clean]    build the public site (GitHub Pages)
 """
 
 from __future__ import annotations
@@ -24,7 +27,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import detect, frontpage, pipeline, scheduled
+from . import detect, pipeline, scheduled, site, stories
 from .config import Config
 from .db import DB
 
@@ -43,23 +46,44 @@ def main(argv=None):
     sub.add_parser("queue").add_argument("--out", default="queue.json")
     p = sub.add_parser("record")
     p.add_argument("story_id", type=int)
-    p.add_argument("findings", help="JSON file: headline, dek, summary, why_moved, sources, check_next, searched")
+    p.add_argument("findings", help="JSON file: see AGENT.md")
     p.add_argument("--kind", choices=["hunt", "recheck"], required=True)
-    sub.add_parser("report").add_argument("--out", default="report.html")
+    sub.add_parser("unlabeled")
+    p = sub.add_parser("label")
+    p.add_argument("story_id", type=int)
+    p.add_argument("topic")
+    sub.add_parser("image").add_argument("url")
+    p = sub.add_parser("site")
+    p.add_argument("--out", default="site")
+    p.add_argument("--clean", action="store_true", help="remove everything in --out except .git and CNAME first")
     args = ap.parse_args(argv)
 
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S")
     cfg = Config.load(args.config)
+    if args.cmd == "image":
+        from .images import lead_image
+        try:
+            print(json.dumps(lead_image(args.url), indent=2))
+        except Exception as ex:  # blocked, timed out, not HTML: the agent moves on to another source
+            print(json.dumps({"source_url": args.url, "url": None, "error": str(ex)[:200]}, indent=2))
+        return
     if args.data:
         d = Path(args.data)
         d.mkdir(parents=True, exist_ok=True)
         cfg.db_path, cfg.briefs_dir, cfg.state_path = str(d / "residual.db"), str(d / "briefs"), str(d / "prices.json.gz")
     db = DB(cfg.db_path)
 
-    if args.cmd == "report":
-        Path(args.out).write_text(frontpage.render(db, cfg))
-        print(f"wrote {args.out}")
+    if args.cmd == "site":
+        files = site.build(db, cfg, args.out, clean=args.clean)
+        print(f"wrote {len(files)} files to {args.out}")
+        return
+    if args.cmd == "unlabeled":
+        print(json.dumps(stories.unlabeled(db, cfg), indent=2))
+        return
+    if args.cmd == "label":
+        st = stories.label(db, args.story_id, args.topic)
+        print(f"story {st['id']}: {st['topic']}")
         return
     if args.cmd == "scan":
         ids = scheduled.scan(db, cfg, Path(cfg.state_path))
@@ -75,7 +99,9 @@ def main(argv=None):
         findings = json.loads(Path(args.findings).read_text())
         st = scheduled.record(db, cfg, args.story_id, args.kind, findings)
         extra = f", first reported {st['lead_minutes']:.0f} min after the markets moved" if st.get("confirmed_ts") else ""
-        print(f"story {st['id']} ({st['score']:.0f}): {st['status']}{extra} | {st['headline']}")
+        print(f"story {st['id']} ({st['score']:.0f}): {st['status']}{extra} | {st['headline'] or st['question']}"
+              f"{' | /' + st['day'].replace('-', '/') + '/' + st['slug'] + '/' if st.get('slug') else ''}"
+              f"{' | image' if st.get('image') else ''}")
         return
 
     client = None
