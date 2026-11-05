@@ -244,7 +244,10 @@ ul.srcs li { display:flex; gap:14px; align-items:baseline; padding:10px 0; borde
 ul.srcs li:first-child { border-top:0; }
 .role { flex:none; background:var(--chip); color:var(--soft); font-size:13px; padding:2px 9px; border-radius:999px; }
 .page h1 { font-size:30px; font-weight:500; letter-spacing:-0.015em; margin:0 0 20px; }
-.page p { max-width:680px; font-size:16px; } .page h2 { font-size:15px; font-weight:600; margin:28px 0 6px; }
+.page p { max-width:680px; font-size:16px; }
+.method ul { max-width:680px; } .method li { margin:4px 0; }
+.abstract { max-width:680px; border-left:2px solid var(--line, #ddd); padding:2px 0 2px 18px; margin:0 0 8px; }
+.abstract h2 { margin-top:0; } .eq { text-align:center; font-family:Georgia, 'Times New Roman', serif; font-size:17px; } .page h2 { font-size:15px; font-weight:600; margin:28px 0 6px; }
 .days { list-style:none; padding:0; margin:0; } .days li { padding:12px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
 .days span { color:var(--dim); }
 @media (max-width:760px) {
@@ -393,30 +396,52 @@ def archive_page(cfg, now: float, days: dict) -> str:
     return shell(cfg, now, "Archive", body)
 
 
+REPO_URL = "https://github.com/mjsilverman19/newshound"
+
+
 def method_page(cfg, now: float) -> str:
     lo = cfg.hunt_min_score
     pts = f"{cfg.move_threshold * 100:.0f}"
     floor_usd = f"${cfg.min_window_volume_usd:,.0f}"
     hours = [f"{h:g}" for h in cfg.recheck_after_hours]
     recheck = ", ".join(hours[:-1]) + f" and {hours[-1]}" if len(hours) > 1 else hours[0]
-    bands = "".join(f"<li>{e(label)}: {floor:.0f} and up</li>" for floor, label in cfg.shift_bands if floor > 0)
-    body = f"""<main class="page"><h1>Method</h1>
-<p>Newshound follows a scent. Prediction markets on Polymarket and Kalshi are where people put money on what happens next, and when expectations about something shift sharply, it usually means something happened. The shift is the scent. It is not the story.</p>
-<p>Every hour the hound checks about 55,000 markets against an hour earlier. A market that moved {pts} points or more, with at least {floor_usd} traded during the move, is flagged. Flagged markets are grouped into stories by what they are about, and each story is scored by how much it shifted expectations. Anything that scores {lo:.0f} or more gets chased.</p>
-<h2>The chase</h2>
-<p>Claude, an AI model made by Anthropic, works out what kind of development would produce the shift, then goes looking: news reports, official statements and press releases, court dockets and filings, government sites, posts from the people involved. It reads what it finds, checks when each piece was published, and writes up what happened. No person edits the stories before they go up.</p>
-<p>Only what it catches is published. A story needs a source that its own searches actually turned up, that reported the development, and that was published before expectations moved or within {cfg.reaction_slack_minutes} minutes of it. Code checks this, not the writer. Wire services, established outlets and primary documents can explain a story. Aggregators, re-posters and partisan blogs can appear as context but never count as the report that explains it.</p>
-<p>If two stories turn out to be the same news, they are merged into one.</p>
-<h2>On the trail</h2>
-<p>When the hunt finds nothing, the lead goes on the trail as an open question, and the hound checks again after {recheck} hours. If reporting turns up later, the lead becomes a story, and the page notes how long after the shift the first report came.</p>
-<h2>How shifts are scored</h2>
-<p>For each market, the points it moved are multiplied by the dollars traded during the move, and weighted up when trading ran far above its usual pace. A story's score adds this up across its markets on a log scale from 0 to 100, so every 10 points means ten times as much. Stories scoring {lo:.0f} or more are chased; smaller ones are noted as things the hound is watching.</p>
+    bands = "".join(f"<li>{e(label)}: S &ge; {floor:.0f}</li>" for floor, label in cfg.shift_bands if floor > 0)
+    body = f"""<main class="page method"><h1>Method</h1>
+<section class="abstract"><h2>Abstract</h2>
+<p>Newshound is an automated news service that uses prediction markets as a detector for news. Each hour it compares the prices of roughly 55,000 Polymarket and Kalshi markets with their prices an hour earlier, flags markets that moved at least {pts} percentage points with at least {floor_usd} traded during the move, groups flagged markets into stories, and scores each story by the money-weighted size of the shift on a logarithmic scale from 0 to 100. Stories scoring {lo:.0f} or more are investigated by a language model (Claude, made by Anthropic) using web search and page retrieval. The model proposes an account of what happened and the sources for it; deterministic code, not the model, decides whether the account is published. Publication requires a source that the model's own searches returned, that is not on a list of aggregators and partisan sites, and that was published no later than {cfg.reaction_slack_minutes} minutes after the shift began. Stories without such a source are kept as open questions and searched again after {recheck} hours. Stories are written and published without human review. Market prices are used only to find stories and never appear in them.</p>
+</section>
+
+<h2>1. Signal</h2>
+<p>Markets are eligible if they have at least ${cfg.min_liquidity_usd:,.0f} of order-book liquidity (Polymarket) or {cfg.min_open_interest:,.0f} contracts of open interest (Kalshi), do not resolve within {cfg.skip_if_ends_within_hours:g} hours, and are not in categories that track a public feed or a live event, such as weather, crypto and asset prices, and games in progress. A market is flagged when its price, read as a probability, differs by at least {pts} points from the previous hourly reading (for Polymarket, also from the platform's own one-hour change). The start of the shift is estimated as the last time the price sat at its earlier level before covering a quarter of the move, using the market's recent price and trade history where available. Flagged moves with less than {floor_usd} traded since that start are discarded. A market is not flagged again for {cfg.cooldown_hours:g} hours unless it moves a further {pts} points.</p>
+
+<h2>2. Scoring</h2>
+<p>For each flagged market <i>m</i>, let &Delta;<i>p</i><sub>m</sub> be the absolute price change (0 to 1), <i>V</i><sub>m</sub> the dollars traded since the shift began, and <i>r</i><sub>m</sub> the ratio of that trading to the market's usual pace over the same length of time (from its one-week volume on Polymarket and its 24-hour volume on Kalshi). The intensity of the move and the score of a story <i>s</i> are</p>
+<p class="eq"><i>I</i><sub>m</sub> = &Delta;<i>p</i><sub>m</sub> &middot; <i>V</i><sub>m</sub> &middot; &radic;min(max(<i>r</i><sub>m</sub>, 1), 100)</p>
+<p class="eq"><i>S</i> = min(100, 10 &middot; log<sub>10</sub>(1 + &Sigma;<sub>m&isin;s</sub> <i>I</i><sub>m</sub>))</p>
+<p>Each 10 points of <i>S</i> is a tenfold increase in money-weighted repricing. For example, a 17-point move on $20,000 of trading at ten times the usual pace scores about 40. Stories scoring {lo:.0f} or more are investigated; smaller ones are listed under a short topic name. Published stories carry a label for the size of the shift:</p>
 <ul>{bands}</ul>
-<h2>What it misses</h2>
-<p>The page reflects what people bet on. Politics, sports and economics carry the most money, and news with no market behind it never gives off a scent. Live games, weather, crypto prices and other markets that just track a public feed are ignored.</p>
-<p>Prices are compared an hour apart, so the time a shift began, and how long it came before the first report, are accurate to about an hour.</p>
-<p>Publication times come from the pages themselves, as the writer read them, and can be wrong. Each story lists its sources with their times so you can check.</p>
-<p>Images are each source article's own lead image, shown with its credit and linked to the article.</p>
+
+<h2>3. Stories</h2>
+<p>A flagged market joins a story already holding that market, or another market from the same event on the same platform, on the same day (US Eastern time). Otherwise it starts a new story. During investigation the model may merge stories it finds to be the same news; merged stories are rescored.</p>
+
+<h2>4. Investigation</h2>
+<p>The model (<code>{e(cfg.hunt_model)}</code>) receives the shift: which markets moved, in which direction, when, how much was traded, and how each market resolves. It is instructed to infer what kind of development would produce the shift and to search for it, preferring primary sources (statements, filings, dockets, official pages, posts by the people involved) and wire services and established outlets. It may run up to {cfg.hunt_max_searches} web searches and {cfg.hunt_max_fetches} page retrievals per story ({cfg.recheck_max_searches} searches on a recheck). It records each source's publication time as shown on the page, or none if no time is shown, and returns a headline, summary, dateline, sources with their roles, and a lead image taken from a source's own page metadata. Topic names for smaller stories are written by <code>{e(cfg.label_model)}</code>.</p>
+
+<h2>5. Verification and status</h2>
+<p>For each source the model marks as the cause of a shift, code checks that (a) its URL was returned by the model's own search or retrieval tools in that run, (b) its site is not one of {len(cfg.background_only_domains)} listed aggregators, re-posters and partisan blogs, which may appear only as context, and (c) its publication time is no later than {cfg.reaction_slack_minutes} minutes after the shift began. A date with no time counts as before the shift only if it is a full day earlier. A story is <b>reported</b> if some source meets all three conditions, and <b>timing unclear</b> if the only qualifying sources lack a usable publication time. Both are published. Otherwise the story is <b>on the trail</b>: it is shown as an open question, written so as not to speculate about a cause, and searched again after {recheck} hours. If a later search finds a qualifying report published after the shift, the story is published with the delay between the shift and the first report.</p>
+
+<h2>6. Limitations</h2>
+<ul>
+<li><b>Coverage.</b> Only news that people bet on can be detected. Politics, sports and economics are overrepresented; news with no market behind it is invisible.</li>
+<li><b>Timing.</b> Prices are compared an hour apart. Where a market's trade history is sparse, the start of a shift, and therefore the delay before the first report, is accurate only to about an hour.</li>
+<li><b>Publication times</b> are read from the pages by the model and can be wrong. Each story lists its sources with their times so readers can check.</li>
+<li><b>Model error.</b> The model can misread a source, overstate what it says, or attach a real source to the wrong development. The checks in section 5 limit invented sources and late reports but do not verify that a source says what the summary says.</li>
+<li><b>No human review.</b> No person reads stories before they are published.</li>
+<li><b>Source lists</b> of aggregators and partisan sites are maintained by hand and are incomplete.</li>
+</ul>
+
+<h2>7. Reproducibility and corrections</h2>
+<p>The code, including every threshold above, is public at <a href="{REPO_URL}">{e(REPO_URL.removeprefix("https://"))}</a>; the numbers on this page are read from its configuration when the site is built. To report an error in a story, open an issue there with the story's link.</p>
 </main>"""
     return shell(cfg, now, "Method", body)
 
