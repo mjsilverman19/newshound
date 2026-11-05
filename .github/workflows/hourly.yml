@@ -37,8 +37,8 @@ jobs:
           git clone --branch gh-pages --depth 1 "$REPO_URL" site \
             || (mkdir -p site && cd site && git init -q && git checkout -q -b gh-pages && git remote add origin "$REPO_URL")
           for d in rdata site; do
-            git -C $d config user.name "Residual"
-            git -C $d config user.email "residual@users.noreply.github.com"
+            git -C $d config user.name "github-actions[bot]"
+            git -C $d config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           done
 
       - name: Scan, label and hunt

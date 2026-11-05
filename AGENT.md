@@ -24,7 +24,7 @@ git clone --branch data --depth 1 https://github.com/mjsilverman19/newshound /tm
   || (mkdir -p /tmp/rdata && cd /tmp/rdata && git init -q && git remote add origin https://github.com/mjsilverman19/newshound)
 git clone --branch gh-pages --depth 1 https://github.com/mjsilverman19/newshound /tmp/site \
   || (mkdir -p /tmp/site && cd /tmp/site && git init -q && git checkout -q -b gh-pages && git remote add origin https://github.com/mjsilverman19/newshound)
-for d in /tmp/rdata /tmp/site; do git -C $d config user.name "Residual"; git -C $d config user.email "residual@users.noreply.github.com"; done
+for d in /tmp/rdata /tmp/site; do git -C $d config user.name "github-actions[bot]"; git -C $d config user.email "41898283+github-actions[bot]@users.noreply.github.com"; done
 ```
 
 - The `data` branch holds the database and saved prices. It is rewritten each run.
