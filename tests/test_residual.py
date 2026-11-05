@@ -1,5 +1,6 @@
 """Offline tests: synthetic prices for the detector, and a scripted stand-in for the Claude API."""
 
+import json
 import time
 from datetime import datetime, timezone
 from types import SimpleNamespace
@@ -329,3 +330,104 @@ def test_state_round_trip(tmp_path):
     assert scheduled.load_state(p) == {"saved_ts": {}, "prices": {}}
     scheduled.save_state(p, {"saved_ts": {"kalshi": 1.0}, "prices": {"kalshi": {"A": 0.5}}})
     assert scheduled.load_state(p)["prices"]["kalshi"]["A"] == 0.5
+
+
+# ---------- scheduled mode on the Claude API ----------
+
+class _Stream:
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def get_final_message(self):
+        return self.msg
+
+
+class APIClient:
+    """Stands in for anthropic.Anthropic(): beta.messages.stream for hunts, messages.create for labels."""
+
+    def __init__(self, hunts, labels=None):
+        self.hunts, self.labels, self.calls = list(hunts), labels, []
+        self.beta = SimpleNamespace(messages=SimpleNamespace(stream=self._stream))
+        self.messages = SimpleNamespace(create=self._create)
+
+    def _stream(self, **kw):
+        self.calls.append({**kw, "messages": list(kw["messages"])})
+        return _Stream(self.hunts.pop(0))
+
+    def _create(self, **kw):
+        return SimpleNamespace(content=[SimpleNamespace(type="text", text=json.dumps(self.labels or {"labels": []}))])
+
+
+def api_resp(*blocks, stop="tool_use"):
+    return SimpleNamespace(content=[SimpleNamespace(**b) if isinstance(b, dict) else b for b in blocks],
+                           stop_reason=stop, stop_details=None,
+                           usage=SimpleNamespace(input_tokens=100, output_tokens=50, cache_read_input_tokens=0,
+                                                 server_tool_use=SimpleNamespace(web_search_requests=1,
+                                                                                 web_fetch_requests=0)))
+
+
+def api_search(*urls):
+    return {"type": "web_search_tool_result", "tool_use_id": "s1",
+            "content": [SimpleNamespace(type="web_search_result", url=u, title=u, page_age=None) for u in urls]}
+
+
+def test_api_hunt_checks_sources_against_what_the_api_returned(env, monkeypatch):
+    from residual import hunter, stories
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    real = "https://apnews.com/article/agency-approves"
+    monkeypatch.setattr("residual.images.lead_image",
+                        lambda url: {"source_url": url, "url": "https://img.apnews.com/a.jpg", "credit": "AP"})
+    client = APIClient([
+        api_resp(api_search(real), {"type": "tool_use", "id": "t1", "name": "lead_image", "input": {"url": real}}),
+        api_resp({"type": "tool_use", "id": "t2", "name": "submit_story", "input": {
+            "headline": "Agency approves the drug", "dek": "d", "summary": "s", "why_it_matters": "w",
+            "dateline": "Washington", "slug": "agency-approves-drug",
+            "image": {"url": "https://img.apnews.com/a.jpg", "source_url": real, "credit": "AP"},
+            "sources": [
+                {"url": real, "relation": "cause", "role": "original report", "published_at": iso(START - 60),
+                 "summary": "Approved."},
+                {"url": "https://madeup.example/scoop", "relation": "cause", "role": "original report",
+                 "published_at": iso(START - 900), "summary": "Invented."}],
+            "check_next": []}}),
+    ])
+    item = stories.queue(db, cfg)[0]
+    f = hunter.hunt(client, cfg, item)
+    # the second call answered the image tool, and the model never got to claim what it searched
+    assert client.calls[1]["messages"][-1]["content"][0]["tool_use_id"] == "t1"
+    assert {s["url"] for s in f["searched"]} == {real}
+    st = stories.record(db, cfg, sid, "hunt", f)
+    assert st["status"] == "reported" and st["image"]["credit"] == "AP"
+    verified = {s["url"]: s["verified"] for s in st["sources"]}
+    assert verified[real] and not verified["https://madeup.example/scoop"]
+    assert client.calls[0]["fallbacks"] == "default" and client.calls[0]["model"] == cfg.hunt_model
+
+
+def test_api_hunt_resumes_paused_turns_nudges_once_and_labels(env):
+    from residual import hunter, stories
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    item = stories.queue(db, cfg)[0]
+    client = APIClient([api_resp(api_search("https://x.com/a"), stop="pause_turn"),
+                        api_resp({"type": "text", "text": "Nothing."}, stop="end_turn"),
+                        api_resp({"type": "text", "text": "Still nothing."}, stop="end_turn")])
+    f = hunter.hunt(client, cfg, item)
+    assert client.calls[1]["messages"][-1]["role"] == "assistant"  # paused turn sent back as is
+    assert client.calls[2]["messages"][-1]["content"].startswith("Now call submit_story")
+    assert f["sources"] == [] and len(client.calls) == 3
+
+    (small,) = stories.assign(db, [story_move(db, "Z-1", "EVZ", dp=0.05, vol=500, vm=1)], NOW)
+    client = APIClient([], labels={"labels": [{"story_id": small, "topic": "the agency's review"},
+                                              {"story_id": 999, "topic": "not a story"}]})
+    assert hunter.label_small(client, cfg, db) == 1 and db.get_story(small)["topic"] == "the agency's review"
+
+
+def test_x_post_time():
+    from residual import hunter
+    assert hunter._x_post_time("1853571232563740821").startswith("2024-11-04")

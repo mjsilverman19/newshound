@@ -14,6 +14,9 @@ Scheduled mode (Claude in a scheduled session does the investigating; see AGENT.
   python -m residual --data DIR label 9 "Nigeria's 2027 race"
   python -m residual image https://example.com/article  a news article's lead image and credit
 
+Scheduled mode on the Claude API (needs ANTHROPIC_API_KEY; see .github/workflows/hourly.yml):
+  python -m residual --data DIR cycle [--summary FILE]  scan, label, hunt and record in one go
+
 Both:
   python -m residual site --out DIR [--clean]    build the public site (GitHub Pages)
 """
@@ -48,6 +51,8 @@ def main(argv=None):
     p.add_argument("story_id", type=int)
     p.add_argument("findings", help="JSON file: see AGENT.md")
     p.add_argument("--kind", choices=["hunt", "recheck"], required=True)
+    sub.add_parser("cycle", help="scan, label, hunt and record using the Claude API").add_argument(
+        "--summary", help="also write a Markdown summary of the run to this file")
     sub.add_parser("unlabeled")
     p = sub.add_parser("label")
     p.add_argument("story_id", type=int)
@@ -94,6 +99,19 @@ def main(argv=None):
         Path(args.out).write_text(json.dumps(q, indent=2))
         print(f"{len(q)} stories ({sum(i['kind'] == 'hunt' for i in q)} to hunt, "
               f"{sum(i['kind'] == 'recheck' for i in q)} re-checks) written to {args.out}")
+        return
+    if args.cmd == "cycle":
+        from . import hunter
+        from .investigate import make_client
+        try:
+            client = make_client()
+        except Exception as e:
+            sys.exit(f"Could not start the Claude client ({e}). Set ANTHROPIC_API_KEY.")
+        report = hunter.cycle(db, cfg, client)
+        text = hunter.summary(db, cfg, report)
+        if args.summary:
+            Path(args.summary).write_text(text + "\n")
+        print(text)
         return
     if args.cmd == "record":
         findings = json.loads(Path(args.findings).read_text())

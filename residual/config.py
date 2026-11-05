@@ -62,6 +62,18 @@ class Config:
     max_new_per_run: int = 6
     max_rechecks_per_run: int = 6
 
+    # Scheduled mode on the Claude API (`cycle`, run by .github/workflows/hourly.yml)
+    hunt_model: str = "claude-opus-5-5"
+    hunt_effort: str = "medium"            # low | medium | high | xhigh | max
+    hunt_fallbacks: bool = True            # re-run a declined request on Anthropic's recommended fallback model
+    label_model: str = "claude-haiku-5-5"
+    web_search_tool_api: str = "web_search_20260209"
+    web_fetch_tool_api: str = "web_fetch_20260209"
+    hunt_max_searches: int = 13            # 2-3 first searches, then up to about 10 more
+    recheck_max_searches: int = 5
+    hunt_max_fetches: int = 10
+    hunt_max_turns: int = 20               # API round trips per story
+
     # Re-checks for moves nobody explained
     recheck_after_hours: list[float] = field(default_factory=lambda: [1, 6, 24])
 
