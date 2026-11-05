@@ -54,7 +54,7 @@ class Config:
     reaction_slack_minutes: int = 15       # a source this soon after the move starts can still be the cause
 
     # Stories
-    hunt_min_score: float = 30             # importance needed before the agent goes looking
+    hunt_min_score: float = 25             # importance needed before the agent goes looking
     rehunt_gain: float = 10                # hunt again if a story's score rises this much
 
     # Scheduled mode (one scan per run; Claude in the session investigates)
@@ -99,7 +99,8 @@ class Config:
     site_title: str = "Newshound"
     # Importance score -> how the page names the shift in expectations (highest band first)
     shift_bands: list[list] = field(default_factory=lambda: [
-        [50, "Extraordinary shift"], [38, "Major shift"], [34, "Large shift"], [30, "Notable shift"], [0, "Small shift"],
+        [50, "Extraordinary shift"], [38, "Major shift"], [34, "Large shift"], [30, "Notable shift"], [25, "Moderate shift"],
+        [0, "Small shift"],
     ])
 
     @classmethod
