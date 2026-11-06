@@ -140,6 +140,9 @@ class Config:
     hunt_max_searches: int = 13            # 2-3 first searches, then up to about 10 more
     recheck_max_searches: int = 5
     weak_max_searches: int = 3             # day mode: searches for a topic with a weak signal
+    moderate_max_searches: int | None = None  # day mode: searches for a moderate signal (None: no extra cap)
+    hunt_fetch_max_tokens: int | None = None  # cap on each fetched page (the fetch tool's max_content_tokens)
+    ledger_keep_transcript_days: int = 14
     hunt_max_fetches: int = 10
     hunt_max_turns: int = 20               # API round trips per story
 

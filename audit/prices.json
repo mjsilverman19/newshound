@@ -1,0 +1,13 @@
+{
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "checked": "2026-11-06",
+  "note": "USD per million tokens. Web search is per 1,000 searches; web fetch has no charge beyond its tokens. Haiku 5.5 has a long-prompt tier for requests over 100,000 input tokens (cache reads and writes included).",
+  "web_search_per_1000": 10.0,
+  "models": {
+    "claude-opus-5-5":   {"input": 4.0, "cache_write_5m": 5.0, "cache_write_1h": 8.0, "cache_read": 0.20, "output": 20.0},
+    "claude-sonnet-5-5": {"input": 2.0, "cache_write_5m": 2.5, "cache_write_1h": 4.0, "cache_read": 0.10, "output": 10.0},
+    "claude-haiku-5-5":  {"input": 0.10, "cache_write_5m": 0.125, "cache_write_1h": 0.20, "cache_read": 0.01, "output": 0.50,
+                          "long_prompt_over": 100000,
+                          "long": {"input": 0.50, "cache_write_5m": 0.625, "cache_write_1h": 1.0, "cache_read": 0.05, "output": 2.50}}
+  }
+}

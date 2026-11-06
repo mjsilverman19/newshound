@@ -1,0 +1,3027 @@
+{
+  "frozen_ts": 1793922097.291,
+  "frozen_utc": "2026-11-05T23:41:37Z",
+  "day": "2026-11-05",
+  "items": [
+    {
+      "story_id": 26,
+      "kind": "hunt",
+      "score": 43.3,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 1 of today's topics by how much they changed expectations (importance 43/100). 2 market(s) moved, in markets that normally trade about $86,812 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Hakeem Jeffries be the next Speaker of the House?\": 71% to 96%, now more likely (normally $85,521 a day).\n- \"Will the 120th Congress Speaker be elected on the first ballot?\": 78% to 96%, now more likely (normally $1,290 a day).\n\nMarket groups in this topic: Who will be the next new Speaker of the House?; Will the 120th Congress Speaker be elected on the first ballot?\n\nWhen: In the lead market, half the move had happened by Nov 05 00:46 ET and the sharpest 30-minute step (+6 points) ended around Nov 05 00:46 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): If Hakeem Jeffries is the first Speaker of the House after Mike Johnson, before Jan 1, 2031, then the market resolves to Yes.",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 9,
+      "kind": "hunt",
+      "score": 41.9,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 2 of today's topics by how much they changed expectations (importance 42/100). 36 market(s) moved, in markets that normally trade about $111,982 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Anthropic IPO by December 31, 2026?\": 90% to 72%, now less likely (normally $20,946 a day).\n- \"Will Anthropic IPO by November 30, 2026?\": 82% to 58%, now less likely (normally $12,219 a day).\n- \"Will Anthropic IPO by December 15, 2026?\": 88% to 67%, now less likely (normally $6,317 a day).\n- \"Will Anthropic raise between $85B and $95B in its IPO?\": 25% to 8%, now less likely (normally $5,123 a day).\n- \"Will Anthropic raise between $75B and $85B in its IPO?\": 28% to 55%, now more likely (normally $2,742 a day).\n- \"Will Anthropic not IPO by November 30, 2026?\": 16% to 34%, now more likely (normally $3,467 a day).\n- \"Will Anthropic IPO on November 20, 2026?\": 22% to 16%, now less likely (normally $10,318 a day).\n- \"Will Anthropic's initial public offering occur in November 2026 (ET)?\": 90% to 63%, now less likely (normally $2,163 a day).\n- \"Next Fable Model (5.2+) released by November 19, 2026?\": 60% to 54%, now less likely (normally $6,793 a day).\n- \"Will Anthropic raise between $95B and $105B in its IPO?\": 30% to 18%, now less likely (normally $3,173 a day).\n- \"Will Anthropic IPO by November 17, 2026?\": 12% to 25%, now more likely (normally $2,616 a day).\n- \"Will Anthropic IPO by November 25, 2026?\": 73% to 56%, now less likely (normally $2,114 a day).\n- and 24 smaller moves in the same topic.\n\nMarket groups in this topic: Anthropic IPO by __?; How much will Anthropic raise in its IPO?; Anthropic IPO Date; In which month will Anthropic IPO?; Next Fable Model (5.2+) released by...?; What will Anthropic's IPO valuation be?\n\nWhen: In the lead market, half the move had happened by Nov 05 10:47 ET and the sharpest 30-minute step (-10 points) ended around Nov 05 13:49 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \"Yes\" if Anthropic shares are listed on a public securities exchange and open for trading by 11:59 PM ET on the listed date. Otherwise, this market will resolve to \"No.\"\n\nIf Anthropic is acquired by another company that is already public, this market will immediately resolve to \"No.\"\n\nThe primary resolution source for this market is official filings and announcements fr",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 8,
+      "kind": "hunt",
+      "score": 41.2,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 3 of today's topics by how much they changed expectations (importance 41/100). 29 market(s) moved, in markets that normally trade about $209,675 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Netanyahu out by June 30, 2027?\": 42% to 58%, now more likely (normally $22,864 a day).\n- \"Israel x Iran ceasefire continues through November 7?\": 90% to 94%, now more likely (normally $100,497 a day).\n- \"Netanyahu out by end of 2026?\": 27% to 36%, now more likely (normally $25,394 a day).\n- \"US x Iran effective ceasefire continues through November 30, 2026?\": 42% to 36%, now less likely (normally $20,855 a day).\n- \"Will the Houthis enter Saudi Arabia by December 31?\": 32% to 62%, now more likely (normally $2,066 a day).\n- \"Houthis capture Taiz city by November 30?\": 16% to 11%, now less likely (normally $7,602 a day).\n- \"Saudi-Houthi ceasefire agreement announced by December 31?\": 24% to 27%, now more likely (normally $8,676 a day).\n- \"Will no Israeli government be formed after the 2026 Knesset election?\": 42% to 32%, now less likely (normally $2,274 a day).\n- \"Saudi coalition strike in Yemen on November 6?\": 86% to 97%, now more likely (normally $1,663 a day).\n- \"Will Dilution of Iranian Uranium be in a US-Iran deal in 2026?\": 18% to 14%, now less likely (normally $4,276 a day).\n- \"Netanyahu out by March 31, 2027?\": 36% to 55%, now more likely (normally $897 a day).\n- \"Saudi coalition strike in Yemen on November 8?\": 60% to 98%, now more likely (normally $355 a day).\n- and 17 smaller moves in the same topic.\n\nMarket groups in this topic: Netanyahu out by...?; Israel x Iran ceasefire continues through...?; US-Iran effective ceasefire continues through...?; Houthis enter Saudi Arabia by...?; Saudi coalition strike in Yemen on...?; Houthis capture Taiz by...? (castle)\n\nWhen: In the lead market, half the move had happened by Nov 05 08:00 ET and the sharpest 30-minute step (+16 points) ended around Nov 05 14:19 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \u201cYes\u201d if Benjamin Netanyahu ceases to be Prime Minister of Israel for any period of time between market creation and the specified date (ET). Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Benjamin Netanyahu's resignation/removal before this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/re",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 27,
+      "kind": "hunt",
+      "score": 40.3,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 4 of today's topics by how much they changed expectations (importance 40/100). 2 market(s) moved, in markets that normally trade about $53,407 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Chuck Schumer win the next Senate Democratic Leader election?\": 66% to 86%, now more likely (normally $51,696 a day).\n- \"Will Chris Van Hollen win the next Senate Democratic Leader election?\": 20% to 8%, now less likely (normally $1,711 a day).\n\nMarket groups in this topic: Next Senate Democratic Leader?\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): If Chuck Schumer wins the next Senate Democratic Leader election, then the market resolves to Yes.\nThe market resolves based on the official certification or declaration by the relevant electoral authority. For parliamentary elections, the party or coalition with the most seats wins. For referendums, \"Yes\" and \"No\" are the options. For presidential or direct elections, the candidate who wins accor",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 16,
+      "kind": "hunt",
+      "score": 39.6,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 7 of today's topics by how much they changed expectations (importance 40/100). 26 market(s) moved, in markets that normally trade about $42,646 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Next Astra Model (6.1+) released by November 6, 2026?\": 57% to 6%, now less likely (normally $3,475 a day).\n- \"Next Astra Model (6.1+) released by November 15, 2026?\": 86% to 64%, now less likely (normally $7,074 a day).\n- \"Will GPT Astra 6.1+ be released between November 2 and November 8, 2026?\": 46% to 9%, now less likely (normally $3,596 a day).\n- \"Next Astra Model (6.1+) released by November 9, 2026?\": 64% to 18%, now less likely (normally $1,672 a day).\n- \"Next Astra Model (6.1+) released by November 30, 2026?\": 98% to 85%, now less likely (normally $5,610 a day).\n- \"Will GPT Astra 6.1+ be released between November 9 and November 15, 2026?\": 31% to 53%, now more likely (normally $2,031 a day).\n- \"Next Astra Model (6.1+) released by November 13, 2026?\": 84% to 62%, now less likely (normally $1,909 a day).\n- \"Next Astra Model (6.1+) released by November 11, 2026?\": 74% to 43%, now less likely (normally $1,387 a day).\n- \"Will GPT Astra 6.1+ be released on November 6, 2026?\": 26% to 4%, now less likely (normally $1,831 a day).\n- \"Will GPT Astra 6.1+ debut in the top 20 of the Text Arena leaderboard by June 30, 2027?\": 5% to 26%, now more likely (normally $1,558 a day).\n- \"Will there be no GPT Astra 6.1+ release by November 30, 2026?\": 4% to 17%, now more likely (normally $1,165 a day).\n- \"Will the next GPT Terra model (5.7+) debut at a score of at least 1440 by June 30, 2027?\": 51% to 26%, now less likely (normally $476 a day).\n- and 14 smaller moves in the same topic.\n\nMarket groups in this topic: GPT Astra 6.1+ released by...?; When will GPT Astra 6.1+ be released?; GPT Astra 6.1+ released on...?; GPT Astra 6.1+: Text Arena Rank Debut?; Next GPT Terra Model (5.7+): Text Arena Debut?; GPT Astra 6.1+: Text Arena Debut?\n\nWhen: In the lead market, half the move had happened by Nov 04 20:44 ET and the sharpest 30-minute step (-16 points) ended around Nov 05 13:05 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \"Yes\" if OpenAI makes a GPT Astra model designated 6.1 or higher available to the general public between market creation and the specified date (ET). Otherwise, this market will resolve to \"No\".\n\nA qualifying model must be an OpenAI model designated as version 6.1 or higher that includes \"Astra\" in its name or model identifier, regardless of capitalization or surroundin",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 28,
+      "kind": "hunt",
+      "score": 39.6,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 6 of today's topics by how much they changed expectations (importance 40/100). 7 market(s) moved, in markets that normally trade about $69,391 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Another Fed rate hike in 2026?\": 78% to 64%, now less likely (normally $41,013 a day).\n- \"Will 1 Fed rate hike happen in 2026?\": 22% to 34%, now more likely (normally $22,734 a day).\n- \"Will 2 Fed rate hikes happen in 2026?\": 78% to 65%, now less likely (normally $3,539 a day).\n- \"Michael Barr officially out as Fed Governor by December 31?\": 20% to 11%, now less likely (normally $632 a day).\n- \"Will the Fed\u2019s upper bound reach 4.25% or higher before 2027?\": 77% to 67%, now less likely (normally $622 a day).\n- \"Will the upper bound of the target federal funds rate be 4.0% at the end of 2026?\": 20% to 33%, now more likely (normally $433 a day).\n- \"Will the upper bound of the target federal funds rate be 4.25% at the end of 2026?\": 76% to 65%, now less likely (normally $418 a day).\n\nMarket groups in this topic: Another Fed rate hike in 2026?; How many Fed rate hikes in 2026?; What will the Fed rate be at the end of 2026?; Michael Barr officially out as Fed Governor by December 31?; What will Fed Rate hit before 2027?\n\nWhen: In the lead market, half the move had happened by Nov 05 10:47 ET and the sharpest 30-minute step (-12 points) ended around Nov 05 10:57 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \u201cYes\u201d if the upper bound of the target federal funds rate is increased at any point between September 17, 2026 and the completion of the Fed's December 2026 meeting, currently scheduled for December 8 to 9, 2026, inclusive of any rate hike announced as a result of the December meeting. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAny change to the target federal funds ",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 29,
+      "kind": "hunt",
+      "score": 38.4,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 8 of today's topics by how much they changed expectations (importance 38/100). 5 market(s) moved, in markets that normally trade about $60,281 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Samuel Alito announce his retirement by December 31, 2026?\": 16% to 5%, now less likely (normally $49,988 a day).\n- \"Will Samuel Alito announce his retirement by June 30, 2027?\": 34% to 18%, now less likely (normally $8,105 a day).\n- \"Supreme Court vacancy in 2026?\": 38% to 23%, now less likely (normally $922 a day).\n- \"Will Clarence Thomas announce his retirement by June 30, 2027?\": 25% to 11%, now less likely (normally $360 a day).\n- \"Will Clarence Thomas announce his retirement by December 31, 2026?\": 15% to 10%, now less likely (normally $906 a day).\n\nMarket groups in this topic: Will Samuel Alito announce his retirement by...?; Supreme Court vacancy in 2026?; Will Clarence Thomas announce his retirement by...?\n\nWhen: In the lead market, half the move had happened by Nov 04 22:17 ET and the sharpest 30-minute step (-5 points) ended around Nov 04 22:17 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \"Yes\" if Samuel Alito announces that he will retire from his position as Associate Justice of the Supreme Court of the United States by the specified date at 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe announced timing of his retirement may be immediate, at the end of the current Supreme Court term, or at any point in the future.\n\nAny qualifying annou",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 30,
+      "kind": "hunt",
+      "score": 37.6,
+      "mode": "day",
+      "strength": "strong",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 9 of today's topics by how much they changed expectations (importance 38/100). 6 market(s) moved, in markets that normally trade about $53,899 a day.\nStrong: many dollars and markets moved together. Something real very likely happened.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will SpaceX have the highest IPO Market Cap 2026?\": 72% to 82%, now more likely (normally $30,256 a day).\n- \"Will Anthropic have the highest IPO Market Cap 2026?\": 28% to 15%, now less likely (normally $19,420 a day).\n- \"Will OpenAI's IPO valuation be between $1.0T and $1.25T?\": 6% to 10%, now more likely (normally $2,313 a day).\n- \"SpaceX becomes a US mobile carrier by June 30, 2027?\": 17% to 24%, now more likely (normally $1,100 a day).\n- \"SpaceX becomes a US mobile carrier by December 31, 2027?\": 57% to 42%, now less likely (normally $508 a day).\n- \"OpenAI IPO closing market cap above $800B?\": 73% to 68%, now less likely (normally $302 a day).\n\nMarket groups in this topic: Largest IPO by market cap in 2026?; SpaceX becomes a US mobile carrier by ___?; What will OpenAI's IPO valuation be?; OpenAI IPO closing market cap above ___ ?\n\nWhen: In the lead market, half the move had happened by Nov 05 10:36 ET and the sharpest 30-minute step (+10 points) ended around Nov 05 10:36 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to the company that achieves the highest market capitalization in U.S. dollars based on the official closing price on its first trading day in 2026.\n\nThis market will resolve to a company that completes an Initial Public Offering (IPO) between January 1 and December 31, 2026, 11:59 PM ET.\n\nMarket capitalization is defined as the total number of outstanding shares multiplie",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 31,
+      "kind": "hunt",
+      "score": 36.1,
+      "mode": "day",
+      "strength": "moderate",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 10 of today's topics by how much they changed expectations (importance 36/100). 1 market(s) moved, in markets that normally trade about $63,297 a day.\nModerate: a real shift, but in fewer or smaller markets.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will J.D. Vance win the 2028 Republican presidential nomination?\": 31% to 38%, now more likely (normally $63,297 a day).\n\nMarket groups in this topic: Republican Presidential Nominee 2028\n\nWhen: In the lead market, half the move had happened by Nov 05 11:15 ET and the sharpest 30-minute step (+5 points) ended around Nov 05 16:25 ET.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \u201cYes\u201d if the named individual wins and accepts the 2028 nomination of the Republican Party for U.S. president. Otherwise, this market will resolve to \u201cNo\u201d.\n\nThe resolution source for this market will be a consensus of official Republican Party sources.\n\nAny replacement of the Republican nominee before election day will not change the resolution of the market.",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 33,
+      "kind": "hunt",
+      "score": 35.4,
+      "mode": "day",
+      "strength": "moderate",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 12 of today's topics by how much they changed expectations (importance 35/100). 3 market(s) moved, in markets that normally trade about $57,515 a day.\nModerate: a real shift, but in fewer or smaller markets.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Pete Hegseth out as Secretary of Defense by November 30?\": 34% to 28%, now less likely (normally $56,476 a day).\n- \"Will Donald Trump be the first of these people impeached by December 31, 2027?\": 34% to 24%, now less likely (normally $451 a day).\n- \"Will Pete Hegseth be the first of these people impeached by December 31, 2027?\": 31% to 36%, now more likely (normally $588 a day).\n\nMarket groups in this topic: Pete Hegseth out as Secretary of Defense by November 30?; Which of these people will be impeached first by the end of 2027?\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \u201cYes\u201d if Pete Hegseth ceases to be U.S. Secretary of Defense for any period of time between market creation and the specified date, 11:59 PM ET. Otherwise, this market will resolve to \u201cNo\u201d.\n\nAn announcement of Pete Hegseth's resignation/removal by this market's end date will immediately resolve this market to \"Yes\", regardless of when the announced resignation/removal g",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 34,
+      "kind": "hunt",
+      "score": 35.2,
+      "mode": "day",
+      "strength": "moderate",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 13 of today's topics by how much they changed expectations (importance 35/100). 6 market(s) moved, in markets that normally trade about $61,880 a day.\nModerate: a real shift, but in fewer or smaller markets.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"US-Iran Hormuz Agreement by November 30?\": 22% to 18%, now less likely (normally $39,221 a day).\n- \"US reissues Iran oil sanction relief by December 31?\": 37% to 32%, now less likely (normally $12,002 a day).\n- \"Iran-Oman Hormuz Agreement by November 30?\": 21% to 15%, now less likely (normally $9,590 a day).\n- \"Will at least 10 ships transit the Strait of Hormuz on any day by November 30, 2026?\": 38% to 25%, now less likely (normally $771 a day).\n- \"Will there be between 0 and 4 average daily transits of the Strait of Hormuz on November 30?\": 26% to 44%, now more likely (normally $173 a day).\n- \"Will there be between 20 and 24 average daily transits of the Bab el-Mandeb Strait on November 30?\": -7% to 7%, now more likely (normally $122 a day).\n\nMarket groups in this topic: US-Iran Hormuz Agreement by...?; US reissues Iran oil sales sanction relief by...?; Iran-Oman Hormuz Management Agreement by...?; Will __ ships transit the Strait of Hormuz on any day by November 30?; Avg. # of ships transiting Strait of Hormuz end of November?; Avg. # of ships transiting Bab el-Mandeb Strait end of November?\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to \u201cYes\u201d if a diplomatic agreement between the United States and Iran over traffic in the strait of Hormuz is announced by the specified date, 11:59 PM ET.\n\nA diplomatic agreement refers to an official agreement, treaty, deal, or substantially similar diplomatic instrument that establishes agreed actions, policies, obligations, or commitments between the United States and ",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 35,
+      "kind": "hunt",
+      "score": 34.9,
+      "mode": "day",
+      "strength": "moderate",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 14 of today's topics by how much they changed expectations (importance 35/100). 2 market(s) moved, in markets that normally trade about $87,390 a day.\nModerate: a real shift, but in fewer or smaller markets.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Marco Rubio be the nominee for the Presidency for the Republican party?\": 22% to 18%, now less likely (normally $48,037 a day).\n- \"Will J.D. Vance be the nominee for the Presidency for the Republican party?\": 31% to 34%, now more likely (normally $39,353 a day).\n\nMarket groups in this topic: 2028 Republican presidential nominee\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): If Marco Rubio wins and accepts the nomination for the Presidency for the Republican party in 2028, then the market resolves to Yes.",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 24,
+      "kind": "hunt",
+      "score": 34.7,
+      "mode": "day",
+      "strength": "moderate",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 16 of today's topics by how much they changed expectations (importance 35/100). 2 market(s) moved, in markets that normally trade about $10,018 a day.\nModerate: a real shift, but in fewer or smaller markets.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?\": 10% to 40%, now more likely (normally $9,026 a day).\n- \"Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Apr 1, 2027?\": 56% to 73%, now more likely (normally $992 a day).\n\nMarket groups in this topic: Will a cabinet member be impeached?\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): If a member of the cabinet is impeached by the U.S. House of Representatives before Jan 1, 2027, then the market resolves to Yes.\nThe cabinet is defined as the following: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Hu",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 36,
+      "kind": "hunt",
+      "score": 34.7,
+      "mode": "day",
+      "strength": "moderate",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 15 of today's topics by how much they changed expectations (importance 35/100). 34 market(s) moved, in markets that normally trade about $60,324 a day.\nModerate: a real shift, but in fewer or smaller markets.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Pedro S\u00e1nchez be the next Prime Minister of Spain?\": 11% to 8%, now less likely (normally $20,323 a day).\n- \"Will Alberto N\u00fa\u00f1ez Feij\u00f3o be the next Prime Minister of Spain?\": 88% to 90%, now more likely (normally $15,103 a day).\n- \"Will Christopher Luxon be the next Prime Minister of New Zealand after the 2026 elections?\": 49% to 56%, now more likely (normally $5,320 a day).\n- \"Will the next governing coalition of New Zealand include National + ACT + NZF?\": 27% to 50%, now more likely (normally $988 a day).\n- \"Will National Party win the most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?\": 69% to 66%, now less likely (normally $6,483 a day).\n- \"Will the next governing coalition of New Zealand include Labour + Green + Maori?\": 44% to 22%, now less likely (normally $794 a day).\n- \"Will voter turnout be between 80% and 82% in the 2026 New Zealand general election?\": 17% to 47%, now more likely (normally $265 a day).\n- \"Will PSOE win the most seats in the 2026 Spanish general election?\": 12% to 10%, now less likely (normally $2,616 a day).\n- \"Will Green Party win the third-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?\": 92% to 96%, now more likely (normally $1,241 a day).\n- \"Spain General Election: PP + Vox get 50%+ of Vote?\": 46% to 52%, now more likely (normally $793 a day).\n- \"Will the Opportunity Party win 7-9 seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?\": 44% to 61%, now more likely (normally $305 a day).\n- \"Will PSOE receive between 26% and 28% of the vote in the 2026 Spanish general election?\": 25% to 36%, now more likely (normally $484 a day).\n- and 22 smaller moves in the same topic.\n\nMarket groups in this topic: Next Prime Minister of Spain?; Which coalition will form the next New Zealand government?; Next Prime Minister of New Zealand?; New Zealand legislative election winner?; New Zealand Election: Turnout; Spain General Election: PSOE % of vote?\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): This market will resolve to the next individual who officially assumes the office of Prime Minister of Spain by March 31, 2028, 11:59 PM ET.\n\nTo count for resolution, the individual must receive a vote of confidence from the Congress of Deputies and be formally sworn-in, resulting in the official formation of a new government. Any interim or caretaker Prime Minister who does not receive a parliame",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 38,
+      "kind": "hunt",
+      "score": 34.3,
+      "mode": "day",
+      "strength": "moderate",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 18 of today's topics by how much they changed expectations (importance 34/100). 11 market(s) moved, in markets that normally trade about $34,215 a day.\nModerate: a real shift, but in fewer or smaller markets.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Gemini Carbon be released between November 9 and November 15, 2026?\": 73% to 80%, now more likely (normally $13,189 a day).\n- \"Will Gemini Carbon be released on November 10, 2026?\": 24% to 35%, now more likely (normally $8,153 a day).\n- \"Gemini Carbon released by November 9, 2026?\": 10% to 2%, now less likely (normally $3,174 a day).\n- \"Will Gemini Carbon be released on November 11, 2026?\": 18% to 24%, now more likely (normally $3,544 a day).\n- \"Gemini Carbon released by November 13, 2026?\": 77% to 80%, now more likely (normally $3,254 a day).\n- \"Will Gemini Carbon be released on November 9, 2026?\": 8% to 1%, now less likely (normally $1,280 a day).\n- \"Will the next Google Gemini Pro model be released by December 31, 2026?\": 35% to 16%, now less likely (normally $181 a day).\n- \"Will the next Google Gemini Pro model added to the Arena Leaderboard debut at a score of at least 1480?\": 15% to 11%, now less likely (normally $486 a day).\n- \"Will the next Google Gemini Pro model added to the Arena Leaderboard debut at a score of at least 1500?\": 11% to 15%, now more likely (normally $380 a day).\n- \"Will the next Google Gemini Pro model added to the Arena Leaderboard debut at a score of at least 1495?\": 16% to 12%, now less likely (normally $314 a day).\n- \"Will the next Google Gemini Pro model added to the Arena Leaderboard debut at a score of at least 1470?\": 16% to 12%, now less likely (normally $261 a day).\n\nMarket groups in this topic: Gemini Carbon released on...?; When will Gemini Carbon be released?; Gemini Carbon released by...?; Next Google Gemini Pro Model: Arena Debut?; Next Google Gemini Pro Model released by...?\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): On October 9, 2026, Business Insider reported that Google employees were internally testing a Gemini 4 model codenamed \"Carbon,\" separate from the checkpoint later released as Gemini 4 Argon (https://www.businessinsider.com/google-employees-test-new-gemini-4-model-argon-barium-carbon-2026-10).\n\nThis market will resolve according to the calendar date (ET) on which \"Carbon\", or a model confirmed to ",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 40,
+      "kind": "hunt",
+      "score": 33.2,
+      "mode": "day",
+      "strength": "weak",
+      "move_start_utc": "2026-11-04T23:41:37Z",
+      "scent": "Rank 20 of today's topics by how much they changed expectations (importance 33/100). 1 market(s) moved, in markets that normally trade about $7,394 a day.\nWeak: thin markets or a single small one. One trader can move these. Run two or three searches; if nothing specific turns up, submit an open lead and stop.\n\nWhat changed in the last 24 hours (now less or more likely, from a day ago):\n- \"Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]\": 61% to 32%, now less likely (normally $7,394 a day).\n\nMarket groups in this topic: 2028 popular vote margin of victory?\n\nWhen: No intraday price history; the move happened at some point in the last 24 hours.\n\nFind: the development behind this shift and how much it matters. If one development explains several of these markets, report that one development. If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary and name the bigger news.\n\nHow the biggest market resolves (short): If a member of the Democratic Party wins the popular vote in 2028 by a margin of between 9.00-100.00%, then the market resolves to Yes.\nThe popular vote margin is calculated as (total votes for the winner minus total votes for second place) divided by total votes, times 100, rounded to two decimal places. The calculation uses the states' and DC's most recent certificates of ascertainment of presid",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 6,
+      "kind": "hunt",
+      "score": 28.6,
+      "mode": "hourly",
+      "strength": null,
+      "move_start_utc": "2026-11-05T17:34:19Z",
+      "scent": "Importance 29/100: about $1,203 traded during the moves, across 1 market(s). Biggest move 6 points.\nThe repricing began around Nov 05 12:34 ET (2026-11-05 17:34 UTC).\n\nWhat the markets are saying:\n- Polymarket: \"Will Peter Obi win the 2027 Nigerian Presidential Election?\" went from 22% to 28% between Nov 05 12:34 ET and Nov 05 12:59 ET. Traders now see it as more likely. https://polymarket.com/event/nigerian-presidential-election-winner-20260602162945585/will-peter-obi-win-the-2027-nigerian-presidential-election-20260602163030948\n  $1,203 traded; 100.3x the usual pace; largest buyer 94% of the buying.\n\nHow the biggest market resolves: Presidential elections are scheduled to be held in Nigeria on January 16, 2027.\n\nThis market will resolve according to the listed candidate who wins the 2027 Nigerian presidential election. \n\nThis market includes any potential second round. \n\nIf the results are not known definitively by October 31, 2027, 11:59 PM ET, this market will resolve to \"Other\".\n\nThis market will resolve based on the results of this election, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve solely based on official results as reported by Nigerian government sources, including the Independent National Electoral Commission (https://www.inecnigeria.org/).",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 11,
+      "kind": "hunt",
+      "score": 36.0,
+      "mode": "hourly",
+      "strength": null,
+      "move_start_utc": "2026-11-05T17:54:18Z",
+      "scent": "Importance 36/100: about $5,300 traded during the moves, across 1 market(s). Biggest move 8 points.\nThe repricing began around Nov 05 12:54 ET (2026-11-05 17:54 UTC).\n\nWhat the markets are saying:\n- Polymarket: \"Will Morena win the most seats in the 2027 Guerrero Congress election?\" went from 86% to 93% between Nov 05 12:54 ET and Nov 05 13:25 ET. Traders now see it as more likely. https://polymarket.com/event/guerrero-congress-election-winner/will-morena-win-the-most-seats-in-the-2027-guerrero-congress-election\n  $5,300 traded; 283.1x the usual pace; largest buyer 64% of the buying.\n\nHow the biggest market resolves: Legislative elections to elect the 46 members of the Congress of the State of Guerrero are scheduled to take place on June 6, 2027.\n\nThis market will resolve according to the political party that wins the greatest number of seats in the Congress of the State of Guerrero as a result of this election.\n\nParties will be primarily ranked by the number of seats won in the specified election. If two or more parties are tied on seats, ties will be broken by the total number of valid votes received by each party's list in the proportional representation vote, with higher vote totals ranking higher. If parties remain tied, ties will be broken by alphabetical order of the listed party names. This market will resolve to the party that occupies the highest finishing position after applying this ranking.\n\nSeats will be attributed to the political party under which each elected deputy is officially registered in the final results published by the Instituto Electoral y de Participaci\u00f3n Ciudadana del Estado de Guerrero. For district (mayor\u00eda relativa) seats won by a coalition or common candidacy, the seat will count toward the party to which the elected deputy is assigned in the official results, p",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 20,
+      "kind": "hunt",
+      "score": 30.2,
+      "mode": "hourly",
+      "strength": null,
+      "move_start_utc": "2026-11-05T22:36:38Z",
+      "scent": "Importance 30/100: about $1,625 traded during the moves, across 1 market(s). Biggest move 6 points.\nThe repricing began around Nov 05 17:36 ET (2026-11-05 22:36 UTC).\n\nWhat the markets are saying:\n- Polymarket: \"Will Simeon Barclay win the Turner Prize 2026?\" went from 20% to 26% between Nov 05 17:36 ET and Nov 05 18:05 ET. Traders now see it as more likely. https://polymarket.com/event/turner-prize-2026-winner-1786472350956/will-simeon-barclay-win-the-turner-prize-2026-1786472350957\n  $1,625 traded; 126.9x the usual pace; largest buyer 91% of the buying.\n  Also moved in the same event: \"Will Tanoa Sasraku win the Turner Prize 2026?\" 24% to 17%.\n  Also moved in the same event: \"Will Marguerite Humeau win the Turner Prize 2026?\" 23% to 16%.\n  Also moved in the same event: \"Will Kira Freije win the Turner Prize 2026?\" 32% to 30%.\n\nHow the biggest market resolves: The Turner Prize is awarded annually by Tate to a British artist for an outstanding exhibition or other presentation of their work. The Turner Prize 2026 shortlist was announced on April 23, 2026, and the shortlisted artists' exhibition runs at Middlesbrough Institute of Modern Art (MIMA) from September 26, 2026 to March 29, 2027. The winner is scheduled to be announced on December 10, 2026.\n\nThis market will resolve according to the artist who is awarded the Turner Prize 2026.\n\nIf no winner has been declared by March 31, 2027, 11:59 PM ET, this market will resolve to \"Other\".\n\nIf multiple listed artists are jointly awarded the Turner Prize 2026, this market will resolve in favor of the winning artist whose last name comes first in alphabetical order. \n\nThe primary resolution source for this market will be official information from Tate (https://www.tate.org.uk/) and the Turner Prize; however, a consensus of credible reporting may also be used.",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        },
+        {
+          "story_id": 21,
+          "score": 27.7,
+          "about": "Will James Li win the 2026 Scarborough North by-election?"
+        }
+      ]
+    },
+    {
+      "story_id": 21,
+      "kind": "hunt",
+      "score": 27.7,
+      "mode": "hourly",
+      "strength": null,
+      "move_start_utc": "2026-11-05T21:48:21Z",
+      "scent": "Importance 28/100: about $1,313 traded during the moves, across 1 market(s). Biggest move 6 points.\nThe repricing began around Nov 05 16:48 ET (2026-11-05 21:48 UTC).\n\nWhat the markets are saying:\n- Polymarket: \"Will James Li win the 2026 Scarborough North by-election?\" went from 91% to 96% between Nov 05 16:48 ET and Nov 05 18:05 ET. Traders now see it as more likely. https://polymarket.com/event/scarborough-north-by-election-winner-1793634153133/will-james-li-win-the-2026-scarborough-north-by-election-1793634153233\n  $1,313 traded; 67.8x the usual pace; largest buyer 100% of the buying.\n\nHow the biggest market resolves: A by-election for the Canadian federal electoral district of Scarborough North is currently scheduled to be held on December 7, 2026.\n\nThis market will resolve according to the candidate who wins the 2026 Scarborough North by-election.\n\nIf the election results are not known definitively by December 31, 2026, 11:59 PM ET, this market will resolve to \"Other\".\n\nThe resolution source for this market will be a consensus of credible reporting. In case of ambiguity, this market will resolve solely based on official election results as published by Elections Canada (https://www.elections.ca/).",
+      "other_stories_today": [
+        {
+          "story_id": 4,
+          "score": 45.6,
+          "about": "Will Marco Rubio leave the Trump administration before 2027?"
+        },
+        {
+          "story_id": 26,
+          "score": 43.3,
+          "about": "Will Hakeem Jeffries be the next Speaker of the House?"
+        },
+        {
+          "story_id": 9,
+          "score": 41.9,
+          "about": "Will Anthropic IPO by December 31, 2026?"
+        },
+        {
+          "story_id": 8,
+          "score": 41.2,
+          "about": "Netanyahu out by June 30, 2027?"
+        },
+        {
+          "story_id": 27,
+          "score": 40.3,
+          "about": "Will Chuck Schumer win the next Senate Democratic Leader election?"
+        },
+        {
+          "story_id": 23,
+          "score": 40.2,
+          "about": "Will Josh O'Connor be the next James Bond?"
+        },
+        {
+          "story_id": 16,
+          "score": 39.6,
+          "about": "Next Astra Model (6.1+) released by November 6, 2026?"
+        },
+        {
+          "story_id": 28,
+          "score": 39.6,
+          "about": "Another Fed rate hike in 2026?"
+        },
+        {
+          "story_id": 29,
+          "score": 38.4,
+          "about": "Will Samuel Alito announce his retirement by December 31, 2026?"
+        },
+        {
+          "story_id": 30,
+          "score": 37.6,
+          "about": "Will SpaceX have the highest IPO Market Cap 2026?"
+        },
+        {
+          "story_id": 31,
+          "score": 36.1,
+          "about": "Will J.D. Vance win the 2028 Republican presidential nomination?"
+        },
+        {
+          "story_id": 11,
+          "score": 36.0,
+          "about": "Will Morena win the most seats in the 2027 Guerrero Congress election?"
+        },
+        {
+          "story_id": 32,
+          "score": 36.0,
+          "about": "Will the margin of victory for Republicans in the U.S. Senate election in South Dakota be at least 17 percentage points? [Rounds, 17+ pts]"
+        },
+        {
+          "story_id": 33,
+          "score": 35.4,
+          "about": "Pete Hegseth out as Secretary of Defense by November 30?"
+        },
+        {
+          "story_id": 34,
+          "score": 35.2,
+          "about": "US-Iran Hormuz Agreement by November 30?"
+        },
+        {
+          "story_id": 35,
+          "score": 34.9,
+          "about": "Will Marco Rubio be the nominee for the Presidency for the Republican party?"
+        },
+        {
+          "story_id": 24,
+          "score": 34.7,
+          "about": "Will any member of the Cabinet (defined as: the Vice President, Secretary of State, Secretary of the Treasury, Secretary of Defense, Attorney General, Secretary of the Interior, Secretary of Agriculture, Secretary of Commerce, Secretary of Labor, Secretary of Health and Human Services, Secretary of Housing and Urban Development, Secretary of Transportation, Secretary of Energy, Secretary of Education, Secretary of Veterans Affairs, Secretary of Homeland Security, Administrator of the Environmental Protection Agency, Director of the Office of Management and Budget, Director of National Intelligence, Trade Representative, Administrator of the Small Business Administration, White House Chief of Staff) be impeached before Jan 1, 2027?"
+        },
+        {
+          "story_id": 36,
+          "score": 34.7,
+          "about": "Will Pedro S\u00e1nchez be the next Prime Minister of Spain?"
+        },
+        {
+          "story_id": 37,
+          "score": 34.4,
+          "about": "Will the margin of victory for Democrats in the U.S. Senate election in Mississippi be at least 0.6 percentage points? [Colom, 0.6+ pts]"
+        },
+        {
+          "story_id": 38,
+          "score": 34.3,
+          "about": "Will Gemini Carbon be released between November 9 and November 15, 2026?"
+        },
+        {
+          "story_id": 39,
+          "score": 33.7,
+          "about": "Will the margin of victory for Republicans in the governor election in Wyoming be at least 49 percentage points? [Barlow, 49+ pts]"
+        },
+        {
+          "story_id": 40,
+          "score": 33.2,
+          "about": "Will Democratic win the 2028 popular vote by 9.0% to 100.0%? [Democratic by 9.0% or more]"
+        },
+        {
+          "story_id": 17,
+          "score": 31.1,
+          "about": "Will Andy Beshear announce a Presidential run before 2027?"
+        },
+        {
+          "story_id": 10,
+          "score": 30.5,
+          "about": "Will Labour Party win the second-most seats in the New Zealand House of Representatives in the 2026 New Zealand legislative election?"
+        },
+        {
+          "story_id": 20,
+          "score": 30.2,
+          "about": "Will Simeon Barclay win the Turner Prize 2026?"
+        },
+        {
+          "story_id": 25,
+          "score": 29.9,
+          "about": "Will Morgan Wallen be the Billboard #1 top artist in 2026?"
+        },
+        {
+          "story_id": 6,
+          "score": 28.6,
+          "about": "Will Peter Obi win the 2027 Nigerian Presidential Election?"
+        },
+        {
+          "story_id": 22,
+          "score": 28.6,
+          "about": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?"
+        }
+      ]
+    }
+  ]
+}

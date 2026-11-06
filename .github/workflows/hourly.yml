@@ -66,4 +66,7 @@ jobs:
 
       - name: Summary
         if: ${{ !cancelled() }}
-        run: test -f summary.md && cat summary.md >> "$GITHUB_STEP_SUMMARY" || true
+        run: |
+          test -f summary.md && cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          python -m residual --data rdata audit report --since "$(date -u +%F)" >> "$GITHUB_STEP_SUMMARY" 2>/dev/null
+          true

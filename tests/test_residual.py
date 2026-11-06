@@ -596,3 +596,131 @@ def test_day_mode_ranks_day_scored_stories_before_hourly_ones():
     hourly = {"score": 46, "money_usd": 30_000, "scent_data": None}
     daily = {"score": 43, "money_usd": 140_000, "scent_data": {"rank": 1}}
     assert site.ranked([hourly, daily], cfg) == [daily, hourly]
+
+
+# ---------- cost ledger ----------
+
+def test_ledger_records_every_request_with_full_usage_and_composition(env, tmp_path):
+    from residual import hunter, stories, ledger as L
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    item = stories.queue(db, cfg)[0]
+    r1 = api_resp(api_search("https://apnews.com/a"), stop="pause_turn")
+    r1.usage.cache_creation_input_tokens = 9000
+    r1.usage.cache_creation = SimpleNamespace(ephemeral_5m_input_tokens=9000, ephemeral_1h_input_tokens=0)
+    r1.model = "claude-sonnet-5-5"   # a fallback served it
+    client = APIClient([r1, api_resp({"type": "tool_use", "id": "t", "name": "submit_story",
+                                      "input": {"question": "Q?", "sources": []}})])
+    client.messages.count_tokens = lambda **kw: SimpleNamespace(input_tokens=4000)
+    led = L.Ledger(tmp_path / "ledger")
+    f = hunter.hunt(client, cfg, item, led)
+    rows = L.read(tmp_path / "ledger")
+    assert [r["turn"] for r in rows] == [0, 1] and all(r["purpose"] == "hunt" and r["story_id"] == sid for r in rows)
+    assert rows[0]["usage"]["cache_creation_input_tokens"] == 9000 and rows[0]["usage"]["cache_write_5m_tokens"] == 9000
+    assert rows[0]["model"] == "claude-sonnet-5-5" and rows[0]["model_requested"] == cfg.hunt_model
+    assert rows[0]["context_tokens_exact"] == 4000 and sum(rows[0]["context_tokens_by_part"].values()) == pytest.approx(4000, abs=10)
+    assert rows[1]["context_chars"]["search_results"] > 0 and rows[0]["context_chars"]["search_results"] == 0
+    assert rows[0]["context_chars"]["scent"] > 0 and rows[0]["context_chars"]["rules"] == len(hunter.HUNT_RULES)
+    assert f["usage"]["cache_creation_input_tokens"] == 9000 and f["usage"]["turns"] == 2
+    assert list((tmp_path / "ledger" / "transcripts").rglob("*.json.gz"))
+
+
+def test_cycle_stops_at_the_first_billing_error(env, tmp_path, monkeypatch):
+    from residual import hunter, stories
+    cfg, db = env
+    cfg.db_path = str(tmp_path / "residual.db")
+    for i in range(2):
+        stories.assign(db, [story_move(db, f"B-{i}", f"EVB{i}")], NOW)
+    monkeypatch.setattr("residual.scheduled.scan", lambda db, cfg, state: [])
+    calls = []
+
+    def broke(**kw):
+        calls.append(1)
+        raise RuntimeError("Error code: 400 - Your credit balance is too low to access the Anthropic API.")
+    client = APIClient([])
+    client.beta.messages.stream = broke
+    report = hunter.cycle(db, cfg, client)
+    assert report["billing_error"] and len(calls) == 1      # the second story was not tried
+
+
+def test_audit_prices_reports_and_reconciles(tmp_path):
+    from residual import audit, ledger as L
+    prices = audit.load_prices()
+    row = {"model": "claude-opus-5-5", "usage": {
+        "input_tokens": 1_000_000, "cache_creation_input_tokens": 1_000_000, "cache_write_5m_tokens": 1_000_000,
+        "cache_write_1h_tokens": 0, "cache_read_input_tokens": 1_000_000, "output_tokens": 1_000_000, "web_searches": 1000}}
+    c = audit.cost(row, prices)
+    assert c == pytest.approx({"uncached_input": 4.0, "cache_writes": 5.0, "cache_reads": 0.2, "output": 20.0, "searches": 10.0})
+    haiku = {"model": "claude-haiku-5-5", "usage": {**row["usage"], "web_searches": 0}}
+    assert audit.cost(haiku, prices)["output"] == 2.5          # over 100k prompt tokens: the long tier
+
+    led = L.Ledger(tmp_path / "ledger")
+    u = {"input_tokens": 10, "cache_creation_input_tokens": 20_000, "cache_write_5m_tokens": 20_000,
+         "cache_write_1h_tokens": 0, "cache_read_input_tokens": 50_000, "output_tokens": 2_000, "web_searches": 3,
+         "web_fetches": 1, "service_tier": "standard"}
+    for turn in range(2):
+        line = {"ts": NOW, "run": led.run, "purpose": "hunt", "variant": None, "story_id": 7, "kind": "hunt",
+                "turn": turn, "model_requested": "claude-opus-5-5", "model": "claude-opus-5-5", "usage": u,
+                "context_tokens_by_part": {"rules": 1_000, "search_results": 9_000}, "context_tokens_exact": 10_000}
+        with open(tmp_path / "ledger" / "calls-2026-11-05.jsonl", "a") as fh:
+            fh.write(json.dumps(line) + "\n")
+    led.outcome(7, "hunt", {"id": 7, "status": "reported", "sources": [{"url": "https://a.com/x", "verified": True,
+                                                                         "relation": "cause"}]})
+    text = audit.report(tmp_path / "ledger")
+    per_turn = 20_000 * 5e-6 + 50_000 * 0.2e-6 + 10 * 4e-6 + 2_000 * 20e-6 + 0.03
+    assert f"${2 * per_turn / 1:.3f}" in text                   # cost per published story, one story
+    assert "search results" in text and "| 1 | 1 |" in text
+    csvp = tmp_path / "cost.csv"
+    csvp.write_text(f"Date,Cost (USD)\n2026-11-05,{2 * per_turn:.4f}\n")
+    rec = audit.reconcile(tmp_path / "ledger", "2026-11-05", "2026-11-06", str(csvp))
+    assert "Within 5%" in rec
+
+
+def test_replay_scores_variants_on_the_frozen_set_within_budget(tmp_path):
+    from pathlib import Path
+    from residual import replay
+    audit_dir = Path(__file__).resolve().parent.parent / "audit"
+    frozen = json.loads((audit_dir / "frozen" / "items.json").read_text())
+    good = "https://www.axios.com/2026/11/04/hakeem-jeffries-speaker-house-democrats-letter"
+
+    class Client:
+        def __init__(self):
+            self.n = 0
+            self.beta = SimpleNamespace(messages=SimpleNamespace(stream=self._stream))
+            self.messages = SimpleNamespace(count_tokens=lambda **kw: SimpleNamespace(input_tokens=5000))
+
+        def _stream(self, **kw):
+            self.n += 1
+            sub = {"type": "tool_use", "id": f"t{self.n}", "name": "submit_story", "input": {
+                "headline": "Jeffries launches bid for speaker", "dek": "d", "summary": "Jeffries asked for support.",
+                "why_it_matters": "w", "dateline": "Washington", "slug": f"jeffries-{self.n}",
+                "sources": [{"url": good, "relation": "cause", "role": "original report",
+                             "published_at": "2026-11-04T15:00:00-05:00", "summary": "s"},
+                            {"url": "https://invented.example/x", "relation": "cause", "published_at": None, "summary": "s"}]}}
+            r = api_resp(api_search(good), sub)
+            r.usage.output_tokens = 10_000      # $0.20 on Opus, $0.10 on Sonnet, plus one search
+            return _Stream(r)
+
+    cfg = Config()
+    text = replay.run(tmp_path, cfg, Client(), budget=0.70, variants=["A", "A2", "B"], items=[26, 9])
+    rows = [json.loads(x) for x in next((tmp_path / "ledger").glob("replay-*.jsonl")).read_text().splitlines()]
+    # item 26 under A, A2, B: 0.21 + 0.21 + 0.11; item 9 / A would need up to 0.21 more: over budget, so stop
+    assert [(r["variant"], r["story_id"]) for r in rows] == [("A", 26), ("A2", 26), ("B", 26)]
+    r = rows[0]
+    assert r["published"] and r["matches_reference"] and not r["wrong_story"] and r["unverified_citations"] == 1
+    assert r["published_thursday_evidence"] and r["ft_overlap"]
+    assert rows[2]["cost"] < rows[0]["cost"]
+    assert "stopped before item 9" in text and "| B: Sonnet |" in text
+    assert frozen["items"][0]["story_id"] == 26
+
+
+def test_a_broken_ledger_never_breaks_a_hunt(env, tmp_path, monkeypatch):
+    from residual import hunter, stories, ledger as L
+    cfg, db = env
+    stories.assign(db, [story_move(db)], NOW)
+    item = stories.queue(db, cfg)[0]
+    monkeypatch.setattr(L, "composition", lambda *a: 1 / 0)
+    client = APIClient([api_resp({"type": "tool_use", "id": "t", "name": "submit_story",
+                                  "input": {"question": "Q?", "sources": []}})])
+    f = hunter.hunt(client, cfg, item, L.Ledger(tmp_path / "ledger"))
+    assert f["question"] == "Q?"

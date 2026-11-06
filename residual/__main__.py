@@ -58,6 +58,16 @@ def main(argv=None):
     p.add_argument("story_id", type=int)
     p.add_argument("topic")
     sub.add_parser("image").add_argument("url")
+    p = sub.add_parser("audit", help="cost audit of the hunting stage, from the ledger")
+    p.add_argument("what", choices=["report", "reconcile"])
+    p.add_argument("--since"), p.add_argument("--until")
+    p.add_argument("--console-csv", help="reconcile against a cost CSV exported from the Console")
+    p.add_argument("--out", help="also write the result to this file")
+    p = sub.add_parser("replay", help="replay the frozen test set under each variant (audit/PROTOCOL.md)")
+    p.add_argument("--budget", type=float, required=True, help="dollars; no hunt starts that could exceed it")
+    p.add_argument("--variants", help="comma-separated, default all in audit/variants.json")
+    p.add_argument("--items", help="comma-separated story ids, default all 20")
+    p.add_argument("--out", help="also write the results table to this file")
     p = sub.add_parser("site")
     p.add_argument("--out", default="site")
     p.add_argument("--clean", action="store_true", help="remove everything in --out except .git and CNAME first")
@@ -79,6 +89,33 @@ def main(argv=None):
         cfg.db_path, cfg.briefs_dir, cfg.state_path = str(d / "residual.db"), str(d / "briefs"), str(d / "prices.json.gz")
     db = DB(cfg.db_path)
 
+    if args.cmd == "replay":
+        from . import replay
+        from .investigate import make_client
+        try:
+            client = make_client()
+        except Exception as e:
+            sys.exit(f"Could not start the Claude client ({e}). Set ANTHROPIC_API_KEY.")
+        text = replay.run(Path(cfg.db_path).parent, cfg, client, args.budget,
+                          args.variants.split(",") if args.variants else None,
+                          [int(x) for x in args.items.split(",")] if args.items else None)
+        if args.out:
+            Path(args.out).write_text(text + "\n")
+        print(text)
+        return
+    if args.cmd == "audit":
+        from . import audit
+        folder = Path(cfg.db_path).parent / "ledger"
+        if args.what == "report":
+            text = audit.report(folder, args.since, args.until)
+        else:
+            if not (args.since and args.until):
+                sys.exit("reconcile needs --since and --until (UTC dates, YYYY-MM-DD)")
+            text = audit.reconcile(folder, args.since, args.until, args.console_csv)
+        if args.out:
+            Path(args.out).write_text(text + "\n")
+        print(text)
+        return
     if args.cmd == "site":
         files = site.build(db, cfg, args.out, clean=args.clean)
         print(f"wrote {len(files)} files to {args.out}")
@@ -112,6 +149,9 @@ def main(argv=None):
         if args.summary:
             Path(args.summary).write_text(text + "\n")
         print(text)
+        if report.get("billing_error"):
+            # fail the run so the failure is visible (and emailed); the site and data are still saved
+            sys.exit(f"Stopped: the Claude API account can't pay for requests ({report['billing_error'][:200]})")
         return
     if args.cmd == "record":
         findings = json.loads(Path(args.findings).read_text())

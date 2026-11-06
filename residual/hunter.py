@@ -219,6 +219,16 @@ def _collect(content: list, seen: list[dict]):
             seen.append({"url": _get(c, "url")})
 
 
+class BillingError(RuntimeError):
+    """The account can't pay for requests (no credit, bad key). Every later request would fail too."""
+
+
+def _billing(e: Exception) -> bool:
+    s = str(e).lower()
+    return type(e).__name__ in ("AuthenticationError", "PermissionDeniedError") or \
+        "credit balance" in s or "billing" in s
+
+
 def _call(client, cfg, system, tools, messages):
     kw = dict(model=cfg.hunt_model, max_tokens=32000, system=system, tools=tools, messages=messages,
               output_config={"effort": cfg.hunt_effort}, cache_control={"type": "ephemeral"})
@@ -228,26 +238,53 @@ def _call(client, cfg, system, tools, messages):
         return stream.get_final_message()
 
 
-def hunt(client, cfg, item: dict) -> dict | None:
-    """One story. Returns findings in the shape `record` takes, or None if the model refused."""
-    n_search = cfg.hunt_max_searches if item["kind"] == "hunt" else cfg.recheck_max_searches
+def searches_for(cfg, item: dict) -> int:
+    n = cfg.hunt_max_searches if item["kind"] == "hunt" else cfg.recheck_max_searches
     if item.get("strength") == "weak":
-        n_search = min(n_search, cfg.weak_max_searches)
+        n = min(n, cfg.weak_max_searches)
+    elif item.get("strength") == "moderate" and cfg.moderate_max_searches:
+        n = min(n, cfg.moderate_max_searches)
+    return n
+
+
+def hunt(client, cfg, item: dict, ledger=None, now_ts: float | None = None, variant: str | None = None) -> dict | None:
+    """One story. Returns findings in the shape `record` takes, or None if the model refused.
+    With a ledger, every request is recorded and the transcript is saved. now_ts replays a hunt as if it
+    were run at that time (the model is told that time)."""
+    fetch = {"type": cfg.web_fetch_tool_api, "name": "web_fetch", "max_uses": cfg.hunt_max_fetches}
+    if cfg.hunt_fetch_max_tokens:
+        fetch["max_content_tokens"] = cfg.hunt_fetch_max_tokens
     tools = [
-        {"type": cfg.web_search_tool_api, "name": "web_search", "max_uses": n_search},
-        {"type": cfg.web_fetch_tool_api, "name": "web_fetch", "max_uses": cfg.hunt_max_fetches},
-        IMAGE_TOOL, X_TIME_TOOL, SUBMIT_TOOL,
+        {"type": cfg.web_search_tool_api, "name": "web_search", "max_uses": searches_for(cfg, item)},
+        fetch, IMAGE_TOOL, X_TIME_TOOL, SUBMIT_TOOL,
     ]
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    now = datetime.fromtimestamp(now_ts or time.time(), timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     messages = [{"role": "user", "content": f"Current time: {now}.\n\n" + json.dumps(item, indent=2)}]
     seen: list[dict] = []
-    usage = {"input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0, "web_searches": 0, "web_fetches": 0}
+    usage = {"input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0,
+             "web_searches": 0, "web_fetches": 0, "turns": 0}
     findings, nudged = None, False
+    sid, kind = item["story_id"], item["kind"]
 
-    for _ in range(cfg.hunt_max_turns):
-        resp = _call(client, cfg, HUNT_RULES, tools, messages)
+    for turn in range(cfg.hunt_max_turns):
+        t0 = time.time()
+        try:
+            resp = _call(client, cfg, HUNT_RULES, tools, messages)
+        except Exception as e:
+            if ledger:
+                ledger.call(client=client, purpose="hunt", story_id=sid, kind=kind, turn=turn, model_requested=cfg.hunt_model,
+                            system=HUNT_RULES, tools=tools, messages=messages, elapsed_s=round(time.time() - t0, 2),
+                            error=f"{type(e).__name__}: {str(e)[:300]}", variant=variant)
+            if _billing(e):
+                raise BillingError(str(e)[:300]) from e
+            raise
+        if ledger:
+            ledger.call(client=client, purpose="hunt", story_id=sid, kind=kind, turn=turn, model_requested=cfg.hunt_model,
+                        system=HUNT_RULES, tools=tools, messages=messages, resp=resp,
+                        elapsed_s=round(time.time() - t0, 2), variant=variant)
         u = resp.usage
-        for k in ("input_tokens", "output_tokens", "cache_read_input_tokens"):
+        usage["turns"] += 1
+        for k in ("input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"):
             usage[k] += _get(u, k) or 0
         stu = _get(u, "server_tool_use")
         if stu is not None:
@@ -281,9 +318,11 @@ def hunt(client, cfg, item: dict) -> dict | None:
         nudged = True
         messages.append({"role": "user", "content": "Now call submit_story with what you found."})
 
-    log.info("story %s: %d in / %d out tokens (%d cached), %d searches, %d fetches", item["story_id"],
-             usage["input_tokens"], usage["output_tokens"], usage["cache_read_input_tokens"],
-             usage["web_searches"], usage["web_fetches"])
+    if ledger:
+        ledger.transcript(sid, kind, HUNT_RULES, tools, messages, variant=variant)
+    log.info("story %s: %d in / %d out tokens (%d cached, %d cache writes), %d searches, %d fetches, %d turns",
+             item["story_id"], usage["input_tokens"], usage["output_tokens"], usage["cache_read_input_tokens"],
+             usage["cache_creation_input_tokens"], usage["web_searches"], usage["web_fetches"], usage["turns"])
     if findings is None:
         log.warning("story %s: no submit_story call", item["story_id"])
         findings = {"sources": [], "check_next": []}
@@ -313,16 +352,28 @@ race", "Vance's 2028 standing", "the Fed's December decision"). Give stories abo
 topic, and reuse a topic from existing_topics when it fits. No em-dashes."""
 
 
-def label_small(client, cfg, db) -> int:
+def label_small(client, cfg, db, ledger=None) -> int:
     todo = stories.unlabeled(db, cfg)
     if not todo:
         return 0
     day = stories.et_day(time.time())
     existing = sorted({s["topic"] for s in db.stories("day=? AND topic IS NOT NULL", (day,))})
-    resp = client.messages.create(
-        model=cfg.label_model, max_tokens=4000, system=LABEL_PROMPT,
-        output_config={"format": {"type": "json_schema", "schema": LABEL_SCHEMA}},
-        messages=[{"role": "user", "content": json.dumps({"existing_topics": existing, "stories": todo})}])
+    messages = [{"role": "user", "content": json.dumps({"existing_topics": existing, "stories": todo})}]
+    t0 = time.time()
+    try:
+        resp = client.messages.create(
+            model=cfg.label_model, max_tokens=4000, system=LABEL_PROMPT,
+            output_config={"format": {"type": "json_schema", "schema": LABEL_SCHEMA}}, messages=messages)
+    except Exception as e:
+        if ledger:
+            ledger.call(purpose="label", model_requested=cfg.label_model, system=LABEL_PROMPT, messages=messages,
+                        elapsed_s=round(time.time() - t0, 2), error=f"{type(e).__name__}: {str(e)[:300]}")
+        if _billing(e):
+            raise BillingError(str(e)[:300]) from e
+        raise
+    if ledger:
+        ledger.call(purpose="label", model_requested=cfg.label_model, system=LABEL_PROMPT, messages=messages,
+                    resp=resp, elapsed_s=round(time.time() - t0, 2))
     text = next((b.text for b in resp.content if b.type == "text"), "{}")
     ids = {s["story_id"] for s in todo}
     n = 0
@@ -336,10 +387,19 @@ def label_small(client, cfg, db) -> int:
 # ---------- one full run ----------
 
 def cycle(db, cfg, client) -> dict:
-    report = {"new_moves": 0, "labeled": 0, "recorded": [], "failed": []}
+    """Scan, label and hunt. Stops calling the API at the first billing error (report["billing_error"])."""
+    from .ledger import Ledger
+    ledger = Ledger(Path(cfg.db_path).parent / "ledger", keep_days=cfg.ledger_keep_transcript_days)
+    report = {"new_moves": 0, "labeled": 0, "recorded": [], "failed": [], "billing_error": None}
     report["new_moves"] = len(scheduled.scan(db, cfg, Path(cfg.state_path)))
     try:
-        report["labeled"] = label_small(client, cfg, db)
+        report["labeled"] = label_small(client, cfg, db, ledger)
+    except BillingError as e:
+        log.error("the API account can't pay for requests: %s", e)
+        report["billing_error"] = str(e)
+        report["failed"].append(f"billing: {e}")
+        ledger.prune()
+        return report
     except Exception as e:
         log.exception("labelling failed")
         report["failed"].append(f"labels: {e}")
@@ -352,20 +412,27 @@ def cycle(db, cfg, client) -> dict:
             continue  # folded into another story earlier this run
         item = {**item, "other_stories_today": [o for o in stories.others_today(db) if o["story_id"] != sid]}
         try:
-            f = hunt(client, cfg, item)
+            f = hunt(client, cfg, item, ledger)
             if f is None:
                 report["failed"].append(f"story {sid}: declined")
                 continue
             f["merge_with"] = [int(x) for x in f.get("merge_with") or [] if int(x) != sid and db.get_story(int(x))]
             st = scheduled.record(db, cfg, sid, item["kind"], f)
+            ledger.outcome(sid, item["kind"], st)
             merged.update({sid, *f["merge_with"]} - {st["id"]})
             report["recorded"].append({"story_id": st["id"], "kind": item["kind"], "status": st["status"],
                                        "score": st["score"], "headline": st.get("headline"),
                                        "question": st.get("question"), "usage": f.get("usage")})
             log.info("story %s (%.0f): %s | %s", st["id"], st["score"], st["status"], st.get("headline") or st.get("question"))
+        except BillingError as e:
+            log.error("the API account can't pay for requests: %s", e)
+            report["billing_error"] = str(e)
+            report["failed"].append(f"billing: {e}")
+            break
         except Exception as e:
             log.exception("hunt failed for story %s", sid)
             report["failed"].append(f"story {sid}: {e}")
+    ledger.prune()
     return report
 
 
@@ -390,7 +457,8 @@ def summary(db, cfg, report: dict) -> str:
     u = [r["usage"] for r in report["recorded"] if r.get("usage")]
     if u:
         lines += ["", f"API use: {sum(x['input_tokens'] for x in u):,} input tokens "
-                      f"({sum(x['cache_read_input_tokens'] for x in u):,} cached), "
+                      f"({sum(x['cache_read_input_tokens'] for x in u):,} cache reads, "
+                      f"{sum(x.get('cache_creation_input_tokens', 0) for x in u):,} cache writes), "
                       f"{sum(x['output_tokens'] for x in u):,} output, "
                       f"{sum(x['web_searches'] for x in u)} searches, {sum(x['web_fetches'] for x in u)} fetches."]
     lines += ["", cfg.site_url]

@@ -1,0 +1,154 @@
+{
+  "_note": "Subjects on ft.com's front page, read at about 6:30 PM ET on Thursday 2026-11-05 in a browser. A published story overlaps the benchmark when its headline and dek contain a term from every group of one subject.",
+  "source": "https://www.ft.com/",
+  "subjects": {
+    "US midterms and their consequences": [
+      [
+        "midterm",
+        "democrat",
+        "blue wave",
+        "senate",
+        "house",
+        "speaker",
+        "schumer",
+        "jeffries",
+        "majority"
+      ]
+    ],
+    "AI and tech stock rout": [
+      [
+        "nasdaq",
+        "wall street",
+        "stocks",
+        "selloff",
+        "sell-off",
+        "rout",
+        "ai stock",
+        "chip",
+        "data cent",
+        "ipo"
+      ]
+    ],
+    "Supreme Court retirements (Alito, Thomas)": [
+      [
+        "alito",
+        "thomas",
+        "supreme court"
+      ]
+    ],
+    "Middle East policy, Iran and Israel": [
+      [
+        "iran",
+        "hormuz",
+        "israel",
+        "netanyahu",
+        "eisenkot",
+        "middle east"
+      ]
+    ],
+    "Trump administration personnel": [
+      [
+        "hegseth",
+        "rubio",
+        "cabinet"
+      ]
+    ],
+    "Murdoch's media and Trump": [
+      [
+        "murdoch",
+        "fox news"
+      ]
+    ],
+    "Los Angeles mayor": [
+      [
+        "los angeles",
+        "raman"
+      ]
+    ],
+    "Wealth taxes": [
+      [
+        "wealth tax"
+      ]
+    ],
+    "Bank of England rates": [
+      [
+        "bank of england",
+        "boe"
+      ]
+    ],
+    "Paraguay's president resigns": [
+      [
+        "paraguay"
+      ]
+    ],
+    "France protests": [
+      [
+        "france",
+        "french"
+      ],
+      [
+        "protest",
+        "strike"
+      ]
+    ],
+    "Russell Brand verdict": [
+      [
+        "russell brand"
+      ]
+    ],
+    "Blue Origin delays": [
+      [
+        "blue origin",
+        "bezos"
+      ]
+    ],
+    "CVS break-up": [
+      [
+        "cvs"
+      ]
+    ],
+    "China blocks SoftBank-ABB": [
+      [
+        "softbank",
+        "abb"
+      ]
+    ],
+    "Oil prices": [
+      [
+        "oil"
+      ],
+      [
+        "price",
+        "barrel",
+        "$100",
+        "below"
+      ]
+    ],
+    "European defence (KNDS, Rheinmetall)": [
+      [
+        "knds",
+        "rheinmetall"
+      ]
+    ],
+    "Gates on AI bioweapons": [
+      [
+        "gates"
+      ],
+      [
+        "bioweapon",
+        "pandemic"
+      ]
+    ],
+    "Ronaldo retires from international football": [
+      [
+        "ronaldo"
+      ]
+    ],
+    "South Africa's ANC": [
+      [
+        "anc",
+        "south africa"
+      ]
+    ]
+  }
+}

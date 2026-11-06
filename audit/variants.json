@@ -1,0 +1,11 @@
+{
+  "_note": "Each variant changes the live settings (A) in one way, except F, which combines the cheap options, and A2, a repeat of A that measures run-to-run noise.",
+  "A":  {"label": "baseline: Opus, medium effort, full pages, current search limits"},
+  "A2": {"label": "baseline repeated (noise)"},
+  "B":  {"label": "Sonnet", "hunt_model": "claude-sonnet-5-5"},
+  "C":  {"label": "low effort", "hunt_effort": "low"},
+  "D":  {"label": "fetched pages capped at 3,000 tokens", "hunt_fetch_max_tokens": 3000},
+  "E":  {"label": "searches by strength: strong 13, moderate 6, weak 3", "moderate_max_searches": 6},
+  "F":  {"label": "Sonnet + 3,000-token pages + searches by strength", "hunt_model": "claude-sonnet-5-5",
+         "hunt_fetch_max_tokens": 3000, "moderate_max_searches": 6}
+}

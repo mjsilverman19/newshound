@@ -1,0 +1,71 @@
+# Replays the frozen test set under each variant (audit/PROTOCOL.md). Run it by hand from the Actions
+# tab, or: gh workflow run replay.yml -f budget=40
+# Shares the hourly run's concurrency group, so the two never write the data branch at once.
+name: Replay test
+
+on:
+  workflow_dispatch:
+    inputs:
+      budget:
+        description: "Dollars to spend at most"
+        required: true
+      variants:
+        description: "Comma-separated variants (blank: all in audit/variants.json)"
+        required: false
+        default: ""
+      items:
+        description: "Comma-separated story ids (blank: all 20)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newshound
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      REPO_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install "anthropic>=2.6"
+      - name: Get the data
+        run: |
+          git clone --branch data --depth 1 "$REPO_URL" rdata
+          git -C rdata config user.name "github-actions[bot]"
+          git -C rdata config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+      - name: Replay
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BUDGET: ${{ inputs.budget }}
+          VARIANTS: ${{ inputs.variants }}
+          ITEMS: ${{ inputs.items }}
+        run: |
+          args=(--budget "$BUDGET")
+          [ -n "$VARIANTS" ] && args+=(--variants "$VARIANTS")
+          [ -n "$ITEMS" ] && args+=(--items "$ITEMS")
+          python -m residual --data rdata replay "${args[@]}" --out replay.md
+      - name: Audit report
+        if: ${{ !cancelled() }}
+        run: python -m residual --data rdata audit report --out audit.md || true
+      - name: Save the data
+        if: ${{ !cancelled() }}
+        run: |
+          cd rdata
+          git checkout -q --orphan snapshot
+          git add -A
+          git commit -qm "data $(date -u +%FT%TZ) (replay)"
+          git push -q -f origin snapshot:data
+      - name: Summary
+        if: ${{ !cancelled() }}
+        run: |
+          for f in replay.md audit.md; do test -f $f && { cat $f; echo; } >> "$GITHUB_STEP_SUMMARY"; done; true

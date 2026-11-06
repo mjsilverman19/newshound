@@ -1,0 +1,219 @@
+{
+  "_note": "Written 2026-11-06 before any replay. A published story matches when its headline, dek and summary contain at least one term from every group (case-insensitive). 'source' is the verified cause report the reference is taken from. Items without a reference are scored only on publication, verification and the FT benchmark.",
+  "26": {
+    "development": "Hakeem Jeffries launched his bid for House speaker after Democrats won the House.",
+    "terms": [
+      [
+        "jeffries"
+      ],
+      [
+        "speaker"
+      ]
+    ],
+    "source": "https://www.axios.com/2026/11/04/hakeem-jeffries-speaker-house-democrats-letter"
+  },
+  "9": {
+    "development": "Investors pushed back on Anthropic's IPO valuation as AI stocks slid after the midterms.",
+    "terms": [
+      [
+        "anthropic"
+      ],
+      [
+        "ipo",
+        "listing",
+        "offering"
+      ],
+      [
+        "valuation",
+        "selloff",
+        "sell-off",
+        "rout",
+        "slide",
+        "slump",
+        "plunge",
+        "delay",
+        "pushback"
+      ]
+    ],
+    "source": "https://www.investing.com/news/stock-market-news/anthropic-faces-valuation-pushback-on-15t-ipo-following-marke"
+  },
+  "30": {
+    "development": "Same development as 9 (the topic was merged into it on Thursday).",
+    "terms": [
+      [
+        "anthropic",
+        "spacex",
+        "ipo"
+      ],
+      [
+        "valuation",
+        "selloff",
+        "sell-off",
+        "rout",
+        "slide",
+        "slump",
+        "plunge",
+        "delay",
+        "pushback",
+        "largest",
+        "biggest"
+      ]
+    ],
+    "source": "https://www.investing.com/news/stock-market-news/anthropic-faces-valuation-pushback-on-15t-ipo-following-marke"
+  },
+  "8": {
+    "development": "Arab parties recommended Gadi Eisenkot, giving him a majority of recommendations to form Israel's next government.",
+    "terms": [
+      [
+        "eisenkot"
+      ],
+      [
+        "recommend",
+        "majority",
+        "back",
+        "form"
+      ]
+    ],
+    "source": "https://www.timesofisrael.com/liveblog_entry/joint-list-says-it-will-back-eisenkot-as-pm-handing-him-majority-"
+  },
+  "27": {
+    "development": "Chris Van Hollen said he would not challenge Chuck Schumer for Senate Democratic leader.",
+    "terms": [
+      [
+        "van hollen"
+      ],
+      [
+        "schumer",
+        "leader"
+      ]
+    ],
+    "source": "https://thehill.com/homenews/senate/6202343-van-hollen-not-challenging-schumer/"
+  },
+  "29": {
+    "development": "Justice Alito told friends he will not retire during the lame-duck session despite Democrats winning the Senate.",
+    "terms": [
+      [
+        "alito"
+      ],
+      [
+        "retire",
+        "step down",
+        "stepping down"
+      ]
+    ],
+    "source": "https://gvwire.com/2026/11/05/justice-alito-wont-retire-immediately-despite-election-outcome/"
+  },
+  "31": {
+    "development": "Marco Rubio said he will serve out Trump's term, after reports he might leave to prepare a 2028 run (the topic was merged into the Rubio story on Thursday).",
+    "terms": [
+      [
+        "rubio"
+      ],
+      [
+        "serve",
+        "stay",
+        "remain",
+        "resign",
+        "leave",
+        "quit",
+        "2028"
+      ]
+    ],
+    "source": "https://www.centraloregondaily.com/news/politics/rubio-tells-nyt-serving-trump-to-end-of-term-has-always-been-"
+  },
+  "35": {
+    "development": "Same development as 31.",
+    "terms": [
+      [
+        "rubio"
+      ],
+      [
+        "serve",
+        "stay",
+        "remain",
+        "resign",
+        "leave",
+        "quit",
+        "2028"
+      ]
+    ],
+    "source": "https://www.centraloregondaily.com/news/politics/rubio-tells-nyt-serving-trump-to-end-of-term-has-always-been-"
+  },
+  "33": {
+    "development": "Trump publicly backed Pete Hegseth after a CBS report that he had asked advisers about replacing him.",
+    "terms": [
+      [
+        "hegseth"
+      ],
+      [
+        "trump",
+        "confidence",
+        "back",
+        "support",
+        "replace",
+        "fire",
+        "impeach"
+      ]
+    ],
+    "source": "https://www.jpost.com/american-politics/article-913858",
+    "note": "Not hunted on Thursday; the reference comes from the research done that evening, not from a published Newshound story."
+  },
+  "34": {
+    "development": "Iran said more tankers were struck in the Strait of Hormuz as talks on reopening it stalled.",
+    "terms": [
+      [
+        "iran",
+        "hormuz",
+        "tehran"
+      ],
+      [
+        "tanker",
+        "mine",
+        "talks",
+        "deal",
+        "stall",
+        "proposal",
+        "threat",
+        "strike"
+      ]
+    ],
+    "source": "https://www.aljazeera.com/news/2026/11/5/iran-says-tankers-struck-in-hormuz-amid-fears-of-new-us-attack"
+  },
+  "36": {
+    "development": "A final New Zealand poll before the election put Labour ahead (the topic was merged into that story on Thursday).",
+    "terms": [
+      [
+        "new zealand",
+        "labour",
+        "luxon",
+        "hipkins",
+        "spain",
+        "sánchez",
+        "sanchez"
+      ],
+      [
+        "poll",
+        "election",
+        "vote",
+        "campaign"
+      ]
+    ],
+    "source": "https://www.odt.co.nz/news/national/final-poll-before-election-puts-labour-ahead-sd3kvp7i"
+  },
+  "6": {
+    "development": "A Nigerian court voided Atiku Abubakar's ADC presidential ticket and sacked the party's leadership.",
+    "terms": [
+      [
+        "atiku"
+      ],
+      [
+        "court",
+        "ticket",
+        "void",
+        "nullif",
+        "sack"
+      ]
+    ],
+    "source": "https://www.yahoo.com/news/articles/nigerian-court-voids-candidacy-opposition-151148095.html"
+  }
+}
