@@ -91,7 +91,7 @@ def run(data: Path, cfg, client, budget: float, variants: list[str] | None = Non
                 else:
                     asked = [int(x) for x in f.get("merge_with") or []]
                     f["merge_with"] = []  # each hunt runs alone; see the protocol
-                    st = stories.record(db, v, item["story_id"], "hunt", f)
+                    st = stories.record(db, v, item["story_id"], "hunt", f, now=frozen["frozen_ts"])
                     led.outcome(item["story_id"], "hunt", st, variant=name, extra={"merge_asked": asked})
             new = L.read(led.folder)[before:]
             c = sum(sum(audit.cost(r, prices).values()) for r in new if r.get("usage"))

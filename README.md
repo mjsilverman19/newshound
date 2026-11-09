@@ -2,7 +2,7 @@
 
 The day's news, found by following where expectations shifted.
 
-Prediction markets give the hound a scent. Every hour, Newshound compares tens of thousands of
+Prediction markets give the hound a scent. At 9 AM and 6 PM Eastern each day, Newshound compares tens of thousands of
 Polymarket and Kalshi prices with their prices **24 hours earlier**, weights each market's change by
 how much money normally trades in it, and groups markets about the same subject into **topics**. Each
 topic is scored by how much it changed expectations over the day:
@@ -14,11 +14,13 @@ A move that reverses adds little, and a move in a heavily traded market counts f
 move in a thin one. The original detector of sharp hourly moves is still there: set `mode = "hourly"`
 in the config. `residual/day.py` describes the day-level method.
 
-Topics scoring 33 or more are chased. Claude starts from the scent (the whole topic: what moved and
-which way, how strong the signal is, and when during the day it moved), finds what happened today and
-writes it up. The code checks every source against the searches that found it and that it is from
-the day of the shift, and won't let aggregators or partisan blogs explain a story. Only what the hunt catches is published. Leads with nothing reported
-go "On the trail" as open questions and are searched again after 1, 6 and 24 hours.
+Topics scoring 33 or more are investigated. Claude uses the topic as an assignment signal, finds
+concrete recent developments and writes declarative news reports. An article does not need to prove
+what caused the market movement. At least one supporting report must have a known publication date
+within the last 72 hours, come from an eligible publisher and appear in the investigation's actual
+search/fetch results. Background and odds-only coverage cannot qualify an article. Older material can
+provide context. Incomplete or unsupported investigations stay internal, including their questions,
+source counts and retry times; they never appear on the homepage, archives or RSS feed.
 
 The site is at https://mjsilverman19.github.io/newshound/ (built into the `gh-pages` branch). Story
 pages carry a headline, dateline, the source's lead image with credit, the body, why it matters and
@@ -28,8 +30,8 @@ The Python package is called `residual`.
 
 ## How it runs: GitHub Actions on the Claude API
 
-`.github/workflows/hourly.yml` runs once an hour, at 17 minutes past, and whenever you start it from
-Actions > Hourly run > Run workflow. It calls the Claude API with the repository secret
+`.github/workflows/hourly.yml` runs at 9 AM and 6 PM America/New_York (including daylight-saving changes), and whenever you start it from
+Actions > Morning and evening run > Run workflow. It calls the Claude API with the repository secret
 `ANTHROPIC_API_KEY` (Settings > Secrets and variables > Actions), so it doesn't use a Claude account.
 
 Each run:

@@ -53,8 +53,7 @@ December decision"), and save it:
 python3 -m residual --data /tmp/rdata label <story_id> "<topic>"
 ```
 
-Give stories about the same subject the same topic. The front page shows them in one quiet line
-("Also watching Nigeria's 2027 race and Vance's 2028 standing").
+Give stories about the same subject the same topic. These labels are internal and never appear publicly.
 
 ## 3. Hunt each story
 
@@ -62,69 +61,44 @@ Read `/tmp/queue.json`. Each item has `story_id`, `kind` (`hunt` or `recheck`), 
 markets are saying, the money behind it, the resolution rules, and anything already found),
 `move_start_utc` and `other_stories_today`. Handle the items one at a time, highest score first.
 
-### Reading the scent
+## Editorial standard
+Use market movements to select subjects to investigate. Publish concrete, timely news about the subject
+when a trustworthy source supports it. You do NOT need to establish why the market moved, find a single
+trigger, confirm the exact market outcome, or wait for a final decision. A reported statement, policy
+change, documented political pressure, research disclosure, filing or other substantive development
+can be news. Write declarative headlines about what happened, not questions or generic explainers.
+A related development uncovered during the investigation can be the story. Do not claim it caused the
+move without evidence. Do not mention inability to explain the market in the article.
 
-Before you search, work out from the scent what kind of development would produce this shift. For
-example, "the odds Rubio leaves fell 26 points" means something made him look more likely to stay:
-a denial, a statement of support, or a report being knocked down. Search for that.
+## Sourcing
+- Use only URLs actually returned by your search/fetch tools. Prefer primary sources, original reporting,
+  established outlets and credible local reporting. One substantive source can suffice; corroborate
+  disputed or consequential claims when possible and attribute allegations and competing accounts.
+- Aggregators, partisan blogs and reposts are background only. Follow them to the original source.
+- At least one supporting news source must have a known publication date within the last 72 hours.
+  Fetch the date if missing; never invent it. For X posts use x_post_time. Older material can provide
+  context, but an old event does not become new just because we discovered it. Date events explicitly.
+- Check for newer reporting that changes or supersedes the original lead before writing. In particular,
+  report completed elections as results, not speculative uncertainty about routine certification.
+- Distinguish an announced plan from an event that actually happened. Rumors, generic background,
+  unexplained price changes and repetition of already published news do not qualify.
 
-If several markets moved together, find the single development behind all of them. If two queued
-stories, or a queued story and one in `other_stories_today`, are really the same news, merge them
-(see `merge_with` below).
+Source relation:
+- report: directly supports the article's concrete news development; market causation is unestablished.
+- cause: directly supports the development and there is evidence it drove the market shift.
+- consequence: reporting on the development found after the move began.
+- background: supporting context only; cannot alone qualify an article.
+- market_coverage: only odds or trading; cannot qualify and is not displayed.
+The source role describes its editorial function for readers, independently of relation.
 
-### Day mode (items whose `mode` is `day`, the default)
-
-The scent is a whole topic: every market about it that moved over the last 24 hours, how much money
-normally trades in them, a signal strength (`strong`, `moderate` or `weak`), and when during the day
-the lead market moved. The question is what happened today on this topic and how much it matters, not
-what happened in one particular minute.
-
-- Find the development behind the shift as a whole. If this topic and one in `other_stories_today`
-  have the same cause (a market rout that moved both an IPO's timing and rate expectations, say),
-  merge them and write the story about the shared cause.
-- A cause must be from the day of the shift. The code treats anything published more than about a day
-  and a half before the 24-hour window as background, whatever you call it.
-- If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the
-  summary and write about the bigger news if you can source it. Otherwise record an open lead.
-- For a `weak` signal, run two or three searches. If nothing specific turns up, record an open lead
-  and move on.
-- `why_it_matters` should say how much this changes things, in plain terms.
-
-### Sourcing
-
-- Report only sources that really appeared in your search results or that you fetched. Never invent
-  or guess a URL.
-- Prefer primary sources and established outlets: the official statement, filing, docket, agency
-  page or post by the person involved, and wire services and major news organizations. Find the
-  original report, not a write-up of it.
-- Aggregators, re-posters and partisan blogs (for example Political Wire, ZeroHedge, Townhall, Raw
-  Story, NewsBeep, BizToc) are background at most. The code will not let them explain a story even
-  if you mark them `cause`, so look for the established or primary source behind them.
-- Record each source's publication time as precisely as the page shows it. Fetch the page when a
-  search result doesn't show the time. Use ISO 8601 with a time zone
-  (`2026-11-04T13:05:00-05:00`), a bare date if the page shows only a date, or `null` if you can't
-  tell. Never guess a time or a time zone.
-- For posts on X, the post ID encodes when it was posted:
-  `python3 -c "print(__import__('datetime').datetime.utcfromtimestamp(((ID >> 22) + 1288834974657) / 1000))"`
-  gives the time in UTC.
-- Look beyond news articles: posts on X, official statements and press releases, government and
-  agency sites, court dockets, filings, schedules, sports injury reports, and the market's
-  resolution source.
-- Never stretch weak or general background into a cause. If you find nothing specific, say so.
-  An open lead is a real and useful result.
-
-### For `hunt` items
-
-Start with 2 or 3 searches on the most likely development. If you find it, confirm it, get the
-publication time of the earliest report, and stop. Otherwise dig deeper with up to about 10 more
-searches. Note any report published after the move started too.
-
-### For `recheck` items
-
-Nothing explained this story when it was first hunted. Run up to 5 searches for anything published
-since `move_start_utc` that reports the development behind it. If you find reporting, write the
-story up in full (headline, dek, summary, why it matters, dateline, image) so the lead is promoted to
-a story. If not, record the new searches and keep the question.
+## Hunts and rechecks
+Start with 2 or 3 searches. Follow the strongest actual news you find; don't fixate on the original
+question if a different substantive development on the same subject is established. Confirm its facts,
+date and latest status. Merge with an existing story if it is the same development, not merely the same
+person or topic. On a recheck, search for recent news, including developments after the original move.
+Write the complete headline, dek, summary, dateline and why_it_matters when evidence qualifies.
+If there is no publishable news, submit only an internal question and research notes. Unpublished leads
+are private and must never be dressed up as articles. Respect the search budget, especially weak signals.
 
 ### The lead image
 
@@ -156,7 +130,7 @@ Write `/tmp/story-<story_id>.json`. When the hunt found the development:
             "credit": "as printed, or omit", "caption": "as printed, or omit", "alt": "short description"},
   "sources": [
     {"url": "...", "title": "...", "outlet": "...", "published_at": "2026-11-04T13:05:00-05:00",
-     "relation": "cause | consequence | background | market_coverage",
+     "relation": "report | cause | consequence | background | market_coverage",
      "role": "original report | announcement | statement | filing | data | denial | confirmation | follow-up | analysis | context",
      "note": "optional, a few words such as 'quoting the State Department'",
      "summary": "One sentence: what it says."}
@@ -179,7 +153,8 @@ When the hunt found nothing, leave out `headline`, `dek`, `summary`, `why_it_mat
 }
 ```
 
-`relation` is what the code uses to decide the status:
+`relation` describes how each source supports the article:
+- `report`: directly supports concrete news, without asserting market causation.
 - `cause`: reports the development that drove the shift.
 - `consequence`: reports that same development, but was published after the move started.
 - `background`: context, not a trigger.
@@ -205,9 +180,9 @@ Then record it:
 python3 -m residual --data /tmp/rdata record <story_id> /tmp/story-<story_id>.json --kind <kind>
 ```
 
-The code decides the status (reported, timing unclear, or nothing reported yet) from the sources and
-their times. Don't override it. A story is published only when it is reported, timing unclear, or a
-lead that a recheck later found reporting for. Everything else stays on the trail.
+The code checks article completeness, source provenance, publisher eligibility and recency.
+A market-causation explanation is not required. Unpublished leads stay internal; they are never
+shown on the homepage, archives or feed.
 
 ## 4. Build and publish the site
 

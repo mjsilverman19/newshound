@@ -2,7 +2,7 @@
 
 The markets give the hound a scent; the page shows only what the hunt caught. Stories carry a
 headline, dateline, image, body, why it matters and sources. Leads the hunt hasn't run down yet sit
-"On the trail" as open questions. Market details (odds, dollars, points) appear nowhere except the
+internal for follow-up. Market details (odds, dollars, points) appear nowhere except the
 Method page, which explains how the scent is scored.
 
 Layout:
@@ -86,10 +86,10 @@ def story_path(s: dict) -> str:
 # ---------- which stories go where ----------
 
 def is_story(s: dict) -> bool:
-    """Something the hunt caught: reported, or a lead a later recheck found reporting for."""
-    if not s.get("headline") or not s.get("slug"):
+    """Something the hunt caught: reported, with a complete article and an approved publication status."""
+    if not s.get("headline") or not s.get("slug") or not s.get("summary"):
         return False
-    return s["status"] in ("reported", "unclear") or (s["status"] == "unreported" and bool(s.get("confirmed_ts")))
+    return s["status"] in ("reported", "unclear")
 
 
 def is_lead(s: dict) -> bool:
@@ -279,7 +279,7 @@ def shell(cfg, now: float, title: str, body: str, desc: str = "") -> str:
 <link rel="alternate" type="application/rss+xml" title="{e(cfg.site_title)}" href="{b}feed.xml">
 <style>{CSS}</style></head>
 <body>
-<nav><a class="brand" href="{b}">{e(cfg.site_title)}</a><a href="{b}">Front page</a><a href="{b}#trail">On the trail</a>
+<nav><a class="brand" href="{b}">{e(cfg.site_title)}</a><a href="{b}">Front page</a>
 <a href="{b}archive/">Archive</a><a href="{b}method/">Method</a>
 <span class="end"><span class="n">{stamp}</span><a class="rss" href="{b}feed.xml" title="RSS feed" aria-label="RSS feed">{RSS_ICON}</a></span></nav>
 {body}
@@ -318,16 +318,8 @@ def front(db, cfg, now: float, data: dict) -> str:
                      f'<span>by how much it shifted expectations</span></div><div class="cards">{cards}</div></section>')
     else:
         parts.append('<section class="hero"><div><h1>Nothing has cleared the hunt yet today</h1>'
-                     '<p class="lede">The hound picks up a new scent every hour. When it catches something, '
+                     '<p class="lede">Newshound investigates in the morning and evening. When a story is ready, '
                      'it will lead this page.</p></div></section>')
-
-    leads = data["leads"]
-    trail = "".join(trail_item(s, now) for s in leads[:12])
-    watch = watching_line([s["topic"] for s in data["watching"] if s["day"] == today])
-    parts.append(f'<section class="blk" id="trail"><div class="sh"><h2>On the trail</h2>'
-                 f'<span>leads the hound is still chasing</span></div>'
-                 f'{f"<ul class=trail>{trail}</ul>" if trail else "<p class=watch>No open leads right now.</p>"}'
-                 f'{watch}</section>')
 
     earlier = [s for s in data["stories"] if s["day"] != today][:10]
     if earlier:
@@ -382,13 +374,9 @@ def day_page(cfg, now: float, day: str, stories: list[dict], leads: list[dict], 
     rows = "".join(
         f'<li><h3><a href="{b}{story_path(s)}">{e(s["headline"])}</a></h3>'
         f'{dek(s)}{kicker(s, cfg)}</li>' for s in stories)
-    trail = "".join(f'<li><p class="q">{e(s["question"])}</p></li>' for s in leads)
     parts = [f'<h1>{e(long_day(day, True))}</h1>']
     parts.append(f'<section class="blk"><div class="sh"><h2>Stories</h2></div>'
-                 f'{f"<ul class=list>{rows}</ul>" if rows else "<p class=watch>Nothing cleared the hunt this day.</p>"}</section>')
-    if trail or watching:
-        parts.append(f'<section class="blk"><div class="sh"><h2>Leads</h2><span>open questions from this day</span></div>'
-                     f'{f"<ul class=trail>{trail}</ul>" if trail else ""}{watching_line([s["topic"] for s in watching])}</section>')
+                 f'{f"<ul class=list>{rows}</ul>" if rows else "<p>No articles published this day.</p>"}</section>')
     return shell(cfg, now, long_day(day, True), f'<main class="page">{"".join(parts)}</main>')
 
 
@@ -396,9 +384,10 @@ def archive_page(cfg, now: float, days: dict) -> str:
     b = base_path(cfg)
     rows = []
     for day in sorted(days, reverse=True):
-        n, m = len(days[day]["stories"]), len(days[day]["leads"])
-        tally = ", ".join(x for x in (f"{n} {'story' if n == 1 else 'stories'}" if n else "",
-                                      f"{m} {'lead' if m == 1 else 'leads'}" if m else "") if x) or "quiet"
+        n = len(days[day]["stories"])
+        if not n:
+            continue
+        tally = f"{n} {'story' if n == 1 else 'stories'}"
         rows.append(f'<li><a href="{b}{day_path(day)}/">{e(long_day(day, True))}</a><span>{tally}</span></li>')
     body = f'<main class="page"><h1>Archive</h1><ul class="days">{"".join(rows) or "<li>Nothing yet.</li>"}</ul></main>'
     return shell(cfg, now, "Archive", body)
@@ -455,6 +444,19 @@ def method_page(cfg, now: float) -> str:
 </main>"""
     if cfg.mode == "day":
         body = _day_method(cfg, body, recheck, bands)
+    import re
+    policy = (f"Publication requires a complete article about a concrete development, supported by a source "
+              f"returned by the investigation's search or retrieval tools, from an eligible publisher, "
+              f"with a known publication date within the last {cfg.publication_max_age_hours:g} hours. "
+              "The report need not explain the market movement. Background material and odds coverage "
+              "cannot qualify an article. Unpublished leads and research notes remain internal. "
+              "The source checks do not independently verify every factual claim; stories are published without human review.")
+    body = re.sub(r"Publication requires a source.*?Stories are written and published without human review\.",
+                  policy, body, flags=re.S)
+    body = re.sub(r"(<h2>5\. Verification and status</h2>\s*)<p>.*?</p>",
+                  lambda m: m.group(1) + "<p>" + policy + "</p>", body, flags=re.S)
+    body = body.replace("Each hour it compares", "Each scheduled run compares")
+    body = body.replace("limit invented sources and late reports", "limit untraceable sources and stale reports")
     return shell(cfg, now, "Method", body)
 
 
@@ -554,14 +556,9 @@ def build(db, cfg, out: str | Path, now: float | None = None, clean: bool = Fals
     put("index.html", front(db, cfg, now, data))
     put("method/index.html", method_page(cfg, now))
     days: dict[str, dict] = {}
-    for s in data["every"]:
+    for s in data["stories"]:
         d = days.setdefault(s["day"], {"stories": [], "leads": [], "watching": []})
-        if is_story(s):
-            d["stories"].append(s)
-        elif s["status"] == "unreported" and s.get("question") and not s.get("confirmed_ts"):
-            d["leads"].append(s)
-        elif s in data["watching"]:
-            d["watching"].append(s)
+        d["stories"].append(s)
     for s in data["stories"]:
         put(f"{story_path(s)}index.html", story_page(cfg, now, s))
     for day, d in days.items():

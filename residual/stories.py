@@ -298,7 +298,7 @@ def others_today(db, todays: list[dict] | None = None) -> list[dict]:
 
 ROLES = ("original report", "denial", "confirmation", "statement", "announcement", "filing", "data",
          "follow-up", "analysis", "context")
-DEFAULT_ROLE = {"cause": "original report", "consequence": "follow-up", "background": "context"}
+DEFAULT_ROLE = {"report": "original report", "cause": "original report", "consequence": "follow-up", "background": "context"}
 
 
 def slugify(text: str, words: int = 6) -> str:
@@ -329,7 +329,8 @@ def clean_image(img, verified_urls: set[str], blocked_hosts=()):
     return {k: img.get(k) for k in ("url", "source_url", "outlet", "credit", "caption", "alt") if img.get(k)}
 
 
-def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
+def record(db, cfg, story_id: int, kind: str, f: dict, now: float | None = None) -> dict:
+    now = time.time() if now is None else now
     story = db.get_story(story_id)
     if not story:
         raise SystemExit(f"no story {story_id}")
@@ -346,7 +347,7 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
         # day mode: a cause must come from the day of the shift (or shortly before), and may be published
         # at any time up to now
         floor = (story["scent_data"].get("window_start_ts") or start) - cfg.day_source_lookback_hours * 3600
-        start = time.time()
+        start = now
         a = V.assess(f.get("sources") or [], searched, start, 0, cfg.background_only_domains, not_before_ts=floor)
     else:
         a = V.assess(f.get("sources") or [], searched, start, cfg.reaction_slack_minutes, cfg.background_only_domains)
@@ -354,27 +355,27 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
     # keep earlier verified sources, add the new ones
     seen = {V.norm_url(s["url"]) for s in a["sources"]}
     sources = a["sources"] + [s for s in story["sources"] if V.norm_url(s["url"]) not in seen]
-    earlier = {"reported": "explained", "unclear": "unclear", "unreported": "unexplained"}.get(story["status"])
-    new = a["verdict"]
-    if kind == "recheck" and new != "explained" and earlier:
-        new = earlier  # a later report confirms an unreported story; it doesn't make it reported
-    # sources verified in an earlier hunt still count: a new hunt never downgrades a story
-    rank = {"unexplained": 0, "unclear": 1, "explained": 2}
-    for src in story["sources"] or []:
-        if src.get("verified") and V.counts_as(src) == "cause":
-            when, _ = V.timing(src.get("published_at"), start, cfg.reaction_slack_minutes * 60)
-            prior = {"before": "explained", "unknown": "unclear"}.get(when, "unexplained")
-            if rank[prior] > rank[new]:
-                new = prior
-    status = {"explained": "reported", "unclear": "unclear", "unexplained": "unreported"}[new]
+    # Publication asks whether we found news, not whether we explained the market.
+    supporting = V.article_sources(f.get("sources") or [], searched, now,
+                                   cfg.publication_max_age_hours, cfg.background_only_domains)
+    complete = all(str(f.get(k) or "").strip() for k in ("headline", "summary"))
+    already_published = (story["status"] in ("reported", "unclear")
+                         and story.get("headline") and story.get("summary"))
+    status = "reported" if complete and supporting else (story["status"] if already_published else "unreported")
+    # A timely news report may predate the market window; keep it visible as evidence.
+    support_urls = {V.norm_url(src["url"]) for src in supporting}
+    for src in sources:
+        if V.norm_url(src["url"]) in support_urls:
+            src["background_only"] = False
+            src["stale"] = False
 
     domains = sorted(set(story["checked_domains"] or []) | {V.host(s["url"]) for s in searched if s.get("url")} - {""})
     fields = {
-        "status": status, "sources": sources, "updated_ts": time.time(), "checked_domains": domains,
+        "status": status, "sources": sources, "updated_ts": now, "checked_domains": domains,
         "check_next": f.get("check_next") or story["check_next"],
     }
     for k in ("headline", "dek", "summary", "why_it_matters", "dateline", "question", "trail_note"):
-        if f.get(k):
+        if f.get(k) and (not already_published or (complete and supporting)):
             fields[k] = f[k]
     verified = {V.norm_url(s["url"]) for s in sources if s.get("verified")}
     img = clean_image(f.get("image"), verified | {V.norm_url(s["url"]) for s in searched if s.get("url")},
@@ -384,7 +385,7 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
     if fields.get("headline") and not story.get("slug"):  # set once, so the story's URL never changes
         fields["slug"] = unique_slug(db, story["day"], slugify(f.get("slug") or fields["headline"], 8), story_id)
     if kind == "hunt":
-        fields.update(hunted_ts=time.time(), hunted_score=story["score"])
+        fields.update(hunted_ts=now, hunted_score=story["score"])
     else:
         fields["rechecks_done"] = (story["rechecks_done"] or 0) + 1
     if status in ("unreported", "unclear"):
@@ -394,10 +395,9 @@ def record(db, cfg, story_id: int, kind: str, f: dict) -> dict:
         done = fields.get("rechecks_done", story["rechecks_done"] or 0)
         delays = cfg.recheck_after_hours
         # on the schedule from when the story was flagged, but never sooner than an hour after this search
-        fields["next_recheck_ts"] = max(story["created_ts"] + delays[done] * 3600, time.time() + 3600) \
+        fields["next_recheck_ts"] = max(story["created_ts"] + delays[done] * 3600, now + 3600) \
             if done < len(delays) else None
-        if fields.get("confirmed_ts") or story["confirmed_ts"]:
-            fields["next_recheck_ts"] = None  # reporting found: the lead becomes a story, no more rechecks
+        # Keep incomplete leads eligible for rechecks even when a later report was found.
     else:
         fields["next_recheck_ts"] = None
     db.update_story(story_id, **fields)

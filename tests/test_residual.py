@@ -312,10 +312,16 @@ def test_site_shows_what_the_hunt_caught_and_nothing_about_the_markets(env, tmp_
     front = (out / "index.html").read_text()
     st = db.get_story(a)
     page = (out / site.story_path(st) / "index.html").read_text()
-    assert "Agency approves the drug" in front and "Has the merger stalled?" in front
+    assert "Agency approves the drug" in front and "Has the merger stalled?" not in front
     assert "Traders raise the odds" not in front and "Q B-1" not in front and "Q C-1" not in front
-    assert "Also watching Nigeria&#x27;s 2027 race" in front
-    assert "The shift came late in the day." in front and "rechecking at" in front
+    assert "Also watching" not in front
+    assert "The shift came late in the day." not in front and "rechecking at" not in front
+    for path in out.rglob("*"):
+        if path.is_file():
+            rendered = path.read_text()
+            assert "Has the merger stalled?" not in rendered
+            assert "Nigeria&#x27;s 2027 race" not in rendered
+            assert "On the trail" not in rendered
     for text in (front, page):
         text = text.split("</style>", 1)[1]
         assert "·" not in text and "<svg class=\"chart" not in text and "$" not in text and "%" not in text
@@ -724,3 +730,60 @@ def test_a_broken_ledger_never_breaks_a_hunt(env, tmp_path, monkeypatch):
                                   "input": {"question": "Q?", "sources": []}})])
     f = hunter.hunt(client, cfg, item, L.Ledger(tmp_path / "ledger"))
     assert f["question"] == "Q?"
+
+
+@pytest.mark.parametrize("relation", ["report", "consequence", "cause"])
+def test_recent_news_can_publish_without_proving_market_causation(env, relation):
+    from residual import stories, site
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    url = "https://apnews.com/article/actual-development"
+    # A later report can qualify immediately, without waiting for a recheck.
+    f = {"headline": "Lawmakers demand policy commitments", "summary": "Lawmakers made demands today.",
+         "searched": [url], "sources": [{"url": url, "relation": relation,
+         "published_at": iso(NOW - 60)}]}
+    st = stories.record(db, cfg, sid, "hunt", f, now=NOW)
+    assert st["status"] == "reported" and site.is_story(st)
+    assert st["next_recheck_ts"] is None
+
+
+@pytest.mark.parametrize("change", ["stale", "future", "undated", "unverified", "blocked", "background", "odds", "incomplete"])
+def test_lower_publication_bar_preserves_evidence_requirements(env, change):
+    from residual import stories, site
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    url = "https://apnews.com/article/news"
+    src = {"url": url, "relation": "report", "published_at": iso(NOW - 60)}
+    f = {"headline": "Agency announces a decision", "summary": "The agency announced its decision.",
+         "sources": [src], "searched": [url]}
+    if change == "stale": src["published_at"] = iso(NOW - 73 * 3600)
+    if change == "future": src["published_at"] = iso(NOW + 3600)
+    if change == "undated": src["published_at"] = None
+    if change == "unverified": f["searched"] = []
+    if change == "blocked":
+        src["url"] = "https://townhall.com/news/example"
+        f["searched"] = [src["url"]]
+    if change == "background": src["relation"] = "background"
+    if change == "odds": src["relation"] = "market_coverage"
+    if change == "incomplete": del f["summary"]
+    st = stories.record(db, cfg, sid, "hunt", f, now=NOW)
+    assert st["status"] == "unreported" and not site.is_story(st)
+
+
+def test_recheck_publishes_complete_news_and_lead_only_days_are_private(env, tmp_path):
+    from residual import stories, site
+    cfg, db = env
+    (sid,) = stories.assign(db, [story_move(db)], NOW)
+    stories.record(db, cfg, sid, "hunt", {"question": "Private research question", "sources": []}, now=NOW)
+    out = tmp_path / "site"
+    site.build(db, cfg, out, NOW)
+    assert not (out / site.day_path(db.get_story(sid)["day"]) / "index.html").exists()
+    url = "https://apnews.com/article/new-report"
+    st = stories.record(db, cfg, sid, "recheck", {
+        "headline": "Agency releases findings", "summary": "The findings document a new development.",
+        "sources": [{"url": url, "relation": "report", "published_at": iso(NOW - 30)}],
+        "searched": [url]}, now=NOW)
+    assert site.is_story(st) and st["next_recheck_ts"] is None
+    site.build(db, cfg, out, NOW, clean=True)
+    assert "Agency releases findings" in (out / "feed.xml").read_text()
+    assert all("Private research question" not in p.read_text() for p in out.rglob("*.html"))

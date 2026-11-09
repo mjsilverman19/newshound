@@ -89,6 +89,7 @@ class Config:
     day_strong_score: float = 37           # "strong" signal: this score and this much normal trading
     day_strong_usd: float = 40_000
     day_timing_topics: int = 10            # read intraday price history for this many leading topics
+    publication_max_age_hours: float = 72  # recent news can publish without explaining a market move
     day_source_lookback_hours: float = 36  # a cause must be published within this long before the window
 
     # Wallet signals (Polymarket only)

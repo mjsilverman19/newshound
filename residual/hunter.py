@@ -35,7 +35,7 @@ SOURCE_SCHEMA = {
             "description": "ISO 8601 with a time zone if the page shows a time (2026-11-04T13:05:00-05:00), "
                            "a bare date if it shows only a date, or null if you cannot tell. Never guess.",
         },
-        "relation": {"type": "string", "enum": ["cause", "consequence", "background", "market_coverage"]},
+        "relation": {"type": "string", "enum": ["report", "cause", "consequence", "background", "market_coverage"]},
         "role": {"type": "string", "enum": list(stories.ROLES)},
         "note": {"type": "string", "description": "Optional, a few words such as 'quoting the State Department'."},
         "summary": {"type": "string", "description": "One sentence: what it says."},
@@ -100,59 +100,44 @@ calling submit_story once. Nobody is watching this run, so do not ask questions.
 The markets are the scent, not the story. Traders, odds and prices never appear in a headline, dek, summary, \
 why-it-matters or question, and you never mention prices, points or dollars traded.
 
-## Reading the scent
-Before you search, work out what kind of development would produce this shift. For example, "the odds Rubio \
-leaves fell 26 points" means something made him look more likely to stay: a denial, a statement of support, \
-or a report being knocked down. Search for that. If several markets moved together, find the single \
-development behind all of them. If this story and one in other_stories_today are really the same news, list \
-the other's story_id in merge_with.
+## Editorial standard
+Use market movements to select subjects to investigate. Publish concrete, timely news about the subject
+when a trustworthy source supports it. You do NOT need to establish why the market moved, find a single
+trigger, confirm the exact market outcome, or wait for a final decision. A reported statement, policy
+change, documented political pressure, research disclosure, filing or other substantive development
+can be news. Write declarative headlines about what happened, not questions or generic explainers.
+A related development uncovered during the investigation can be the story. Do not claim it caused the
+move without evidence. Do not mention inability to explain the market in the article.
 
 ## Sourcing
-- Report only sources that really appeared in your search results or that you fetched. Never invent or guess \
-a URL. The code checks every source against the URLs your searches and fetches returned and drops the rest.
-- Prefer primary sources and established outlets: the official statement, filing, docket, agency page or post \
-by the person involved, and wire services and major news organizations. Find the original report, not a \
-write-up of it.
-- Aggregators, re-posters and partisan blogs (for example Political Wire, ZeroHedge, Townhall, Raw Story, \
-NewsBeep, BizToc) are background at most. The code will not let them explain a story, so look for the \
-established or primary source behind them.
-- Record each source's publication time as precisely as the page shows it. Fetch the page when a search \
-result doesn't show the time. Never guess a time or a time zone. For posts on X, use x_post_time.
-- Look beyond news articles: posts on X, official statements and press releases, government and agency sites, \
-court dockets, filings, schedules, sports injury reports, and the market's resolution source.
-- Never stretch weak or general background into a cause. If you find nothing specific, say so. An open lead \
-is a real and useful result.
+- Use only URLs actually returned by your search/fetch tools. Prefer primary sources, original reporting,
+  established outlets and credible local reporting. One substantive source can suffice; corroborate
+  disputed or consequential claims when possible and attribute allegations and competing accounts.
+- Aggregators, partisan blogs and reposts are background only. Follow them to the original source.
+- At least one supporting news source must have a known publication date within the last 72 hours.
+  Fetch the date if missing; never invent it. For X posts use x_post_time. Older material can provide
+  context, but an old event does not become new just because we discovered it. Date events explicitly.
+- Check for newer reporting that changes or supersedes the original lead before writing. In particular,
+  report completed elections as results, not speculative uncertainty about routine certification.
+- Distinguish an announced plan from an event that actually happened. Rumors, generic background,
+  unexplained price changes and repetition of already published news do not qualify.
 
-relation (the code uses it to decide the status):
-- cause: reports the development that drove the shift.
-- consequence: reports that same development, but was published after the move started.
-- background: context, not a trigger.
-- market_coverage: only reports the odds or the trading.
-role is what readers see next to each source: pick the one that describes what the source is.
-
-## Day mode (when the item's mode is "day")
-The scent is a whole topic: every market about it that moved over the last 24 hours, how strong the \
-signal is, and when during the day the lead market moved. Your question is what happened today on this \
-topic and how much it matters, not what happened in one particular minute.
-- Find the development behind the shift as a whole. If several markets point to one development, that is \
-the story. If this topic and one in other_stories_today have the same cause (for example a market rout \
-that moved both an IPO's timing and rate expectations), list the other's story_id in merge_with and write \
-the story about the shared cause.
-- A cause must be from the day of the shift. Reports from earlier days are background: the code treats \
-anything published more than about a day and a half before the window as background, whatever you call it.
-- If the shift has no single trigger (a slow drift, or the knock-on of bigger news), say so in the summary \
-and write about the bigger news if you can source it. Otherwise submit an open lead.
-- Follow the strength note. For a weak signal, run two or three searches and stop if nothing specific \
-turns up: an open lead is the right result and saves the budget for real news.
-- why_it_matters should say how much this changes things, in plain terms.
+Source relation:
+- report: directly supports the article's concrete news development; market causation is unestablished.
+- cause: directly supports the development and there is evidence it drove the market shift.
+- consequence: reporting on the development found after the move began.
+- background: supporting context only; cannot alone qualify an article.
+- market_coverage: only odds or trading; cannot qualify and is not displayed.
+The source role describes its editorial function for readers, independently of relation.
 
 ## Hunts and rechecks
-- kind "hunt": start with 2 or 3 searches on the most likely development. If you find it, confirm it, get the \
-publication time of the earliest report, and stop. Otherwise dig deeper with up to about 10 more searches. \
-Note any report published after the move started too.
-- kind "recheck": nothing explained this story when it was first hunted. Run up to 5 searches for anything \
-published since move_start_utc that reports the development behind it. If you find reporting, write the story \
-up in full so the lead is promoted to a story. If not, keep the question.
+Start with 2 or 3 searches. Follow the strongest actual news you find; don't fixate on the original
+question if a different substantive development on the same subject is established. Confirm its facts,
+date and latest status. Merge with an existing story if it is the same development, not merely the same
+person or topic. On a recheck, search for recent news, including developments after the original move.
+Write the complete headline, dek, summary, dateline and why_it_matters when evidence qualifies.
+If there is no publishable news, submit only an internal question and research notes. Unpublished leads
+are private and must never be dressed up as articles. Respect the search budget, especially weak signals.
 
 ## The lead image
 When you found the story, call lead_image on one of its sources, preferring the original report. If it returns \

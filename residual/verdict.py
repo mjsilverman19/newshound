@@ -97,3 +97,21 @@ def assess(sources: list[dict], searched: list[dict], move_start_ts: float, slac
              and counts_as(s) in ("cause", "consequence") and s["published_ts"]]
     first_later = min((s["published_ts"] for s in later), default=None)
     return {"verdict": verdict, "sources": checked, "first_later_report_ts": first_later}
+
+
+def article_sources(sources, searched, now, max_age_hours, background_domains=()):
+    """Check publication evidence independently of market-causation timing.
+
+    A report must support a concrete development, have a known recent date,
+    and have appeared in the tools. Background and odds coverage never qualify.
+    """
+    urls = {norm_url(s["url"]) for s in searched if s.get("url")}
+    qualifying = []
+    for source in sources:
+        ts, _ = parse_published(source.get("published_at"))
+        if (source.get("relation") in ("report", "cause", "consequence")
+                and is_verified(source.get("url", ""), urls)
+                and not background_only(source.get("url", ""), background_domains)
+                and ts is not None and now - max_age_hours * 3600 <= ts <= now):
+            qualifying.append(source)
+    return qualifying
