@@ -1,10 +1,11 @@
-# One Newshound cycle an hour on the Claude API, instead of a scheduled Claude session.
+# Newshound runs at 9 AM and 6 PM Eastern daily on the Claude API.
 # Needs a repository secret ANTHROPIC_API_KEY (Settings > Secrets and variables > Actions).
-name: Hourly run
+name: Morning and evening run
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "0 9,18 * * *"
+      timezone: "America/New_York"
   workflow_dispatch:
 
 permissions:
